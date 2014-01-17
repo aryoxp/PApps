@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+   	<string name="pref_settings_title">Settings</string>
+	<string name="pref_server_configuration">Network Configuration</string>
+	<string name="pref_ip_address">Server IP Address</string>
+	<string name="pref_ip_address_description">Server IP address used as application web services.</string>
+</resources>

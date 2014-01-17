@@ -1,0 +1,24 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff"
+    tools:context=".MainActivity" >
+
+    <FrameLayout
+        android:id="@+id/contentContainer"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="#fff" >
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/navigationContainer"
+        android:layout_width="250dp"
+        android:layout_height="fill_parent"
+        android:padding="10dp"
+        android:background="#fff4f4f4" >
+    </FrameLayout>
+
+</FrameLayout>

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fragment_home"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+	<FrameLayout
+	    android:background="#22777777"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content" 
+	    >
+
+    <ImageView
+        android:id="@+id/cloud_2"
+        android:layout_width="116dp"
+        android:layout_height="116dp"
+        android:layout_gravity="right"
+        android:layout_marginRight="-120dp"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/cloud_2" />
+
+    <RelativeLayout
+        android:id="@+id/headingContainer"
+        android:layout_width="match_parent"
+        android:layout_height="128dp" >
+
+        <TextView
+            android:id="@+id/weatherDescription"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:background="#77ffffff"
+            android:paddingBottom="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="10dp"
+            android:text="Light Rain"
+            android:textColor="#999" />
+
+        <LinearLayout
+            android:id="@+id/weatherData"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp" >
+
+            <TextView
+                android:id="@+id/cityName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Malang"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="#555"
+                android:textSize="36sp" />
+
+            <TextView
+                android:id="@+id/temperature"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="26°C, Rain"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="#777" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/weatherIcon"
+            android:layout_width="142dp"
+            android:layout_height="142dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="-30dp"
+            android:layout_toLeftOf="@id/weatherData"
+            android:contentDescription="@string/empty_space"
+            android:src="@drawable/m_weather_06" />
+        
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/cloud_9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="-80dp"
+        android:src="@drawable/cloud_9" />
+	</FrameLayout>
+</FrameLayout>
