@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/loginContainer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/sunflower"
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:contentDescription="@string/empty_space"
+            android:id="@+id/imageWeatherDashboard"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@color/orange"
+            android:padding="10dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_interface_14" />
+
+        <TextView
+            android:id="@+id/fragmentScheduleTitle"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:padding="10dp"
+            android:text="Login"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="#fff"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical" >
+
+            <ProgressBar
+                android:id="@+id/progressBar1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal" />
+
+            <TextView
+                android:id="@+id/textLoginProgress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:textColor="@color/asbestos"
+                android:text="Logging you in, please wait..." />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/loginFormContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:paddingTop="20dp"
+            android:orientation="vertical" >
+
+            <EditText
+                android:id="@+id/editText1"
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_input_normal"
+                android:ellipsize="end"
+                android:ems="12"
+                android:hint="Username"
+                android:padding="10dp" >
+
+                <requestFocus />
+            </EditText>
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:text="Username is most likely your UB email address"
+                android:textColor="@color/concrete" />
+
+            <EditText
+                android:id="@+id/editText2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@drawable/bg_input_normal"
+                android:ellipsize="end"
+                android:ems="12"
+                android:hint="Password"
+                android:inputType="textPassword"
+                android:padding="10dp" >
+            </EditText>
+
+            <TextView
+                android:id="@+id/TextView01"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:text="Your PTIIK Apps password"
+                android:textColor="@color/concrete" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp" >
+
+                <TextView
+                    android:id="@+id/buttonLoginOK"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_green"
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:hint="Username"
+                    android:padding="15dp"
+                    android:text="OK"
+                    android:textColor="@color/white" />
+
+                <TextView
+                    android:id="@+id/buttonLoginCancel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_gray"
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:hint="Password"
+                    android:padding="15dp"
+                    android:text="Cancel"
+                    android:textColor="@color/button_gray" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </FrameLayout>
+
+</LinearLayout>
