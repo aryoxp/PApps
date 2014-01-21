@@ -5,6 +5,53 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
+    <FrameLayout
+        android:id="@+id/dashboardUserBackground"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white" >
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="right|center_vertical"
+            android:paddingRight="10dp"
+            android:textColor="@color/asbestos"
+            android:text="You are not signed in." />
+
+        <LinearLayout
+            android:id="@+id/dashboardUserContainer"
+            android:background="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@+id/dashboardUsernameText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:padding="10dp"
+                android:text="TextView"
+                android:textColor="@color/asbestos" />
+
+            <ImageView
+                android:id="@+id/dashboardButtonSignOut"
+                android:layout_width="58dp"
+                android:layout_height="42dp"
+                android:background="@drawable/button_gray"
+                android:clickable="true"
+                android:paddingBottom="8dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="8dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_interface_13" />
+        </LinearLayout>
+    </FrameLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -207,44 +254,9 @@
         android:background="@color/silver" />
 
     <FrameLayout
+        android:id="@+id/dashboardContentContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:orientation="vertical"
-            tools:ignore="UselessParent" >
-
-            <ImageView
-                android:contentDescription="@string/empty_space"
-                android:id="@+id/imageView2"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_launcher_silver" />
-
-            <TextView
-                android:id="@+id/textView6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:text="Get the most of PTIIK Apps"
-                android:textColor="@color/silver" />
-
-            <TextView
-                android:id="@+id/buttonDashboardSignIn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/button_green"
-                android:clickable="true"
-                android:gravity="center"
-                android:padding="20dp"
-                android:text="Sign In"
-                android:textColor="#fff"
-                android:textSize="16sp" />
-        </LinearLayout>
     </FrameLayout>
 
 </LinearLayout>

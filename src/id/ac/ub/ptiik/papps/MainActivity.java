@@ -62,7 +62,7 @@ public class MainActivity extends SlidingFragmentActivity
 		this.navigationMenu.setShadowDrawable(R.drawable.menu_shadow);
 		this.navigationMenu.setShadowWidth(
 			(int) (this.getResources().getDisplayMetrics().widthPixels * 0.05));
-		
+
 		// show navigation fragment to the configured menu
 		this.navFragment.getMenu().get(0).activate();
 		getSupportFragmentManager()

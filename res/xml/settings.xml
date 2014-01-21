@@ -5,7 +5,7 @@
         <EditTextPreference
                 android:title="@string/pref_ip_address"
                 android:summary="@string/pref_ip_address_description"
-                android:key="prefIPAddress"
+                android:key="host"
                 android:defaultValue="175.45.187.246"
                 />
     </PreferenceCategory>

@@ -1,12 +1,21 @@
 package id.ac.ub.ptiik.papps;
 
+import com.google.gson.Gson;
+
+import id.ac.ub.ptiik.papps.base.User;
+import id.ac.ub.ptiik.papps.interfaces.LoginDialogFinishInterface;
 import id.ac.ub.ptiik.papps.tasks.WeatherTask;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewManager;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -14,7 +23,8 @@ import ap.mobile.base.Weather;
 import ap.mobile.interfaces.WeatherInterface;
 
 public class DashboardFragment extends Fragment 
-	implements WeatherInterface, View.OnClickListener {
+	implements WeatherInterface, View.OnClickListener, LoginDialogFinishInterface,
+	DialogInterface.OnClickListener {
 	
 	private ImageView iconView;
 	private TextView temperatureView;
@@ -22,17 +32,19 @@ public class DashboardFragment extends Fragment
 	private TextView descriptionView;
 	private TextView buttonSignIn;
 	private Weather weather;
+	private View v;
+	
+	private User user;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.fragment_dashboard, container, false);
+		this.v = v;
 		this.iconView = (ImageView) v.findViewById(R.id.imageWeatherIcon);
 		this.temperatureView = (TextView) v.findViewById(R.id.dashboardTemperatureText);
 		this.humidityView = (TextView) v.findViewById(R.id.dashboardHumidityText);
 		this.descriptionView = (TextView) v.findViewById(R.id.dashboardTemperatureDescriptionText);
-		this.buttonSignIn = (TextView) v.findViewById(R.id.buttonDashboardSignIn);
-		this.buttonSignIn.setOnClickListener(this);
 		return v;
 	}
 	
@@ -65,8 +77,20 @@ public class DashboardFragment extends Fragment
 			WeatherTask weatherTask = new WeatherTask(this);
 			weatherTask.execute("Malang");
 		}
+		try {
+			String userGson = PreferenceManager.getDefaultSharedPreferences(getActivity())
+					.getString("user", null);
+			Gson gson = new Gson();
+			this.user = gson.fromJson(userGson, User.class);
+		} catch (Exception e) {
+			Log.e("User", e.getMessage());
+			this.user = null;
+		}
+		updateUserView();
 		
 	}
+
+
 
 	@Override
 	public void weatherLoaded(Weather weather) {
@@ -171,8 +195,101 @@ public class DashboardFragment extends Fragment
 		switch(v.getId()) {
 		case R.id.buttonDashboardSignIn:
 			LoginFragment loginFragment = new LoginFragment();
+			loginFragment.setOnFinishCallback(this);
 			loginFragment.show(getFragmentManager(), "login");
 			break;
+		case R.id.dashboardButtonSignOut:
+			new AlertDialog.Builder(getActivity())
+			.setTitle("Confirmation")
+			.setMessage("Sign out from this mobile app?")
+			.setPositiveButton("OK", this)
+			.setNegativeButton("Cancel", this)
+			.show();
 		}
+	}
+
+	@Override
+	public void onLoginFinished(User user) {
+		
+		Gson gson = new Gson();
+		String userGson = gson.toJson(user);
+		PreferenceManager.getDefaultSharedPreferences(getActivity())
+		.edit()
+		.putString("user", userGson)
+		.commit();
+		
+		this.user = user;
+		
+		updateUserView();
+		
+	}
+
+	private void updateUserView() {
+		if(this.user != null) {
+			if(user.karyawan_id != null) {
+				TextView userText = (TextView) this.v.findViewById(R.id.dashboardUsernameText);
+				if(this.user.gelar_awal.equals("null")) this.user.gelar_awal = "";
+				if(this.user.gelar_akhir.equals("null")) this.user.gelar_akhir = "";
+				String namaLengkap = this.user.gelar_awal + " " + this.user.nama + ", " + this.user.gelar_akhir;
+				userText.setText(namaLengkap.trim());
+				
+				loginView();
+				return;
+			}
+		}
+		logoutView();
+	}
+
+	@Override
+	public void onClick(DialogInterface dialog, int which) {
+		if(which == DialogInterface.BUTTON_POSITIVE) {
+			Log.d("Logout", String.valueOf(which));
+			
+			PreferenceManager.getDefaultSharedPreferences(getActivity())
+			.edit()
+			.putString("user", "{\"user\":null}")
+			.commit();
+			
+			this.user = null;
+			
+			logoutView();
+		}
+	}
+
+	private void loginView() {
+		
+		View viewLogin = this.v.findViewById(R.id.dashboardLoginContainer);
+		ImageView buttonSignOut = (ImageView) this.v.findViewById(R.id.dashboardButtonSignOut);
+		buttonSignOut.setOnClickListener(this);
+		if(viewLogin != null)
+			((ViewManager)viewLogin.getParent()).removeView(viewLogin);
+		
+		View userContainer = this.v.findViewById(R.id.dashboardUserContainer);
+		userContainer.animate()
+		.translationX(0)
+		.setDuration(300)
+		.start();
+		
+	}	
+	
+	private void logoutView() {
+		View loginContainer  = this.v.findViewById(R.id.dashboardContentContainer);
+		View dashboardLogin = getActivity().getLayoutInflater().inflate(R.layout.view_dashboard_login, (ViewGroup) loginContainer, false);
+		((ViewGroup) loginContainer).addView(dashboardLogin);
+		
+		dashboardLogin.setAlpha(0);
+		dashboardLogin.animate()
+		.alpha(1f)
+		.setDuration(500)
+		.start();
+		this.buttonSignIn = (TextView) dashboardLogin.findViewById(R.id.buttonDashboardSignIn);
+		this.buttonSignIn.setOnClickListener(this);
+		
+		
+		View userContainer = this.v.findViewById(R.id.dashboardUserContainer);
+		userContainer.animate()
+		.translationX(this.getResources().getDisplayMetrics().widthPixels)
+		.setDuration(300)
+		.start();
 	}
 }
