@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal" >
@@ -9,6 +10,7 @@
         android:layout_width="72dp"
         android:layout_height="72dp"
         android:layout_gravity="center_vertical"
+        android:contentDescription="@string/empty_space"
         android:padding="24dp"
         android:scaleType="fitCenter"
         android:src="@drawable/chevron_medium_thin_2_01" />
@@ -23,21 +25,14 @@
             android:id="@+id/menuTitle"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:paddingLeft="20dp"
             android:gravity="center_vertical"
+            android:paddingLeft="20dp"
             android:text="Medium Text"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="#fff"
-            android:textSize="20dp" />
+            android:textSize="20sp"
+            tools:ignore="HardcodedText" />
 
-		<!-- 
-        <TextView
-            android:id="@+id/menuDescription"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#999"
-            android:text="TextView" />
- 		-->
     </LinearLayout>
 
 </LinearLayout>

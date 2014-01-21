@@ -55,7 +55,7 @@ public class NavigationMenuAdapter extends BaseAdapter {
 		View rowView = convertView;
 		if(rowView == null) {
 			LayoutInflater inflater = ((Activity)context).getLayoutInflater();
-			rowView = inflater.inflate(R.layout.menu_navigation, null);
+			rowView = inflater.inflate(R.layout.item_menu_navigation, null);
 			ViewHolder vh = new ViewHolder();
 			vh.title = (TextView) rowView.findViewById(R.id.menuTitle);
 			//vh.description = (TextView) rowView.findViewById(R.id.menuDescription);

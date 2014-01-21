@@ -123,12 +123,16 @@ public class MainActivity extends SlidingFragmentActivity
 					newFragment = new ScheduleFragment();
 					tag = "schedule";
 				}
-				else if(position == 3) {
-					//this.navAnimation.toggle();
-					return;
-				}
+				else if(position == 3) return;
 				break;
 			case 1:
+				newFragment = getSupportFragmentManager()
+					.findFragmentByTag("news");
+				if(newFragment == null) {
+					newFragment = new NewsFragment();
+					tag = "news";
+				} else if(position == 1) return;
+				break;
 			case 2:
 			case 4:
 			default:
@@ -138,8 +142,7 @@ public class MainActivity extends SlidingFragmentActivity
 					newFragment = new DashboardFragment();
 					tag = "dashboard" ;
 				}
-				else if(position == 0 || position == 1 || position == 2) {
-					//this.navAnimation.toggle();
+				else if(position == 0 || position == 2) {
 					return;
 				}
 		}
@@ -149,10 +152,30 @@ public class MainActivity extends SlidingFragmentActivity
 			.setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
 			.replace(R.id.contentContainer, newFragment, tag)
 			.commit();
-		
-		//this.navAnimation.toggle();
+
 	}
 
-	
+	@Override
+	public void onBackPressed() {
+		Fragment fragment = getSupportFragmentManager()
+				.findFragmentByTag("dashboard");
+		
+		if(fragment == null) {
+			this.navFragment.getMenu().get(0).activate();
+			fragment = new DashboardFragment();
+			String tag = "dashboard" ;
+			getSupportFragmentManager()
+			.beginTransaction()
+			.setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
+			.replace(R.id.contentContainer, fragment, tag)
+			.commit();
+			
+		} else {
+			super.onBackPressed();
+			return;
+		}
+		
+		
+	}
 
 }
