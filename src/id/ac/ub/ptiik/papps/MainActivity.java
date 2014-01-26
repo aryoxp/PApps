@@ -1,6 +1,8 @@
 package id.ac.ub.ptiik.papps;
 
 import id.ac.ub.ptiik.papps.base.NavMenu;
+import id.ac.ub.ptiik.papps.base.User;
+import id.ac.ub.ptiik.papps.helpers.SystemHelper;
 import id.ac.ub.ptiik.papps.interfaces.NavigationInterface;
 
 import java.util.ArrayList;
@@ -15,6 +17,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 public class MainActivity extends SlidingFragmentActivity 
 	implements NavigationInterface {
@@ -133,8 +136,25 @@ public class MainActivity extends SlidingFragmentActivity
 					tag = "news";
 				} else if(position == 1) return;
 				break;
-			case 2:
 			case 4:
+				newFragment = getSupportFragmentManager()
+				.findFragmentByTag("agenda");
+				if(newFragment == null) {
+					
+					User u = SystemHelper.getSystemUser(this);
+					if(u == null) {
+						Toast.makeText(this, "You are not allowed to access this features", 
+								Toast.LENGTH_SHORT).show();
+						return;
+					}
+					newFragment = new AgendaFragment();
+					Bundle args = new Bundle();
+					args.putString("idKaryawan", u.karyawan_id);
+					newFragment.setArguments(args);
+					tag = "agenda";
+				} else if(position == 4) return;
+				break;
+			case 2:
 			default:
 				newFragment = getSupportFragmentManager()
 					.findFragmentByTag("dashboard");

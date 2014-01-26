@@ -6,43 +6,45 @@
     android:orientation="vertical" >
 
     <LinearLayout
-        android:id="@+id/fragment_schedule"
+        android:id="@+id/fragment_agenda"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/sunflower"
         android:orientation="horizontal" >
 
         <ImageView
-            android:id="@+id/imageWeatherDashboard"
+            android:id="@+id/agendaIcon"
             android:layout_width="76dp"
             android:layout_height="76dp"
             android:background="@color/orange"
             android:contentDescription="@string/empty_space"
             android:padding="20dp"
             android:scaleType="fitCenter"
-            android:src="@drawable/communication_99" />
+            android:src="@drawable/time_3" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal" >
+            android:orientation="horizontal"
+            tools:ignore="UseCompoundDrawables" >
 
             <TextView
-                android:id="@+id/fragmentNewsTitle"
-                android:layout_width="fill_parent"
+                android:id="@+id/agendaTitle"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
+                android:fontFamily="sans-serif-condensed"
                 android:padding="22dp"
-                android:text="News"
+                android:text="Agenda"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="#fff"
                 android:textSize="27sp"
-                android:fontFamily="sans-serif-condensed"
                 tools:ignore="HardcodedText" />
 
             <ImageView
-                android:id="@+id/newsButtonRefresh"
+                android:contentDescription="@string/empty_space"
+                android:id="@+id/agendaButtonRefresh"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:padding="20dp"
@@ -54,34 +56,36 @@
     </LinearLayout>
 
     <FrameLayout
-        android:id="@+id/listNewsContainer"
+        android:id="@+id/listagendaContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
         <FrameLayout
-            android:id="@+id/newsRefreshContainer"
+            android:id="@+id/agendaRefreshContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent" >
 
             <TextView
-                android:id="@+id/newsRefreshText"
+                android:id="@+id/agendaRefreshText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:padding="20dp"
                 android:text="TextView"
-                android:textColor="@color/asbestos" />
+                android:textColor="@color/asbestos"
+                tools:ignore="HardcodedText" />
+
         </FrameLayout>
 
         <ListView
-            android:id="@+id/newsList"
+            android:id="@+id/agendaList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white" >
         </ListView>
 
         <ProgressBar
-            android:id="@+id/newsRefreshProgress"
+            android:id="@+id/agendaRefreshProgress"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

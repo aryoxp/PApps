@@ -43,7 +43,7 @@ public class NewsIndexAdapter extends BaseAdapter {
 	private class ViewHolder {
 		public TextView date;
 		public TextView title;
-		//public TextView description;
+		public TextView excerpt;
 		public View row;
 	}
 	
@@ -55,14 +55,30 @@ public class NewsIndexAdapter extends BaseAdapter {
 			rowView = inflater.inflate(R.layout.item_news_index, null);
 			ViewHolder vh = new ViewHolder();
 			vh.title = (TextView) rowView.findViewById(R.id.itemNewsTitle);
-			//vh.description = (TextView) rowView.findViewById(R.id.menuDescription);
+			vh.excerpt = (TextView) rowView.findViewById(R.id.itemNewsExcerpt);
 			vh.date = (TextView) rowView.findViewById(R.id.itemNewsDate);
 			vh.row = rowView;
 			rowView.setTag(vh);
 		}
 		ViewHolder vh = (ViewHolder) rowView.getTag();
+		
+		String date = this.newsList.get(position).post_date;
+		String tanggal = (date.split(" "))[0];
+		String jam = (date.split(" "))[1];
+		String tanggalParts[] = tanggal.split("-");
+		
 		vh.title.setText(this.newsList.get(position).post_title);
-		vh.date.setText(this.newsList.get(position).post_date);
+		vh.date.setText(tanggalParts[2] + "/" + tanggalParts[1] + "/" + tanggalParts[0]
+				+ " " + jam.substring(0, jam.length()-3));
+		String post_content = this.newsList.get(position).post_content;
+		if(position == 0) {
+			vh.excerpt.setText(this.newsList.get(position).post_content + " ...");
+		} else {
+			int cutPosition = 300;
+			if(post_content.length() <= 300)
+				cutPosition = post_content.length();
+			vh.excerpt.setText(post_content.substring(0, cutPosition) + " ...");
+		}
 		vh.row.setVisibility(View.VISIBLE);
 		return rowView;
 	}

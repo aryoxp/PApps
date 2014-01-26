@@ -1,8 +1,7 @@
 package id.ac.ub.ptiik.papps;
 
-import com.google.gson.Gson;
-
 import id.ac.ub.ptiik.papps.base.User;
+import id.ac.ub.ptiik.papps.helpers.SystemHelper;
 import id.ac.ub.ptiik.papps.interfaces.LoginDialogFinishInterface;
 import id.ac.ub.ptiik.papps.tasks.WeatherTask;
 import android.app.AlertDialog;
@@ -15,8 +14,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewManager;
 import android.view.ViewGroup.LayoutParams;
+import android.view.ViewManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import ap.mobile.base.Weather;
@@ -78,10 +77,7 @@ public class DashboardFragment extends Fragment
 			weatherTask.execute("Malang");
 		}
 		try {
-			String userGson = PreferenceManager.getDefaultSharedPreferences(getActivity())
-					.getString("user", null);
-			Gson gson = new Gson();
-			this.user = gson.fromJson(userGson, User.class);
+			this.user = SystemHelper.getSystemUser(getActivity());
 		} catch (Exception e) {
 			Log.e("User", e.getMessage());
 			this.user = null;
@@ -211,15 +207,8 @@ public class DashboardFragment extends Fragment
 	@Override
 	public void onLoginFinished(User user) {
 		
-		Gson gson = new Gson();
-		String userGson = gson.toJson(user);
-		PreferenceManager.getDefaultSharedPreferences(getActivity())
-		.edit()
-		.putString("user", userGson)
-		.commit();
-		
+		SystemHelper.saveSystemUser(getActivity(), user);
 		this.user = user;
-		
 		updateUserView();
 		
 	}

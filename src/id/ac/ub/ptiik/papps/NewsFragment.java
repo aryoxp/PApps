@@ -12,14 +12,17 @@ import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class NewsFragment extends Fragment 
-	implements NewsIndexInterface, OnScrollListener {
+	implements NewsIndexInterface, OnScrollListener, OnClickListener {
 
 	private View v;
 	private View footerView;
@@ -30,7 +33,10 @@ public class NewsFragment extends Fragment
 	private ArrayList<News> newsList;
 	private NewsIndexTask newsIndexTask;
 	
-	
+	private TextView newsRefrestText;
+	private ProgressBar newsRefreshProgress;
+	private View refreshContainer;
+		
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -43,6 +49,13 @@ public class NewsFragment extends Fragment
 		this.adapter = new NewsIndexAdapter(getActivity(), this.newsList);
 		this.newsListView.setAdapter(this.adapter);
 		this.newsListView.setOnScrollListener(this);
+		
+		this.newsRefreshProgress = (ProgressBar) v.findViewById(R.id.newsRefreshProgress);
+		this.newsRefrestText = (TextView) v.findViewById(R.id.newsRefreshText);
+		this.refreshContainer = v.findViewById(R.id.newsRefreshContainer);
+		v.findViewById(R.id.newsButtonRefresh).setOnClickListener(this);
+		//this.refreshContainer.setOnTouchListener(this);
+		
 		return v;
 	}
 	
@@ -52,12 +65,24 @@ public class NewsFragment extends Fragment
 		super.onStart();
 		
 		this.newsIndexTask = new NewsIndexTask(getActivity(), this, page, perpage);
-		newsIndexTask.execute();
+		this.newsIndexTask.execute();
+		
+		//this.refreshContainerHeight = this.refreshContainer.getMeasuredHeight();
+		this.newsRefreshProgress.setAlpha(0);
+		this.newsRefrestText.setText("Pull to refresh");
+		this.refreshContainer.setAlpha(0);
 		
 	}
 
 	@Override
 	public void onRetrievingStart() {
+		if(page == 1) {
+			this.newsRefreshProgress.animate()
+			.alpha(1)
+			.setDuration(300)
+			.start();
+			return;
+		} 
 		View progressBar = this.v.findViewById(R.id.loadingMoreProgressBar);
 		if(progressBar != null) {
 			progressBar.animate()
@@ -71,6 +96,10 @@ public class NewsFragment extends Fragment
 	public void onRetrieveComplete(ArrayList<News> newsList) {
 		this.newsList.addAll(newsList);
 		this.adapter.notifyDataSetChanged();
+		if(this.newsRefreshProgress.getAlpha() > 0)
+			this.newsRefreshProgress.animate().alpha(0).setDuration(100).start();
+		if(page == 1)
+			this.newsListView.smoothScrollToPosition(0);
 	}
 
 	@Override
@@ -91,7 +120,8 @@ public class NewsFragment extends Fragment
 	@Override
 	public void onScroll(AbsListView view, int firstVisibleItem,
 			int visibleItemCount, int totalItemCount) {
-        int lastInScreen = firstVisibleItem + visibleItemCount;
+
+		int lastInScreen = firstVisibleItem + visibleItemCount;
         if(this.newsIndexTask != null) {
             if(lastInScreen == totalItemCount && this.newsIndexTask.getStatus() != Status.RUNNING) {
                     Log.d("onScroll", "loading started...");
@@ -106,5 +136,35 @@ public class NewsFragment extends Fragment
 
 	@Override
 	public void onScrollStateChanged(AbsListView view, int scrollState) {}
+
+	@Override
+	public void onClick(View v) {
+		switch(v.getId()) {
+		case R.id.newsButtonRefresh:
+			if(this.newsIndexTask != null && this.newsIndexTask.getStatus() != Status.RUNNING) {
+				this.newsList.clear();
+				this.page = 1;
+				this.newsIndexTask = new NewsIndexTask(getActivity(), this, page, perpage);
+				this.newsIndexTask.execute();
+			}
+			break;
+		}
+		
+	}
+	
+	/*
+	@Override
+	public boolean onTouch(View v, MotionEvent event) {
+		switch(event.getAction()) {
+		case MotionEvent.ACTION_DOWN :
+			this.newsRefreshProgress.animate()
+			.alpha(1)
+			.setDuration(300)
+			.start();
+		}
+		return true;
+	}
+	*/
+	
 
 }

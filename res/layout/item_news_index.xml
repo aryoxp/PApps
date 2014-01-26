@@ -10,7 +10,10 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:orientation="vertical"
-        android:padding="10dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         tools:ignore="UselessParent" >
 
         <TextView
@@ -19,8 +22,8 @@
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:text="Medium Text"
-            android:textColor="@color/silver"
-            android:textSize="12sp"
+            android:textColor="@color/orange"
+            android:textSize="14sp"
             tools:ignore="HardcodedText" />
         
         <TextView
@@ -30,6 +33,18 @@
             android:gravity="center_vertical"
             android:text="Medium Text"
             android:textColor="@color/asbestos"
+            android:textSize="20sp"
+            android:fontFamily="sans-serif-condensed"
+            tools:ignore="HardcodedText" />
+        
+        <TextView
+            android:id="@+id/itemNewsExcerpt"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="sans-serif-condensed"
+            android:gravity="center_vertical"
+            android:text="Medium Text"
+            android:textColor="@color/silver"
             android:textSize="16sp"
             tools:ignore="HardcodedText" />
 
