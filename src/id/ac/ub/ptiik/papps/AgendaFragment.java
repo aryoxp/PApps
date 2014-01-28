@@ -63,6 +63,7 @@ public class AgendaFragment extends Fragment
 		this.idKaryawan = getArguments().getString("idKaryawan");
 		
 		v.findViewById(R.id.agendaButtonRefresh).setOnClickListener(this);
+		v.findViewById(R.id.loadingMoreProgressBar).setAlpha(0);
 		
 		return v;
 	}
@@ -81,8 +82,8 @@ public class AgendaFragment extends Fragment
 		
 		this.idKaryawan = this.getArguments().getString("idKaryawan");
 		this.calendar = Calendar.getInstance(Locale.US);
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-		String tanggal = sdf.format(this.calendar.getTime());
+		
+		String tanggal = this.getBulanTahunString();
 		
 		this.agendaKaryawanTask = new AgendaKaryawanTask(getActivity(), this, this.idKaryawan, tanggal, page, perpage);
 		this.agendaKaryawanTask.execute();
@@ -115,6 +116,8 @@ public class AgendaFragment extends Fragment
 			this.AgendaKaryawanRefreshProgress.animate().alpha(0).setDuration(100).start();
 		if(page == 1)
 			this.agendaKaryawanListView.smoothScrollToPosition(0);
+		if(AgendaKaryawanList.size() > 0)
+			this.page++;
 	}	
 
 	@Override
@@ -127,11 +130,11 @@ public class AgendaFragment extends Fragment
 	}
 
 	private void hideProgressIndicator() {
-		View progressBar = this.v.findViewById(R.id.loadingMoreProgressBar);
+		View pagingProgressBar = this.v.findViewById(R.id.loadingMoreProgressBar);
 		View loadingProgressBar = this.v.findViewById(R.id.agendaRefreshProgress);
 		
-		if(progressBar != null) {
-			progressBar.animate()
+		if(pagingProgressBar != null) {
+			pagingProgressBar.animate()
 			.alpha(0)
 			.setDuration(500)
 			.start();
@@ -147,13 +150,14 @@ public class AgendaFragment extends Fragment
 
 	private int visibleItemCount;
 	private int totalItemCount;
+	private int lastInScreen;
 	
 	@Override
 	public void onScroll(AbsListView view, int firstVisibleItem,
 			int visibleItemCount, int totalItemCount) {
 		this.visibleItemCount = visibleItemCount;
 		this.totalItemCount = totalItemCount;
-		
+		this.lastInScreen = firstVisibleItem + visibleItemCount;
 	}
 
 	@Override
@@ -163,11 +167,10 @@ public class AgendaFragment extends Fragment
 			//int lastInScreen = firstVisibleItem + visibleItemCount;
 	        if(this.agendaKaryawanTask != null) {
 	            //if(lastInScreen == totalItemCount && this.agendaKaryawanTask.getStatus() != Status.RUNNING) {
-	        	if(this.agendaKaryawanTask.getStatus() == Status.RUNNING) {
+	        	if(lastInScreen == totalItemCount && this.agendaKaryawanTask.getStatus() != Status.RUNNING) {
                     Log.d("onScroll", "loading started...");
-                    this.page++;
-            		String tanggal = this.getTanggalString();
-            		this.agendaKaryawanTask = new AgendaKaryawanTask(getActivity(), this, this.idKaryawan, tanggal, page, perpage);
+            		String tanggal = this.getBulanTahunString();
+            		this.agendaKaryawanTask = new AgendaKaryawanTask(getActivity(), this, this.idKaryawan, tanggal, page+1, perpage);
             		this.agendaKaryawanTask.execute();
 	            }
 	        }
@@ -182,7 +185,7 @@ public class AgendaFragment extends Fragment
 			if(this.agendaKaryawanTask != null && this.agendaKaryawanTask.getStatus() != Status.RUNNING) {
 				this.agendaKaryawanList.clear();
 				this.page = 1;
-				String tanggal = this.getTanggalString();
+				String tanggal = this.getBulanTahunString();
 				this.agendaKaryawanTask = new AgendaKaryawanTask(getActivity(), this, this.idKaryawan, tanggal, page, perpage);
 				this.agendaKaryawanTask.execute();
 			}
@@ -191,9 +194,10 @@ public class AgendaFragment extends Fragment
 		
 	}	
 
-	private String getTanggalString() {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-		return sdf.format(this.calendar.getTime());
+	private String getBulanTahunString() {
+		SimpleDateFormat sdf = new SimpleDateFormat("MM/yyyy", Locale.US);
+		String bulanTahun = sdf.format(this.calendar.getTime());
+		return bulanTahun;
 	}
 	
 }
