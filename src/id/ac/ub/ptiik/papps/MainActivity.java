@@ -140,14 +140,14 @@ public class MainActivity extends SlidingFragmentActivity
 				newFragment = getSupportFragmentManager()
 				.findFragmentByTag("agenda");
 				if(newFragment == null) {
-					
 					User u = SystemHelper.getSystemUser(this);
 					if(u == null) {
 						Toast.makeText(this, "You are not allowed to access this features", 
 								Toast.LENGTH_SHORT).show();
 						return;
 					}
-					newFragment = new AgendaFragment();
+					//newFragment = new AgendaFragment();
+					newFragment = new CalendarFragment();
 					Bundle args = new Bundle();
 					args.putString("idKaryawan", u.karyawan_id);
 					newFragment.setArguments(args);
