@@ -32,6 +32,19 @@ public class AgendaKaryawan {
 		return null;
 	}
 	
+	public int getTanggal() {
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
+		try {
+			Date tanggal = format.parse(this.tanggal_mulai + " " + this.jam_mulai);
+			Calendar cal = Calendar.getInstance(Locale.US);
+			cal.setTime(tanggal);
+			return cal.get(Calendar.DAY_OF_MONTH);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return 0;
+	}
+	
 	public Calendar getCalendarTanggalSelesai() {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
 		try {

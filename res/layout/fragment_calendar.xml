@@ -63,17 +63,18 @@
         <ProgressBar
             android:id="@+id/calendarRefreshProgress"
             style="?android:attr/progressBarStyle"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:background="@color/white"
             android:indeterminate="true"
             android:padding="10dp" />
         
         <LinearLayout
-            android:orientation="vertical"
+            android:id="@+id/calendarTableContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            >
+            android:orientation="vertical" >
 
             <TableLayout
                 android:stretchColumns="1"
@@ -82,11 +83,13 @@
 
                 <TableRow
                     android:id="@+id/tableRow1"
-                    android:background="@color/silver"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" >
+                    android:layout_height="wrap_content"
+                    android:background="@color/silver"
+                    tools:ignore="UselessParent" >
 
                     <ImageView
+                        android:contentDescription="@string/empty_space"
                         android:id="@+id/calendarPrevMonthButton"
                         android:layout_width="46dp"
                         android:layout_height="46dp"
@@ -100,14 +103,16 @@
                         android:id="@+id/calendarMonthYearText"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:gravity="center"
                         android:layout_weight="3"
-                     	android:textColor="@color/white"
-                     	android:textSize="18dp"
-                     	android:fontFamily="sans-serif-condensed"
-                        android:text="TextView" />
+                        android:fontFamily="sans-serif-condensed"
+                        android:gravity="center"
+                        android:text="TextView"
+                        android:textColor="@color/white"
+                        android:textSize="18sp"
+                        tools:ignore="HardcodedText" />
 
                     <ImageView
+                        android:contentDescription="@string/empty_space"
                         android:id="@+id/calendarNextMonthButton"
                         android:layout_width="46dp"
                         android:layout_height="46dp"
@@ -125,59 +130,65 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             >
+
             <TableRow
                 android:background="@color/asbestos"
                 android:minHeight="35dp"
-                >
+                tools:ignore="UselessParent" >
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:fontFamily="sans-serif-condensed"
+                    android:gravity="center"
+                    android:text="Mon"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    tools:ignore="HardcodedText" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:fontFamily="sans-serif-condensed"
+                    android:gravity="center"
+                    android:text="Tue"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    tools:ignore="HardcodedText" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:fontFamily="sans-serif-condensed"
+                    android:gravity="center"
+                    android:text="Wed"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    tools:ignore="HardcodedText" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:fontFamily="sans-serif-condensed"
+                    android:gravity="center"
+                    android:text="Thu"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    tools:ignore="HardcodedText" />
+
                 <TextView 
                     android:gravity="center"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="match_parent"
                     android:fontFamily="sans-serif-condensed"
-                    android:textSize="16dp"
+                    android:textSize="16sp"
                     android:textColor="@color/white"
-                    
-                    android:text="Mon" />
-                <TextView 
-                    android:gravity="center"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="match_parent"
-                    android:fontFamily="sans-serif-condensed"
-                    android:textSize="16dp"
-                    android:textColor="@color/white"
-                    
-                    android:text="Tue" />
-                <TextView 
-                    android:gravity="center"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="match_parent"
-                    android:fontFamily="sans-serif-condensed"
-                    android:textSize="16dp"
-                    android:textColor="@color/white"
-                    
-                    android:text="Wed" />
-                <TextView 
-                    android:gravity="center"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="match_parent"
-                    android:fontFamily="sans-serif-condensed"
-                    android:textSize="16dp"
-                    android:textColor="@color/white"
-                    
-                    android:text="Thu" />
-                <TextView 
-                    android:gravity="center"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="match_parent"
-                    android:fontFamily="sans-serif-condensed"
-                    android:textSize="16dp"
-                    android:textColor="@color/white"
-                    
+                    tools:ignore="HardcodedText"
                     android:text="Fri" />
                 <TextView 
                     android:gravity="center"
@@ -185,19 +196,22 @@
                     android:layout_weight="1"
                     android:layout_height="match_parent"
                     android:fontFamily="sans-serif-condensed"
-                    android:textSize="16dp"
+                    android:textSize="16sp"
                     android:textColor="@color/white"
-                    
+                    tools:ignore="HardcodedText"
                     android:text="Sat" />
-                <TextView 
-                    android:gravity="center"
+
+                <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="1"
                     android:layout_height="match_parent"
+                    android:layout_weight="1"
                     android:fontFamily="sans-serif-condensed"
-                    android:textSize="16dp"
+                    android:gravity="center"
+                    android:text="Sun"
                     android:textColor="@color/white"
-                    android:text="Sun" />
+                    android:textSize="16sp"
+                    tools:ignore="HardcodedText" />
+
             </TableRow>
         </TableLayout>
 		

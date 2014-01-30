@@ -1,27 +1,33 @@
 package id.ac.ub.ptiik.papps;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
 import id.ac.ub.ptiik.papps.adapters.CalendarAdapter;
+import id.ac.ub.ptiik.papps.base.CalendarCell;
+import id.ac.ub.ptiik.papps.interfaces.AgendaKaryawanIndexInterface;
+import id.ac.ub.ptiik.papps.tasks.AgendaKaryawanTask;
+import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.CalendarView;
 import android.widget.GridView;
 import android.widget.TextView;
 
 public class CalendarFragment extends Fragment
-	implements OnClickListener {
+	implements OnClickListener, AgendaKaryawanIndexInterface {
 	
 	View v;
 	TextView monthYearText;
 	Calendar currentCalendar;
+	String userId;
+	AgendaKaryawanTask agendaKaryawanTask;
+	CalendarAdapter adapter;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -37,13 +43,22 @@ public class CalendarFragment extends Fragment
 		View prevMonthButton = this.v.findViewById(R.id.calendarPrevMonthButton);
 		nextMonthButton.setOnClickListener(this);
 		prevMonthButton.setOnClickListener(this);
+		
+		this.userId = this.getArguments().getString("idKaryawan");
+		this.agendaKaryawanTask = 
+				new AgendaKaryawanTask(getActivity(), 
+						(AgendaKaryawanIndexInterface) this, 
+						this.userId, this.currentCalendar.get(Calendar.MONTH), 
+						this.currentCalendar.get(Calendar.YEAR));
+		agendaKaryawanTask.execute();
+		
 		return v;
 	}
 	
 	@Override
 	public void onStart() {
 		super.onStart();
-		CalendarAdapter adapter = new CalendarAdapter(getActivity(), 1, 2014);
+		this.adapter = new CalendarAdapter(getActivity(), 1, 2014);
 		GridView calendarGrid = (GridView) this.v.findViewById(R.id.calendarGrid);
 		calendarGrid.setAdapter(adapter);
 		adapter.notifyDataSetChanged();
@@ -51,24 +66,49 @@ public class CalendarFragment extends Fragment
 
 	@Override
 	public void onClick(View v) {
-		int month = this.currentCalendar.get(Calendar.MONTH);
-		int year = this.currentCalendar.get(Calendar.YEAR);
-		SimpleDateFormat sdf = new SimpleDateFormat("MMM yyyy", Locale.US);
-		Log.d("month before", String.valueOf(this.currentCalendar.get(Calendar.MONTH)));
-		
-		switch(v.getId()) {
-			case R.id.calendarNextMonthButton:
-				month++;
-				break;
-			case R.id.calendarPrevMonthButton:
-				month--;
-				break;
+		if(this.agendaKaryawanTask.getStatus() != Status.RUNNING) {
+			int month = this.currentCalendar.get(Calendar.MONTH);
+			SimpleDateFormat sdf = new SimpleDateFormat("MMM yyyy", Locale.US);		
+			switch(v.getId()) {
+				case R.id.calendarNextMonthButton:
+					month++;
+					break;
+				case R.id.calendarPrevMonthButton:
+					month--;
+					break;
+			}
+			this.currentCalendar.set(Calendar.MONTH, month);
+			this.monthYearText = (TextView) this.v.findViewById(R.id.calendarMonthYearText);
+			this.monthYearText.setText(sdf.format(this.currentCalendar.getTime()));
+			this.agendaKaryawanTask = 
+					new AgendaKaryawanTask(getActivity(), 
+							(AgendaKaryawanIndexInterface) this, 
+							this.userId, this.currentCalendar.get(Calendar.MONTH), 
+							this.currentCalendar.get(Calendar.YEAR));
+			this.agendaKaryawanTask.execute();
 		}
-		
-		this.currentCalendar.set(Calendar.MONTH, month);
+	}
 
-		Log.d("month after", String.valueOf(this.currentCalendar.get(Calendar.MONTH)));
-		this.monthYearText = (TextView) this.v.findViewById(R.id.calendarMonthYearText);
-		this.monthYearText.setText(sdf.format(this.currentCalendar.getTime()));
+	@Override
+	public void onRetrievingStart() {
+		this.v.findViewById(R.id.calendarTableContainer).animate()
+		.alpha(0)
+		.setDuration(300)
+		.start();
+	}
+
+	@Override
+	public void onRetrieveComplete(ArrayList<CalendarCell> calendarCells) {
+		this.v.findViewById(R.id.calendarTableContainer).animate()
+		.alpha(1)
+		.setDuration(300)
+		.start();
+		this.adapter.fillCalendar(calendarCells);
+		this.adapter.notifyDataSetChanged();
+	}
+
+	@Override
+	public void onRetrieveFail(String error) {
+		
 	}
 }

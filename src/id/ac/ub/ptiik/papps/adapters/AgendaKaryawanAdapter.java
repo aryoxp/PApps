@@ -80,6 +80,7 @@ public class AgendaKaryawanAdapter extends BaseAdapter {
 		vh.kegiatan.setText(agenda.kegiatan);
 		vh.keterangan.setText(keterangan);
 		vh.row.setVisibility(View.VISIBLE);
+		
 		return rowView;
 	}
 
