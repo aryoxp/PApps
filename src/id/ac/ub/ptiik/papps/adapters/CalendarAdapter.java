@@ -2,7 +2,6 @@ package id.ac.ub.ptiik.papps.adapters;
 
 import id.ac.ub.ptiik.papps.R;
 import id.ac.ub.ptiik.papps.base.CalendarCell;
-import id.ac.ub.ptiik.papps.base.CalendarDayCell;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -61,11 +60,11 @@ public class CalendarAdapter extends BaseAdapter {
 		this.dayList = new ArrayList<CalendarCell>();
 		
 		for(int i = currentDayOfWeek-3; i>=0; i--) {
-			CalendarDayCell cell = new CalendarDayCell(prevMonthDays-i, false);
+			CalendarCell cell = new CalendarCell(prevMonthDays-i, false);
 			this.dayList.add(cell);
 		}
 		for(int i = 1; i<=currentMonth.getActualMaximum(Calendar.DAY_OF_MONTH); i++) {
-			CalendarDayCell cell = new CalendarDayCell(i);
+			CalendarCell cell = new CalendarCell(i);
 			if(i == this.todayDate) cell.setToday();
 			this.dayList.add(cell);
 		}
@@ -73,7 +72,7 @@ public class CalendarAdapter extends BaseAdapter {
 		int lastDayOfWeek = currentMonth.get(Calendar.DAY_OF_WEEK);
 		int d = 1;
 		for(int i=lastDayOfWeek; i<=7; i++) {
-			CalendarDayCell cell = new CalendarDayCell(d, false);
+			CalendarCell cell = new CalendarCell(d, false);
 			this.dayList.add(cell);
 			d++;
 		}
@@ -115,7 +114,7 @@ public class CalendarAdapter extends BaseAdapter {
 		} 
 		ViewHolder vh = (ViewHolder) v.getTag();
 		
-		CalendarDayCell c = (CalendarDayCell) cell;
+		CalendarCell c = (CalendarCell) cell;
 		vh.dayText.setText(String.valueOf(c.date));
 		if(!c.currentMonth)
 			vh.dayText.setTextColor(context.getResources().getColor(R.color.silver));

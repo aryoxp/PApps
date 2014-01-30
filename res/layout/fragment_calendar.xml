@@ -74,6 +74,52 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             >
+
+            <TableLayout
+                android:stretchColumns="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <TableRow
+                    android:id="@+id/tableRow1"
+                    android:background="@color/silver"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" >
+
+                    <ImageView
+                        android:id="@+id/calendarPrevMonthButton"
+                        android:layout_width="46dp"
+                        android:layout_height="46dp"
+                        android:padding="8dp"
+                        android:layout_weight="1"
+                        android:clickable="true"
+                        android:background="@drawable/button_gray"
+                        android:src="@drawable/chevron_medium_thin_2_02" />
+
+                    <TextView
+                        android:id="@+id/calendarMonthYearText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:layout_weight="3"
+                     	android:textColor="@color/white"
+                     	android:textSize="18dp"
+                     	android:fontFamily="sans-serif-condensed"
+                        android:text="TextView" />
+
+                    <ImageView
+                        android:id="@+id/calendarNextMonthButton"
+                        android:layout_width="46dp"
+                        android:layout_height="46dp"
+                        android:padding="8dp"
+                        android:layout_weight="1"
+                        android:clickable="true"
+                        android:background="@drawable/button_gray"
+                        android:src="@drawable/chevron_medium_thin_2_01" />
+
+                </TableRow>
+            </TableLayout>
+
         <TableLayout
             android:stretchColumns="*"
             android:layout_width="match_parent"
