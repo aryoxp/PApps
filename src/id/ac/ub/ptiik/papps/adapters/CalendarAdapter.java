@@ -2,6 +2,7 @@ package id.ac.ub.ptiik.papps.adapters;
 
 import id.ac.ub.ptiik.papps.R;
 import id.ac.ub.ptiik.papps.base.CalendarCell;
+
 import java.util.ArrayList;
 import android.app.Service;
 import android.content.Context;
@@ -15,24 +16,15 @@ public class CalendarAdapter extends BaseAdapter {
 	
 	Context context;
 	ArrayList<CalendarCell> dayList;
-	
-	int month, year;
-	
-	
-	public CalendarAdapter(Context c, int month, int year) {
+		
+	public CalendarAdapter(Context c) {
 		this.dayList = new ArrayList<CalendarCell>();
 		this.context = c;
-		this.month = month;
-		this.year = year;
-		//this.agendaList = new ArrayList<AgendaKaryawan>();
-		//this.calculateMonth(month, year);
 	}
 	
 	public void fillCalendar(ArrayList<CalendarCell> dayList) {
-		this.dayList = dayList;
-		//this.agendaList.clear();
-		//this.agendaList.addAll(agendaList);
-		//this.calculateMonth(month, year);
+		this.dayList.clear();
+		this.dayList.addAll(dayList);
 	}
 	
 	
@@ -72,12 +64,16 @@ public class CalendarAdapter extends BaseAdapter {
 		ViewHolder vh = (ViewHolder) v.getTag();
 		
 		CalendarCell c = (CalendarCell) cell;
-		vh.dayText.setText(String.valueOf(c.date) + " - " + c.getAgendaCount());
-		if(!c.currentMonth)
-			vh.dayText.setTextColor(context.getResources().getColor(R.color.silver));
+		vh.dayText.setText(String.valueOf(c.getDateString()) + " - " + c.getAgendaCount());
+		
 		if(c.today) {
 			vh.cell.setBackgroundColor(context.getResources().getColor(R.color.petermann));
 			vh.dayText.setTextColor(context.getResources().getColor(R.color.white));
+		} else {
+			vh.cell.setBackgroundColor(context.getResources().getColor(R.color.white));
+			if(!c.currentMonth)
+				vh.dayText.setTextColor(context.getResources().getColor(R.color.silver));
+			else vh.dayText.setTextColor(context.getResources().getColor(R.color.asbestos));
 		}
 		
 		return v;

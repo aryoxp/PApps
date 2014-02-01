@@ -142,7 +142,7 @@ public class MainActivity extends SlidingFragmentActivity
 				if(newFragment == null) {
 					User u = SystemHelper.getSystemUser(this);
 					if(u == null) {
-						Toast.makeText(this, "You are not allowed to access this features", 
+						Toast.makeText(this, "You have to login to use this feature", 
 								Toast.LENGTH_SHORT).show();
 						return;
 					}

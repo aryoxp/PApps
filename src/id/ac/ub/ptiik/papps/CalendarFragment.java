@@ -16,11 +16,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 import android.widget.TextView;
 
 public class CalendarFragment extends Fragment
-	implements OnClickListener, AgendaKaryawanIndexInterface {
+	implements OnClickListener, AgendaKaryawanIndexInterface, OnItemClickListener {
 	
 	View v;
 	TextView monthYearText;
@@ -28,6 +30,7 @@ public class CalendarFragment extends Fragment
 	String userId;
 	AgendaKaryawanTask agendaKaryawanTask;
 	CalendarAdapter adapter;
+	GridView calendarGrid;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -45,12 +48,7 @@ public class CalendarFragment extends Fragment
 		prevMonthButton.setOnClickListener(this);
 		
 		this.userId = this.getArguments().getString("idKaryawan");
-		this.agendaKaryawanTask = 
-				new AgendaKaryawanTask(getActivity(), 
-						(AgendaKaryawanIndexInterface) this, 
-						this.userId, this.currentCalendar.get(Calendar.MONTH), 
-						this.currentCalendar.get(Calendar.YEAR));
-		agendaKaryawanTask.execute();
+		
 		
 		return v;
 	}
@@ -58,10 +56,15 @@ public class CalendarFragment extends Fragment
 	@Override
 	public void onStart() {
 		super.onStart();
-		this.adapter = new CalendarAdapter(getActivity(), 1, 2014);
-		GridView calendarGrid = (GridView) this.v.findViewById(R.id.calendarGrid);
-		calendarGrid.setAdapter(adapter);
-		adapter.notifyDataSetChanged();
+		this.adapter = new CalendarAdapter(getActivity());
+		this.calendarGrid = (GridView) this.v.findViewById(R.id.calendarGrid);
+		this.calendarGrid.setAdapter(this.adapter);
+		this.calendarGrid.setOnItemClickListener(this);
+		int month = this.currentCalendar.get(Calendar.MONTH);
+		int year = this.currentCalendar.get(Calendar.YEAR);
+		this.agendaKaryawanTask = 
+				new AgendaKaryawanTask(getActivity(), this, this.userId, month, year);
+		this.agendaKaryawanTask.execute();
 	}
 
 	@Override
@@ -110,5 +113,19 @@ public class CalendarFragment extends Fragment
 	@Override
 	public void onRetrieveFail(String error) {
 		
+	}
+
+	@Override
+	public void onRetrieveProgress(int percent, String status) {
+		TextView statusText = (TextView) this.v.findViewById(R.id.calendarLoadingStatusText);
+		statusText.setText(status);
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+		CalendarCell cell = (CalendarCell) this.adapter.getItem(position);
+		DayCalendarFragment fragment = new DayCalendarFragment();
+		fragment.putCalendarCell(cell);
+		fragment.show(this.getFragmentManager(), "dayCalendar");
 	}
 }

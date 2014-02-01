@@ -8,4 +8,5 @@ public interface AgendaKaryawanIndexInterface {
 	public void onRetrievingStart();
 	public void onRetrieveComplete(ArrayList<CalendarCell> calendarCells);
 	public void onRetrieveFail(String error);
+	public void onRetrieveProgress(int percent, String status);
 }

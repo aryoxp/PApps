@@ -1,20 +1,23 @@
 package id.ac.ub.ptiik.papps.base;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
+import java.util.Locale;
 
 public class CalendarCell {
-	public int date;
+	public GregorianCalendar calendar;
 	public boolean currentMonth = true;
 	public boolean today = false;
 	private ArrayList<AgendaKaryawan> listAgenda;
 	
-	public CalendarCell(int date) {
-		this.date = date;
+	public CalendarCell(GregorianCalendar calendar) {
+		this.calendar = calendar;
 		this.listAgenda = new ArrayList<AgendaKaryawan>();
 	}
 	
-	public CalendarCell(int date, boolean current) {
-		this.date = date;
+	public CalendarCell(GregorianCalendar calendar, boolean current) {
+		this.calendar = calendar;
 		this.currentMonth = current;
 		this.listAgenda = new ArrayList<AgendaKaryawan>();
 	}
@@ -33,5 +36,15 @@ public class CalendarCell {
 	
 	public int getAgendaCount() {
 		return this.listAgenda.size();
+	}
+
+	public String getDateMonthString() {
+		SimpleDateFormat sdf = new SimpleDateFormat("dd MMM", Locale.US);
+		return sdf.format(this.calendar.getTime());
+	}
+	
+	public String getDateString() {
+		SimpleDateFormat sdf = new SimpleDateFormat("d", Locale.US);
+		return sdf.format(this.calendar.getTime());
 	}
 }
