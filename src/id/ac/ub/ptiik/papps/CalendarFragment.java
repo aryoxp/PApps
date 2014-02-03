@@ -42,11 +42,13 @@ public class CalendarFragment extends Fragment
 		this.currentCalendar.set(Calendar.DAY_OF_MONTH, 1);
 		this.monthYearText = (TextView) v.findViewById(R.id.calendarMonthYearText);
 		this.monthYearText.setText(sdf.format(this.currentCalendar.getTime()));
+		this.v.findViewById(R.id.calendarTableContainer).setAlpha(0);
 		View nextMonthButton = this.v.findViewById(R.id.calendarNextMonthButton);
 		View prevMonthButton = this.v.findViewById(R.id.calendarPrevMonthButton);
+		View refreshButton = this.v.findViewById(R.id.calendarButtonRefresh);
 		nextMonthButton.setOnClickListener(this);
 		prevMonthButton.setOnClickListener(this);
-		
+		refreshButton.setOnClickListener(this);
 		this.userId = this.getArguments().getString("idKaryawan");
 		
 		
@@ -69,26 +71,34 @@ public class CalendarFragment extends Fragment
 
 	@Override
 	public void onClick(View v) {
-		if(this.agendaKaryawanTask.getStatus() != Status.RUNNING) {
-			int month = this.currentCalendar.get(Calendar.MONTH);
-			SimpleDateFormat sdf = new SimpleDateFormat("MMM yyyy", Locale.US);		
-			switch(v.getId()) {
-				case R.id.calendarNextMonthButton:
-					month++;
-					break;
-				case R.id.calendarPrevMonthButton:
-					month--;
-					break;
+		switch(v.getId()) {
+		case R.id.calendarButtonRefresh:
+		case R.id.calendarNextMonthButton:
+		case R.id.calendarPrevMonthButton:
+			if(this.agendaKaryawanTask.getStatus() != Status.RUNNING) {
+				int month = this.currentCalendar.get(Calendar.MONTH);
+				SimpleDateFormat sdf = new SimpleDateFormat("MMM yyyy", Locale.US);		
+				switch(v.getId()) {
+					case R.id.calendarButtonRefresh:
+						break;
+					case R.id.calendarNextMonthButton:
+						month++;
+						break;
+					case R.id.calendarPrevMonthButton:
+						month--;
+						break;
+				}
+				this.currentCalendar.set(Calendar.MONTH, month);
+				this.monthYearText = (TextView) this.v.findViewById(R.id.calendarMonthYearText);
+				this.monthYearText.setText(sdf.format(this.currentCalendar.getTime()));
+				this.agendaKaryawanTask = 
+						new AgendaKaryawanTask(getActivity(), 
+								(AgendaKaryawanIndexInterface) this, 
+								this.userId, this.currentCalendar.get(Calendar.MONTH), 
+								this.currentCalendar.get(Calendar.YEAR));
+				this.agendaKaryawanTask.execute();
 			}
-			this.currentCalendar.set(Calendar.MONTH, month);
-			this.monthYearText = (TextView) this.v.findViewById(R.id.calendarMonthYearText);
-			this.monthYearText.setText(sdf.format(this.currentCalendar.getTime()));
-			this.agendaKaryawanTask = 
-					new AgendaKaryawanTask(getActivity(), 
-							(AgendaKaryawanIndexInterface) this, 
-							this.userId, this.currentCalendar.get(Calendar.MONTH), 
-							this.currentCalendar.get(Calendar.YEAR));
-			this.agendaKaryawanTask.execute();
+			break;
 		}
 	}
 

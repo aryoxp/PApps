@@ -29,7 +29,7 @@ public class DayCalendarFragment extends DialogFragment {
 		TextView numAgenda = (TextView) this.v.findViewById(R.id.agendaNumAgendaText);
 		
 		numAgenda.setText(this.cell.getListAgenda().size() + " Events");
-		tanggal.setText(this.cell.getDateMonthString());
+		tanggal.setText(this.cell.getFormattedString("d MMM yyyy"));
 		
 		return v;
 	}

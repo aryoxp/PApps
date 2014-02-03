@@ -46,11 +46,13 @@ public class CalendarAdapter extends BaseAdapter {
 	class ViewHolder {
 		View cell;
 		TextView dayText;
+		TextView calendarItems;
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		CalendarCell cell = this.dayList.get(position);
+		CalendarCell c = this.dayList.get(position);
 		
 		View v = convertView;
 		if(v == null) {
@@ -59,21 +61,32 @@ public class CalendarAdapter extends BaseAdapter {
 			ViewHolder vh = new ViewHolder();
 			vh.dayText = (TextView) v.findViewById(R.id.calendarDayText);
 			vh.cell = v.findViewById(R.id.calendarCell);
+			vh.calendarItems = (TextView) v.findViewById(R.id.calendarDayNumEvents);
 			v.setTag(vh);
 		} 
 		ViewHolder vh = (ViewHolder) v.getTag();
 		
-		CalendarCell c = (CalendarCell) cell;
-		vh.dayText.setText(String.valueOf(c.getDateString()) + " - " + c.getAgendaCount());
-		
+		int agendaCount = c.getAgendaCount();
+		vh.dayText.setText(String.valueOf(c.getDateString()));
+		String s = "";
+		if(agendaCount > 1) s = "S"; 
+		if(agendaCount > 0) vh.calendarItems.setText(agendaCount + " EVT" + s);
+		else vh.calendarItems.setText("");
 		if(c.today) {
 			vh.cell.setBackgroundColor(context.getResources().getColor(R.color.petermann));
 			vh.dayText.setTextColor(context.getResources().getColor(R.color.white));
+			vh.calendarItems.setTextColor(context.getResources().getColor(R.color.white));
 		} else {
-			vh.cell.setBackgroundColor(context.getResources().getColor(R.color.white));
-			if(!c.currentMonth)
-				vh.dayText.setTextColor(context.getResources().getColor(R.color.silver));
-			else vh.dayText.setTextColor(context.getResources().getColor(R.color.asbestos));
+			if(c.isSunday()) {
+				vh.dayText.setTextColor(context.getResources().getColor(R.color.white));
+				vh.calendarItems.setTextColor(context.getResources().getColor(R.color.white));
+				vh.cell.setBackgroundDrawable(context.getResources().getDrawable(R.color.alizarinlight));
+			} else {
+				vh.cell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.button_white));
+				if(!c.currentMonth)
+					vh.dayText.setTextColor(context.getResources().getColor(R.color.silver));
+				else vh.dayText.setTextColor(context.getResources().getColor(R.color.asbestos));
+			}
 		}
 		
 		return v;

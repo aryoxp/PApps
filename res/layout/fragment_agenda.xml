@@ -19,8 +19,9 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:textColor="@color/white"
-            android:textSize="26sp"
+            android:textSize="32sp"
             android:text="26 Jan"
+            android:fontFamily="sans-serif-condensed"
             tools:ignore="HardcodedText" />
 
         <TextView
