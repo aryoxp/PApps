@@ -75,12 +75,12 @@
             android:layout_weight="3"
              />
     </LinearLayout>
-
+	<!-- 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/clouds" />
-
+	-->
     <ListView
         android:id="@+id/scheduleList"
         android:layout_width="match_parent"

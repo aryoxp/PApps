@@ -121,7 +121,7 @@ public class CalendarFragment extends Fragment
 	}
 
 	@Override
-	public void onRetrieveFail(String error) {
+	public void onRetrieveFail(String error) {		
 		
 	}
 

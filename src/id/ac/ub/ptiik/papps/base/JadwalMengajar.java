@@ -11,6 +11,10 @@ public class JadwalMengajar {
 	public String jam_mulai;
 	public String jam_selesai;
 	
+	public static final int DOSEN = 1;
+	public static final int DAY = 2;
+	public static final int SUBJECT = 3;
+	
 	public JadwalMengajar(String kelas, String hari, String ruang, String prodi, 
 			String jam_mulai, String jam_selesai) {
 		this.kelas = kelas;

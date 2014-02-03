@@ -90,12 +90,19 @@ public class ScheduleFragment extends Fragment
 				}
 				break;
 			case R.id.scheduleOptions:
+				JadwalMengajarTask task = new JadwalMengajarTask(getActivity(), this);
 				if(this.scheduleOptions.getAdapter().getClass() == KaryawanAdapter.class)
 				{
-					Karyawan karyawan = (Karyawan) this.scheduleOptions.getSelectedItem();
-					JadwalMengajarTask task = new JadwalMengajarTask(getActivity(), this, karyawan);
-					task.execute();
+					Karyawan karyawan = (Karyawan) this.scheduleOptions.getSelectedItem();					
+					task.setByKaryawan(karyawan);
+				} else if(this.scheduleOptions.getAdapter().getClass() == DayAdapter.class){
+					String day = (String) this.scheduleOptions.getSelectedItem();
+					task.setByDay(day);
+				} else if(this.scheduleOptions.getAdapter().getClass() == MatakuliahAdapter.class){
+					String kodeSubject = ((Matakuliah)this.scheduleOptions.getSelectedItem()).getKode();
+					task.setBySubject(kodeSubject);
 				}
+					task.execute();
 				break;
 		}
 	}

@@ -19,11 +19,27 @@ public class JadwalMengajarTask extends AsyncTask<Void, Void, ArrayList<JadwalMe
 	private String error;
 	private Context c;
 	private Karyawan karyawan;
+	private int jadwalMengajarBy;
+	private String day, kodeSubject;
 		
-	public JadwalMengajarTask(Context c, JadwalMengajarIndexInterface mCallback, Karyawan karyawan) {
+	public JadwalMengajarTask(Context c, JadwalMengajarIndexInterface mCallback) {
 		this.mCallback = mCallback;
 		this.c = c;
+	}
+	
+	public void setByKaryawan(Karyawan karyawan) {
 		this.karyawan = karyawan;
+		this.jadwalMengajarBy = JadwalMengajar.DOSEN;
+	}
+	
+	public void setByDay(String day) {
+		this.day = day;
+		this.jadwalMengajarBy = JadwalMengajar.DAY;
+	}
+	
+	public void setBySubject(String kodeSubject){
+		this.kodeSubject = kodeSubject;
+		this.jadwalMengajarBy = JadwalMengajar.SUBJECT;
 	}
 
 	@Override
@@ -39,7 +55,17 @@ public class JadwalMengajarTask extends AsyncTask<Void, Void, ArrayList<JadwalMe
 			String host = PreferenceManager
 					.getDefaultSharedPreferences(this.c)
 					.getString("host", "175.45.187.246");
-			String url = "http://"+host+"/service/index.php/karyawan/jadwal/" + this.karyawan.id;  
+			String url = null;
+			switch(this.jadwalMengajarBy) {
+			case JadwalMengajar.DOSEN:
+				url = "http://"+host+"/service/index.php/jadwal/karyawan/" + this.karyawan.id;
+				break;
+			case JadwalMengajar.DAY:
+				url = "http://"+host+"/service/index.php/jadwal/day/" + this.getDay();
+				break;
+			case JadwalMengajar.SUBJECT:
+				url = "http://"+host+"/service/index.php/jadwal/subject/" + this.kodeSubject;
+			}
 			String result = Rest.getInstance().get(url).getResponseText();
 			ArrayList<JadwalMengajar> jadwalMengajarList = JadwalMengajarParser.Parse(result);
 			return jadwalMengajarList;
@@ -56,5 +82,16 @@ public class JadwalMengajarTask extends AsyncTask<Void, Void, ArrayList<JadwalMe
 		} else {
 			this.mCallback.onJadwalRetrieveFail(this.error);
 		}
+	}
+	
+	private String getDay(){
+		if(this.day.equals("Monday")) return "senin";
+		if(this.day.equals("Tuesday")) return "selasa";
+		if(this.day.equals("Wednesday")) return "rabu";
+		if(this.day.equals("Thursday")) return "kamis";
+		if(this.day.equals("Friday")) return "jumat";
+		if(this.day.equals("Saturday")) return "sabtu";
+		if(this.day.equals("Sunday")) return "minggu";
+		return null;
 	}
 }

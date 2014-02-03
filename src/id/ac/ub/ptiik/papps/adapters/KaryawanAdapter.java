@@ -24,6 +24,15 @@ public class KaryawanAdapter extends BaseAdapter {
 		this.karyawanList = karyawanList;
 	}
 	
+	public int findItem(Karyawan karyawan) {
+		for (int i = 0; i<this.karyawanList.size(); i++) {
+			if(karyawan.id.equals(this.karyawanList.get(i).id)) {
+				return i;
+			}
+		}
+		return -1;
+	}
+	
 	@Override
 	public int getCount() {
 		return karyawanList.size();
