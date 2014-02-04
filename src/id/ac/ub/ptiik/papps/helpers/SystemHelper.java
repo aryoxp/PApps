@@ -23,4 +23,17 @@ public class SystemHelper {
 		.putString("user", userGson)
 		.commit();
 	}
+	
+	public static void setPreference(Context context, String key, String value) {
+		PreferenceManager.getDefaultSharedPreferences(context)
+		.edit().putString(key, value)
+		.commit();
+	}
+	
+	public static String getPreference(Context context, String key) {
+		String value = PreferenceManager.getDefaultSharedPreferences(context)
+				.getString(key, null);
+		return value;
+	}
+	
 }

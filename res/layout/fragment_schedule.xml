@@ -63,28 +63,41 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:paddingTop="4dp"
             android:paddingBottom="4dp"
-             />
+            android:paddingTop="4dp" />
 
         <Spinner
             android:id="@+id/scheduleOptions"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_gravity="bottom"
-            android:layout_weight="3"
-             />
+            android:layout_weight="3" />
     </LinearLayout>
-	<!-- 
+    <!--
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/clouds" />
-	-->
-    <ListView
-        android:id="@+id/scheduleList"
+    -->
+
+    <FrameLayout
+        android:id="@+id/scheduleListContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
-    </ListView>
+
+        <ListView
+            android:id="@+id/scheduleList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+        </ListView>
+
+        <ProgressBar
+            android:id="@+id/scheduleProgressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:indeterminate="true" />
+
+    </FrameLayout>
 
 </LinearLayout>

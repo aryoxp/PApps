@@ -41,6 +41,13 @@ public class NavigationFragment extends Fragment implements OnItemClickListener 
 		return this.menuAdapter;
 	}
 	
+	public void activateMenu(int position) {
+		for(int i=0; i<this.menus.size(); i++)
+			this.menus.get(i).deactivate();
+		this.menus.get(position).activate();
+		this.menuAdapter.notifyDataSetChanged();
+	}
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {

@@ -80,7 +80,10 @@ public class JadwalMengajarTask extends AsyncTask<Void, Void, ArrayList<JadwalMe
 		if(jadwalMengajarList != null) {
 			this.mCallback.onJadwalRetrieveComplete(jadwalMengajarList);
 		} else {
-			this.mCallback.onJadwalRetrieveFail(this.error);
+			if(this.error == null) {
+				this.mCallback.onJadwalRetrieveComplete(new ArrayList<JadwalMengajar>());
+				return;
+			} this.mCallback.onJadwalRetrieveFail(this.error);
 		}
 	}
 	

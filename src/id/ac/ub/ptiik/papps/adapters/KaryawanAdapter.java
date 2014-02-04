@@ -2,6 +2,8 @@ package id.ac.ub.ptiik.papps.adapters;
 
 import id.ac.ub.ptiik.papps.R;
 import id.ac.ub.ptiik.papps.base.Karyawan;
+import id.ac.ub.ptiik.papps.base.User;
+
 import java.util.ArrayList;
 //import java.util.Locale;
 
@@ -24,10 +26,12 @@ public class KaryawanAdapter extends BaseAdapter {
 		this.karyawanList = karyawanList;
 	}
 	
-	public int findItem(Karyawan karyawan) {
-		for (int i = 0; i<this.karyawanList.size(); i++) {
-			if(karyawan.id.equals(this.karyawanList.get(i).id)) {
-				return i;
+	public int findItem(User u) {
+		if(u != null) {
+			for (int i = 0; i<this.karyawanList.size(); i++) {
+				if(u.karyawan_id != null && u.karyawan_id.equals(this.karyawanList.get(i).id)) {
+					return i;
+				}
 			}
 		}
 		return -1;

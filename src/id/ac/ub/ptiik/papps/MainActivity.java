@@ -125,8 +125,7 @@ public class MainActivity extends SlidingFragmentActivity
 				if(newFragment == null) {
 					newFragment = new ScheduleFragment();
 					tag = "schedule";
-				}
-				else if(position == 3) return;
+				} else if(position == 3) return;
 				break;
 			case 1:
 				newFragment = getSupportFragmentManager()
@@ -181,7 +180,7 @@ public class MainActivity extends SlidingFragmentActivity
 				.findFragmentByTag("dashboard");
 		
 		if(fragment == null) {
-			this.navFragment.getMenu().get(0).activate();
+			
 			fragment = new DashboardFragment();
 			String tag = "dashboard" ;
 			getSupportFragmentManager()
@@ -189,6 +188,8 @@ public class MainActivity extends SlidingFragmentActivity
 			.setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
 			.replace(R.id.contentContainer, fragment, tag)
 			.commit();
+			
+			this.navFragment.activateMenu(0);
 			
 		} else {
 			super.onBackPressed();
