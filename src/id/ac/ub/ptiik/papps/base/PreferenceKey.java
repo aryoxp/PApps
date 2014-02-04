@@ -1,6 +1,7 @@
 package id.ac.ub.ptiik.papps.base;
 
 public class PreferenceKey {
-	public static final int USER_ID = 1;
-	public static final int WEATHER_TIMESTAMP = 2;
+	public static final String USER_ID = "uid";
+	public static final String WEATHER_TIMESTAMP = "weatherTimestamp";
+	public static final String WEATHER_JSON = "weatherJson";
 }

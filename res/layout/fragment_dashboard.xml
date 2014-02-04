@@ -17,18 +17,18 @@
             android:layout_height="match_parent"
             android:gravity="right|center_vertical"
             android:paddingRight="10dp"
-            android:textColor="@color/asbestos"
-            android:text="You are not signed in." />
+            android:text="You are not signed in."
+            android:textColor="@color/asbestos" />
 
         <LinearLayout
             android:id="@+id/dashboardUserContainer"
-            android:background="@color/white"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:background="@color/white" >
 
             <TextView
                 android:id="@+id/dashboardUsernameText"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
@@ -38,6 +38,7 @@
                 android:textColor="@color/asbestos" />
 
             <ImageView
+                android:contentDescription="@string/empty_space"
                 android:id="@+id/dashboardButtonSignOut"
                 android:layout_width="58dp"
                 android:layout_height="42dp"
@@ -97,8 +98,9 @@
                         android:id="@+id/dashboardHumidityText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-condensed"
                         android:paddingRight="5dp"
-                        android:text="94%"
+                        android:text="H94%"
                         android:textColor="@color/white"
                         android:textSize="26sp" />
 
@@ -109,22 +111,36 @@
                         android:gravity="right"
                         android:text="26°C"
                         android:textColor="@color/white"
-                        android:textSize="48sp" />
+                        android:maxLines="1"
+                        android:textSize="52sp" />
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/locationContianer"
+                    android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" >
 
                     <TextView
                         android:id="@+id/dashboardTemperatureDescriptionText"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-condensed"
                         android:gravity="right"
-                        android:text="Malang, ID - Light Rain"
+                        android:text="Malang - Light Rain"
                         android:textColor="#CCffffff"
-                        android:textSize="13sp" />
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/dashboardTimestampText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-condensed"
+                        android:gravity="right"
+                        android:paddingLeft="5dp"
+                        android:text="Sat, 19 Jun 20:04"
+                        android:maxLines="1"
+                        android:textColor="#CCffffff"
+                        android:textSize="12sp" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

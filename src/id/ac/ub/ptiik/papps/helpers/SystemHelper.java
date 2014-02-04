@@ -30,9 +30,21 @@ public class SystemHelper {
 		.commit();
 	}
 	
-	public static String getPreference(Context context, String key) {
+	public static String getPreferenceString(Context context, String key) {
 		String value = PreferenceManager.getDefaultSharedPreferences(context)
 				.getString(key, null);
+		return value;
+	}
+	
+	public static Long getPreferenceLong(Context context, String key) {
+		Long value = PreferenceManager.getDefaultSharedPreferences(context)
+				.getLong(key, 0);
+		return value;
+	}
+	
+	public static Integer getPreferenceInteger(Context context, String key) {
+		Integer value = PreferenceManager.getDefaultSharedPreferences(context)
+				.getInt(key, 0);
 		return value;
 	}
 	

@@ -1,5 +1,12 @@
 package id.ac.ub.ptiik.papps;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
+import com.google.gson.Gson;
+
+import id.ac.ub.ptiik.papps.base.PreferenceKey;
 import id.ac.ub.ptiik.papps.base.User;
 import id.ac.ub.ptiik.papps.helpers.SystemHelper;
 import id.ac.ub.ptiik.papps.interfaces.LoginDialogFinishInterface;
@@ -34,6 +41,8 @@ public class DashboardFragment extends Fragment
 	private View v;
 	
 	private User user;
+	
+	private int weatherTimestamp;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -73,8 +82,17 @@ public class DashboardFragment extends Fragment
 		super.onStart();
 		
 		if(this.weather == null) {
-			WeatherTask weatherTask = new WeatherTask(this);
-			weatherTask.execute("Malang");
+			this.weatherTimestamp = SystemHelper.getPreferenceInteger(getActivity(), PreferenceKey.WEATHER_TIMESTAMP);
+			int selisih = (int) ((System.currentTimeMillis()/1000)-this.weatherTimestamp);
+			if(this.weatherTimestamp == 0 || selisih > 3600) {
+				WeatherTask weatherTask = new WeatherTask(getActivity(), this);
+				weatherTask.execute("Malang");
+			} else {
+				String jsonWeather = SystemHelper.getPreferenceString(getActivity(), PreferenceKey.WEATHER_JSON);
+				Gson gson = new Gson();
+				Weather w = gson.fromJson(jsonWeather, Weather.class);
+				this.weatherLoaded(w);
+			}
 		}
 		try {
 			this.user = SystemHelper.getSystemUser(getActivity());
@@ -90,6 +108,8 @@ public class DashboardFragment extends Fragment
 
 	@Override
 	public void weatherLoaded(Weather weather) {
+		
+		
 		this.weather = weather;
 		switch(weather.id){
 			case 200:
@@ -167,7 +187,12 @@ public class DashboardFragment extends Fragment
 		
 		this.temperatureView.setText(String.valueOf(weather.temperature) + (char) 0x00B0 + "C");
 		this.humidityView.setText(weather.humidity + "%");
-		this.descriptionView.setText(weather.city + ", " + weather.main + " - " + weather.description);
+		this.descriptionView.setText(weather.city + ", " + weather.main); //  + " - " + weather.description
+		TextView timestampText = (TextView) this.v.findViewById(R.id.dashboardTimestampText);
+		Long timestampLong = (long) this.weatherTimestamp*1000;
+		Date timestamp = new Date(timestampLong);
+		SimpleDateFormat sdf = new SimpleDateFormat("EEE, d MMM HH:mm", Locale.US);
+		timestampText.setText(sdf.format(timestamp).toUpperCase(Locale.US));
 	}
 
 	@Override
