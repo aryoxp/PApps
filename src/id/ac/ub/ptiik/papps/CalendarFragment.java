@@ -134,7 +134,7 @@ public class CalendarFragment extends Fragment
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		CalendarCell cell = (CalendarCell) this.adapter.getItem(position);
-		DayCalendarFragment fragment = new DayCalendarFragment();
+		AgendaFragment fragment = new AgendaFragment();
 		fragment.putCalendarCell(cell);
 		fragment.show(this.getFragmentManager(), "dayCalendar");
 	}

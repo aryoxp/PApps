@@ -32,4 +32,17 @@
         android:fontFamily="sans-serif-condensed"
         tools:ignore="HardcodedText" />
 
+    <TextView
+        android:id="@+id/calendarDayNumPrivateEvents"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-condensed"
+        android:gravity="center_vertical"
+        android:paddingLeft="6dp"
+        android:paddingTop="3dp"
+        android:text="2 EVENTS"
+        android:textColor="@color/alizarin"
+        android:textSize="12sp"
+        tools:ignore="HardcodedText" />
+
 </LinearLayout>

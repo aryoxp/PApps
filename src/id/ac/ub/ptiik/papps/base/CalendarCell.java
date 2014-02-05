@@ -11,17 +11,20 @@ public class CalendarCell {
 	public boolean currentMonth = true;
 	public boolean today = false;
 
-	private ArrayList<AgendaKaryawan> listAgenda;
+	private ArrayList<AgendaKaryawan> listAgendaKaryawan;
+	private ArrayList<Agenda> listAgenda;
 	
 	public CalendarCell(GregorianCalendar calendar) {
 		this.calendar = calendar;
-		this.listAgenda = new ArrayList<AgendaKaryawan>();
+		this.listAgendaKaryawan = new ArrayList<AgendaKaryawan>();
+		this.listAgenda = new ArrayList<Agenda>();
 	}
 	
 	public CalendarCell(GregorianCalendar calendar, boolean current) {
 		this.calendar = calendar;
 		this.currentMonth = current;
-		this.listAgenda = new ArrayList<AgendaKaryawan>();
+		this.listAgendaKaryawan = new ArrayList<AgendaKaryawan>();
+		this.listAgenda = new ArrayList<Agenda>();
 	}
 	
 	public void setToday() {
@@ -29,10 +32,18 @@ public class CalendarCell {
 	}
 	
 	public void addAgenda(AgendaKaryawan agenda) {
+		this.listAgendaKaryawan.add(agenda);
+	}
+	
+	public void addAgenda(Agenda agenda){
 		this.listAgenda.add(agenda);
 	}
 	
-	public ArrayList<AgendaKaryawan> getListAgenda(){
+	public ArrayList<AgendaKaryawan> getListAgendaKaryawan(){
+		return this.listAgendaKaryawan;
+	}
+	
+	public ArrayList<Agenda> getListAgenda(){
 		return this.listAgenda;
 	}
 	
@@ -40,6 +51,10 @@ public class CalendarCell {
 		return this.listAgenda.size();
 	}
 
+	public int getAgendaKaryawanCount() {
+		return this.listAgendaKaryawan.size();
+	}
+	
 	public String getDateMonthString() {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd MMM", Locale.US);
 		return sdf.format(this.calendar.getTime());

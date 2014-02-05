@@ -14,16 +14,15 @@
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:paddingTop="10dp"
-        android:background="@color/white"
         tools:ignore="UselessParent" >
 
         <RelativeLayout
-            android:id="@+id/agendaKaryawanInfoContainer"
+            android:id="@+id/agendaContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent" >
 
             <TextView
-                android:id="@+id/itemAgendaKaryawanDate"
+                android:id="@+id/itemAgendaTanggal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
@@ -33,22 +32,10 @@
                 android:fontFamily="sans-serif-condensed"
                 tools:ignore="HardcodedText" />
 
-            <TextView
-                android:id="@+id/itemAgendaKaryawanInfo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:fontFamily="sans-serif-condensed"
-                android:gravity="center_vertical"
-                android:text="Medium Text"
-                android:textColor="@color/silver"
-                android:textSize="16sp"
-                tools:ignore="HardcodedText" />
-
         </RelativeLayout>
 
         <TextView
-            android:id="@+id/itemAgendaKaryawanKegiatan"
+            android:id="@+id/itemAgendaJudul"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:fontFamily="sans-serif-condensed"
@@ -59,7 +46,18 @@
             tools:ignore="HardcodedText" />
 
         <TextView
-            android:id="@+id/itemAgendaNamamk"
+            android:id="@+id/itemAgendaLokasi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-condensed"
+            android:gravity="center_vertical"
+            android:text="Medium Text"
+            android:textColor="@color/silver"
+            android:textSize="16sp"
+            tools:ignore="HardcodedText" />
+
+        <TextView
+            android:id="@+id/itemAgendaKeterangan"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-condensed"

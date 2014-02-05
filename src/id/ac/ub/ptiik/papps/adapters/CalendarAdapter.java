@@ -47,6 +47,7 @@ public class CalendarAdapter extends BaseAdapter {
 		View cell;
 		TextView dayText;
 		TextView calendarItems;
+		TextView calendarPrivateItems;
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -62,6 +63,7 @@ public class CalendarAdapter extends BaseAdapter {
 			vh.dayText = (TextView) v.findViewById(R.id.calendarDayText);
 			vh.cell = v.findViewById(R.id.calendarCell);
 			vh.calendarItems = (TextView) v.findViewById(R.id.calendarDayNumEvents);
+			vh.calendarPrivateItems = (TextView) v.findViewById(R.id.calendarDayNumPrivateEvents);
 			v.setTag(vh);
 		} 
 		ViewHolder vh = (ViewHolder) v.getTag();
@@ -72,14 +74,24 @@ public class CalendarAdapter extends BaseAdapter {
 		if(agendaCount > 1) s = "S"; 
 		if(agendaCount > 0) vh.calendarItems.setText(agendaCount + " EVT" + s);
 		else vh.calendarItems.setText("");
+		
+		s = "";
+		agendaCount = c.getAgendaKaryawanCount();
+		if(agendaCount > 1) s = "S"; 
+		if(agendaCount > 0) vh.calendarPrivateItems.setText(agendaCount + " PEVT" + s);
+		else vh.calendarPrivateItems.setText("");
+		
+		
 		if(c.today) {
 			vh.cell.setBackgroundColor(context.getResources().getColor(R.color.petermann));
 			vh.dayText.setTextColor(context.getResources().getColor(R.color.white));
 			vh.calendarItems.setTextColor(context.getResources().getColor(R.color.white));
+			vh.calendarPrivateItems.setTextColor(context.getResources().getColor(R.color.white));
 		} else {
 			if(c.isSunday()) {
 				vh.dayText.setTextColor(context.getResources().getColor(R.color.white));
 				vh.calendarItems.setTextColor(context.getResources().getColor(R.color.white));
+				vh.calendarPrivateItems.setTextColor(context.getResources().getColor(R.color.white));
 				vh.cell.setBackgroundDrawable(context.getResources().getDrawable(R.color.alizarinlight));
 			} else {
 				vh.cell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.button_white));

@@ -5,10 +5,12 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
+import id.ac.ub.ptiik.papps.base.Agenda;
 import id.ac.ub.ptiik.papps.base.AgendaKaryawan;
 import id.ac.ub.ptiik.papps.base.CalendarCell;
 import id.ac.ub.ptiik.papps.interfaces.AgendaKaryawanIndexInterface;
 import id.ac.ub.ptiik.papps.parsers.AgendaKaryawanParser;
+import id.ac.ub.ptiik.papps.parsers.AgendaParser;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Handler;
@@ -68,6 +70,8 @@ public class AgendaKaryawanTask extends AsyncTask<Void, Void, ArrayList<Calendar
 				}
 			});
 			ArrayList<AgendaKaryawan> AgendaKaryawanList = AgendaKaryawanParser.Parse(result);
+			ArrayList<Agenda> AgendaList = AgendaParser.Parse(result);
+			
 			new Handler(Looper.getMainLooper()).post(new Runnable() {
 				@Override
 				public void run() {
@@ -75,7 +79,7 @@ public class AgendaKaryawanTask extends AsyncTask<Void, Void, ArrayList<Calendar
 						mCallback.onRetrieveProgress(90, "Visualizing calendar...");
 				}
 			});
-			ArrayList<CalendarCell> cells = this.calculateMonth(AgendaKaryawanList);
+			ArrayList<CalendarCell> cells = this.calculateMonth(AgendaKaryawanList, AgendaList);
 			return cells;
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -98,8 +102,11 @@ public class AgendaKaryawanTask extends AsyncTask<Void, Void, ArrayList<Calendar
 		}
 	}
 	
-	private ArrayList<CalendarCell> calculateMonth(ArrayList<AgendaKaryawan> agendaList) {
-		ArrayList<AgendaKaryawan> agendaListTemp = agendaList;
+	private ArrayList<CalendarCell> calculateMonth(ArrayList<AgendaKaryawan> agendaKaryawanList, ArrayList<Agenda> agendaList) {
+		
+		ArrayList<AgendaKaryawan> agendaKaryawanListTemp = agendaKaryawanList;
+		ArrayList<Agenda> agendaListTemp = agendaList;
+		
 		GregorianCalendar currentCalendar = new GregorianCalendar(tahun, bulan, 1);
 		Log.d("current month", currentCalendar.getTime().toString());
 		
@@ -147,10 +154,20 @@ public class AgendaKaryawanTask extends AsyncTask<Void, Void, ArrayList<Calendar
 			CalendarCell cell = new CalendarCell(cal);
 			if(i == todayDate && bulan == todayMonth && tahun == todayYear) 
 				cell.setToday();
+			if(agendaKaryawanList != null) {
+				for(int j=0; j<agendaKaryawanList.size();j++)
+				{
+					AgendaKaryawan agenda = agendaKaryawanListTemp.get(j);
+					if(agenda.getTanggal() == i) {
+						cell.addAgenda(agenda);
+						agendaKaryawanListTemp.remove(j);
+					}
+				}
+			}
 			if(agendaList != null) {
 				for(int j=0; j<agendaList.size();j++)
 				{
-					AgendaKaryawan agenda = agendaListTemp.get(j);
+					Agenda agenda = agendaListTemp.get(j);
 					if(agenda.getTanggal() == i) {
 						cell.addAgenda(agenda);
 						agendaListTemp.remove(j);
