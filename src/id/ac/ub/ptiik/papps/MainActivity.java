@@ -2,11 +2,11 @@ package id.ac.ub.ptiik.papps;
 
 import id.ac.ub.ptiik.papps.base.NavMenu;
 import id.ac.ub.ptiik.papps.base.User;
+import id.ac.ub.ptiik.papps.helpers.GCMHelper;
 import id.ac.ub.ptiik.papps.helpers.SystemHelper;
 import id.ac.ub.ptiik.papps.interfaces.NavigationInterface;
 
 import java.util.ArrayList;
-
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingFragmentActivity;
 
@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -26,6 +27,10 @@ public class MainActivity extends SlidingFragmentActivity
 	private NavigationFragment navFragment;
 	private SlidingMenu navigationMenu;
 	
+	
+	private GCMHelper gcmHelper;
+	private String registrationId;
+		
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -39,6 +44,8 @@ public class MainActivity extends SlidingFragmentActivity
 		initiateNavigationMenu();		
 		configureNavigationMenu();
 		showDashboardFragments();
+		
+		this.gcmHelper = new GCMHelper(this);
 		
 	}
 
@@ -83,13 +90,21 @@ public class MainActivity extends SlidingFragmentActivity
 
 	private void initiateNavigationMenu() {
 		this.menus = new ArrayList<NavMenu>();
-		this.menus.add(new NavMenu("Home", "Apps home screen", R.drawable.places_1));
-		this.menus.add(new NavMenu("News", "News and Information", R.drawable.communication_99));
-		this.menus.add(new NavMenu("Class", "My lecturing classes", R.drawable.users_17));
-		this.menus.add(new NavMenu("Schedule", "Lecturing Schedules", R.drawable.time_4));
-		this.menus.add(new NavMenu("Agenda", "My Agenda", R.drawable.time_3));
+		this.menus.add(new NavMenu("Home", "Apps home screen", R.drawable.ic_places_1));
+		this.menus.add(new NavMenu("News", "News and Information", R.drawable.ic_communication_99));
+		this.menus.add(new NavMenu("Messages", "Incoming messages", R.drawable.ic_communication_63));
+		this.menus.add(new NavMenu("Schedule", "Lecturing Schedules", R.drawable.ic_time_4));
+		this.menus.add(new NavMenu("Agenda", "My Agenda", R.drawable.ic_time_3));
 	}
 
+	@Override
+	protected void onResume() {
+	    super.onResume();
+	    
+	    this.registrationId = this.gcmHelper.getRegistrationId();
+		Log.d("c2dm ID", "Device is registered with ID: " + this.registrationId);
+	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -154,6 +169,13 @@ public class MainActivity extends SlidingFragmentActivity
 				} else if(position == 4) return;
 				break;
 			case 2:
+				newFragment = getSupportFragmentManager()
+						.findFragmentByTag("messages");
+				if(newFragment == null) {
+					newFragment = new MessagesFragment();
+					tag = "messages";
+				} else if(position == 2) return;
+				break;
 			default:
 				newFragment = getSupportFragmentManager()
 					.findFragmentByTag("dashboard");
@@ -161,7 +183,7 @@ public class MainActivity extends SlidingFragmentActivity
 					newFragment = new DashboardFragment();
 					tag = "dashboard" ;
 				}
-				else if(position == 0 || position == 2) {
+				else if(position == 0) {
 					return;
 				}
 		}
@@ -198,5 +220,6 @@ public class MainActivity extends SlidingFragmentActivity
 		
 		
 	}
-
+	
+	
 }
