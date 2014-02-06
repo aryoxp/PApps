@@ -10,6 +10,7 @@ import id.ac.ub.ptiik.papps.base.PreferenceKey;
 import id.ac.ub.ptiik.papps.base.User;
 import id.ac.ub.ptiik.papps.helpers.SystemHelper;
 import id.ac.ub.ptiik.papps.interfaces.LoginDialogFinishInterface;
+import id.ac.ub.ptiik.papps.interfaces.NavigationInterface;
 import id.ac.ub.ptiik.papps.tasks.WeatherTask;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -44,6 +45,8 @@ public class DashboardFragment extends Fragment
 	
 	private int weatherTimestamp;
 	
+	private NavigationInterface navigationCallback;
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -53,6 +56,11 @@ public class DashboardFragment extends Fragment
 		this.temperatureView = (TextView) v.findViewById(R.id.dashboardTemperatureText);
 		this.humidityView = (TextView) v.findViewById(R.id.dashboardHumidityText);
 		this.descriptionView = (TextView) v.findViewById(R.id.dashboardTemperatureDescriptionText);
+		
+		v.findViewById(R.id.newsSummaryContainer).setOnClickListener(this);
+		v.findViewById(R.id.agendaSummaryContainer).setOnClickListener(this);
+		v.findViewById(R.id.notificationSummaryContainer).setOnClickListener(this);
+		
 		return v;
 	}
 	
@@ -74,7 +82,7 @@ public class DashboardFragment extends Fragment
 			LayoutParams layoutParams = v.getLayoutParams();
 			layoutParams.width = width;
 			if(resId[i] != R.id.imageWeatherContainer )
-				layoutParams.height = (int) (width - (40*metrics.density));
+				layoutParams.height = (int) (width);
 			v.setLayoutParams(layoutParams);
 		
 		}
@@ -104,7 +112,9 @@ public class DashboardFragment extends Fragment
 		
 	}
 
-
+	public void setNavigationCallback(NavigationInterface navCallback) {
+		this.navigationCallback = navCallback;
+	}
 
 	@Override
 	public void weatherLoaded(Weather weather) {
@@ -213,7 +223,14 @@ public class DashboardFragment extends Fragment
 
 	@Override
 	public void onClick(View v) {
+		int position = 0;
 		switch(v.getId()) {
+		case R.id.newsSummaryContainer:
+			position = 1; break;
+		case R.id.agendaSummaryContainer:
+			position = 4; break;
+		case R.id.notificationSummaryContainer:
+			position = 2; break;
 		case R.id.buttonDashboardSignIn:
 			LoginFragment loginFragment = new LoginFragment();
 			loginFragment.setOnFinishCallback(this);
@@ -226,7 +243,10 @@ public class DashboardFragment extends Fragment
 			.setPositiveButton("OK", this)
 			.setNegativeButton("Cancel", this)
 			.show();
+			break;
 		}
+		if(position > 0 && this.navigationCallback != null)
+			this.navigationCallback.OnNavigationMenuSelected(position);
 	}
 
 	@Override

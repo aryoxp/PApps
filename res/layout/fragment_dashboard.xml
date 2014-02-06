@@ -150,19 +150,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingBottom="20dp"
-        android:paddingTop="20dp"
         android:weightSum="3" >
 
         <FrameLayout
             android:id="@+id/newsSummaryContainer"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="16dp"
+            android:paddingTop="16dp"
+            android:clickable="true"
+            android:background="@drawable/button_white"
             android:layout_weight="1" >
 
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:orientation="vertical"
                 tools:ignore="UselessParent" >
@@ -189,18 +191,23 @@
 
         <View
             android:layout_width="1px"
-            android:layout_height="match_parent"
+            android:layout_height="30dp"
+            android:layout_gravity="bottom"
             android:background="@color/silver" />
 
         <FrameLayout
             android:id="@+id/agendaSummaryContainer"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:paddingBottom="16dp"
+            android:paddingTop="16dp"
+            android:clickable="true"
+            android:background="@drawable/button_white"
             android:layout_weight="1" >
 
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:orientation="vertical"
                 tools:ignore="UselessParent" >
@@ -227,18 +234,23 @@
 
         <View
             android:layout_width="1px"
-            android:layout_height="match_parent"
+            android:layout_height="30dp"
+            android:layout_gravity="bottom"
             android:background="@color/silver" />
 
         <FrameLayout
             android:id="@+id/notificationSummaryContainer"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:paddingBottom="16dp"
+            android:paddingTop="16dp"
+            android:clickable="true"
+            android:background="@drawable/button_white"
             android:layout_weight="1" >
 
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:orientation="vertical"
                 tools:ignore="UselessParent" >

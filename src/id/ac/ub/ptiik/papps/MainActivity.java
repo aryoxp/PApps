@@ -83,6 +83,7 @@ public class MainActivity extends SlidingFragmentActivity
 
 	private void showDashboardFragments() {
 		DashboardFragment fragment = new DashboardFragment();
+		fragment.setNavigationCallback(this);
 		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 		transaction.add(R.id.contentContainer, fragment, "dashboard");
 		transaction.commit();
@@ -130,7 +131,9 @@ public class MainActivity extends SlidingFragmentActivity
 
 	@Override
 	public void OnNavigationMenuSelected(int position) {
-		this.getSlidingMenu().toggle();
+		Boolean isShown = this.getSlidingMenu().isMenuShowing();
+		if(isShown)
+			this.getSlidingMenu().toggle();
 		Fragment newFragment;
 		String tag = null;
 		switch(position) {
@@ -180,7 +183,9 @@ public class MainActivity extends SlidingFragmentActivity
 				newFragment = getSupportFragmentManager()
 					.findFragmentByTag("dashboard");
 				if(newFragment == null) {
-					newFragment = new DashboardFragment();
+					DashboardFragment fragment = new DashboardFragment();
+					fragment.setNavigationCallback(this);
+					newFragment = fragment;
 					tag = "dashboard" ;
 				}
 				else if(position == 0) {
@@ -203,7 +208,9 @@ public class MainActivity extends SlidingFragmentActivity
 		
 		if(fragment == null) {
 			
-			fragment = new DashboardFragment();
+			DashboardFragment dashboardFragment = new DashboardFragment();
+			dashboardFragment.setNavigationCallback(this);
+			fragment = dashboardFragment;
 			String tag = "dashboard" ;
 			getSupportFragmentManager()
 			.beginTransaction()
