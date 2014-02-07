@@ -81,8 +81,9 @@ public class DashboardFragment extends Fragment
 			View v = this.getView().findViewById(resId[i]);
 			LayoutParams layoutParams = v.getLayoutParams();
 			layoutParams.width = width;
-			if(resId[i] != R.id.imageWeatherContainer )
-				layoutParams.height = (int) (width);
+			
+			//if(resId[i] != R.id.imageWeatherContainer )
+			//	layoutParams.height = (int) (width);
 			v.setLayoutParams(layoutParams);
 		
 		}

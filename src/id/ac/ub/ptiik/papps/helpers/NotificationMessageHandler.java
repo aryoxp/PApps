@@ -1,0 +1,129 @@
+package id.ac.ub.ptiik.papps.helpers;
+
+import java.util.ArrayList;
+
+import id.ac.ub.ptiik.papps.base.NotificationMessage;
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+
+public class NotificationMessageHandler extends SQLiteOpenHelper {
+
+	private String MESSAGES_TABLE = "messages";
+	private String KEY_ID = "id";
+	private String FIELD_TYPE = "type";
+	private String FIELD_MESSAGE = "message";
+	private String FIELD_DATETIME = "datetime";
+	private String FIELD_FROM = "sender";
+
+	private static String databaseName = "MessageDB";
+	private static int version = 1;
+	
+	public NotificationMessageHandler(Context context) {
+		super(context, databaseName, null, version);
+	}
+
+	@Override
+	public void onCreate(SQLiteDatabase db) {
+		String CREATE_MESSAGES_TABLE = "CREATE TABLE " + MESSAGES_TABLE + "("
+                + KEY_ID + " INTEGER PRIMARY KEY," + FIELD_TYPE + " INTEGER,"
+                + FIELD_MESSAGE + " TEXT," + FIELD_DATETIME + " TEXT," 
+                + FIELD_FROM + " TEXT)";
+                db.execSQL(CREATE_MESSAGES_TABLE);
+	}
+
+	@Override
+	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+		db.execSQL("DROP TABLE IF EXISTS " + MESSAGES_TABLE);
+		this.onCreate(db);
+	}
+	
+	public void add(NotificationMessage notificationMessage){
+		SQLiteDatabase db = this.getWritableDatabase();
+		ContentValues values = new ContentValues();
+		values.put(FIELD_TYPE, notificationMessage.type);
+		values.put(FIELD_MESSAGE, notificationMessage.message);
+		values.put(FIELD_DATETIME, notificationMessage.dateTime);
+		values.put(FIELD_FROM, notificationMessage.from);
+		
+		// Inserting Row
+		db.insert(MESSAGES_TABLE, null, values);
+		db.close(); // Closing database connection
+	}
+
+	public NotificationMessage get(int id){
+		SQLiteDatabase db = this.getReadableDatabase();
+		Cursor cursor = db.query(MESSAGES_TABLE, new String[] { KEY_ID,
+	            FIELD_TYPE, FIELD_MESSAGE, FIELD_DATETIME, FIELD_FROM }, 
+	            KEY_ID + "=?", // where column
+	            new String[] { String.valueOf(id) }, // where value
+	            null, // group by 
+	            null, // having
+	            null, // order by
+	            null); // limit
+
+		if (cursor != null) cursor.moveToFirst();
+		    NotificationMessage notificationMessage = new NotificationMessage(
+		    	Integer.parseInt(cursor.getString(0)), // id
+		    	Integer.parseInt(cursor.getString(1)), // type
+		    	cursor.getString(2), // message
+		    	cursor.getString(3), // datetime
+		    	cursor.getString(4)); // from
+	    cursor.close();
+	    db.close();
+	    return notificationMessage;
+	}
+
+	public int update(NotificationMessage notificationMessage) {
+
+	    SQLiteDatabase db = this.getWritableDatabase();
+
+	    ContentValues values = new ContentValues();
+	    values.put(FIELD_TYPE, notificationMessage.type);
+	    values.put(FIELD_MESSAGE, notificationMessage.message);
+	    values.put(FIELD_DATETIME, notificationMessage.dateTime);
+		values.put(FIELD_FROM, notificationMessage.from);
+
+	    // updating row
+	    return db.update(MESSAGES_TABLE, values, KEY_ID + " = ?",
+	            new String[] { String.valueOf(notificationMessage.id) });
+	}
+
+	public int delete(NotificationMessage notification) {
+
+	    SQLiteDatabase db = this.getWritableDatabase();
+	    // deleting row
+	    return db.delete(MESSAGES_TABLE, KEY_ID + " = ?", // where column
+	        new String[] { String.valueOf(notification.id) }); // where values
+	}
+	
+	public ArrayList<NotificationMessage> getAll(){
+
+		  ArrayList<NotificationMessage> listMessages = new ArrayList<NotificationMessage>();
+
+		  SQLiteDatabase db = this.getReadableDatabase();
+		  Cursor cursor = db.rawQuery("SELECT * FROM " + MESSAGES_TABLE, null);   
+		  try{
+		    if (cursor != null){
+		      if(cursor.moveToFirst()){
+		        do {
+		        	NotificationMessage notificationMessage = new NotificationMessage(
+		    		    	Integer.parseInt(cursor.getString(0)), // id
+		    		    	Integer.parseInt(cursor.getString(1)), // type
+		    		    	cursor.getString(2), // message
+		    		    	cursor.getString(3), // datetime
+		    		    	cursor.getString(4)); // from
+		        	listMessages.add(notificationMessage);
+		        } while(cursor.moveToNext());
+		      }
+		    }
+		  } finally {
+		    cursor.close();
+		    db.close();
+		  }
+		  return listMessages;
+		}
+
+}

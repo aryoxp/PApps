@@ -1,6 +1,9 @@
 package id.ac.ub.ptiik.papps;
 
+import org.json.JSONObject;
+
 import id.ac.ub.ptiik.papps.base.NotificationMessage;
+import id.ac.ub.ptiik.papps.helpers.NotificationMessageHandler;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
@@ -10,6 +13,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
@@ -18,6 +22,7 @@ public class GcmIntentService extends IntentService {
 	private static final String TAG = "GcmIntentService";
 	private static final int NOTIFICATION_ID = 1;
 	private NotificationManager mNotificationManager;
+	private NotificationMessageHandler dbHandler;
 	
 	public GcmIntentService(String name) {
 		super(name);
@@ -50,6 +55,20 @@ public class GcmIntentService extends IntentService {
             } else if (GoogleCloudMessaging.MESSAGE_TYPE_DELETED.equals(messageType)) {
                 sendNotification("Deleted messages on server: " + extras.toString());
             } else if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE.equals(messageType)) {
+            	
+            	this.dbHandler = new NotificationMessageHandler(this.getApplicationContext());
+            	String messageJSONString = extras.getString("message");
+            	try {
+            		JSONObject messageJSONObject = new JSONObject(messageJSONString);
+            		int type = messageJSONObject.getInt("type");
+            		String message = messageJSONObject.getString("message");
+            		String dateTime = messageJSONObject.getString("datetime");
+            		String from = messageJSONObject.getString("from");
+            		NotificationMessage notificationMessage = new NotificationMessage(type, message, dateTime, from);
+            		this.dbHandler.add(notificationMessage);
+            	} catch(Exception e) {
+            		Log.e("MessageJSON Error", e.getMessage());
+            	}
                 // Post notification of received message.
                 sendNotification("Received: " + extras.getString("message"));
                 Log.i(TAG, "Received: " + extras.toString());
@@ -75,6 +94,7 @@ public class GcmIntentService extends IntentService {
         .setSmallIcon(R.drawable.ic_papps_taskbar)
         .setContentTitle("PTIIK Apps Server")
         .setStyle(new NotificationCompat.BigTextStyle().bigText(msg))
+        .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
         .setContentText(msg);
 
         mBuilder.setContentIntent(contentIntent);
