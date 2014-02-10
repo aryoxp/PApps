@@ -10,9 +10,12 @@ public class SystemHelper {
 	public static User getSystemUser(Context context) {
 		String userGson = PreferenceManager.getDefaultSharedPreferences(context)
 				.getString("user", null);
-		Gson gson = new Gson();
-		User user = gson.fromJson(userGson, User.class);
-		return user;
+		if(userGson != null) {
+			Gson gson = new Gson();
+			User user = gson.fromJson(userGson, User.class);
+			return user;
+		} 
+		return null;
 	}
 	
 	public static void saveSystemUser(Context context, User user) {

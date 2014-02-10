@@ -41,15 +41,6 @@
                 android:fontFamily="sans-serif-condensed"
                 tools:ignore="HardcodedText" />
 
-            <ImageView
-                android:id="@+id/newsButtonRefresh"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:padding="20dp"
-                android:background="@drawable/button_yellow"
-                android:clickable="true"                
-                android:src="@drawable/ic_transfers_66" />
-
         </LinearLayout>
     </LinearLayout>
 

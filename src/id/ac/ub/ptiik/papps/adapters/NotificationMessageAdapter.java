@@ -82,7 +82,9 @@ public class NotificationMessageAdapter extends BaseAdapter {
 		ViewHolder vh = (ViewHolder) rowView.getTag();
 		NotificationMessage message = this.notificationMessageList.get(position);
 		vh.messageFrom.setText(message.from);
-		vh.messageDateTime.setText(message.dateTime);
+		if(message.status == NotificationMessage.STATUS_NEW)
+			vh.messageFrom.setText(vh.messageFrom.getText() + " (NEW)");
+		vh.messageDateTime.setText(message.getDateTimeString("dd MMM yyy HH:mm", NotificationMessage.SENT));
 		vh.messageType.setText(String.valueOf(message.type));
 		vh.messageMessage.setText(message.message);
 		return rowView;

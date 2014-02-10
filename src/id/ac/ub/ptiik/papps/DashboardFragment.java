@@ -6,6 +6,7 @@ import java.util.Locale;
 
 import com.google.gson.Gson;
 
+import id.ac.ub.ptiik.papps.base.NavMenu;
 import id.ac.ub.ptiik.papps.base.PreferenceKey;
 import id.ac.ub.ptiik.papps.base.User;
 import id.ac.ub.ptiik.papps.helpers.SystemHelper;
@@ -224,14 +225,17 @@ public class DashboardFragment extends Fragment
 
 	@Override
 	public void onClick(View v) {
-		int position = 0;
+		NavMenu menu = new NavMenu(NavMenu.MENU_HOME, "Home", "Apps home screen", R.drawable.ic_places_1, "home");
 		switch(v.getId()) {
 		case R.id.newsSummaryContainer:
-			position = 1; break;
+			menu = new NavMenu(NavMenu.MENU_NEWS, "News", "News and Information", R.drawable.ic_communication_99, "news");
+			break;
 		case R.id.agendaSummaryContainer:
-			position = 4; break;
+			menu = new NavMenu(NavMenu.MENU_AGENDA, "Agenda", "My Agenda", R.drawable.ic_time_3, "agenda"); 
+			break;
 		case R.id.notificationSummaryContainer:
-			position = 2; break;
+			menu = new NavMenu(NavMenu.MENU_MESSAGES, "Messages", "Incoming messages", R.drawable.ic_communication_63, "messages");
+			break;
 		case R.id.buttonDashboardSignIn:
 			LoginFragment loginFragment = new LoginFragment();
 			loginFragment.setOnFinishCallback(this);
@@ -246,8 +250,8 @@ public class DashboardFragment extends Fragment
 			.show();
 			break;
 		}
-		if(position > 0 && this.navigationCallback != null)
-			this.navigationCallback.OnNavigationMenuSelected(position);
+		if(menu.id != NavMenu.MENU_HOME && this.navigationCallback != null)
+			this.navigationCallback.OnNavigationMenuSelected(menu);
 	}
 
 	@Override
@@ -281,9 +285,7 @@ public class DashboardFragment extends Fragment
 			Log.d("Logout", String.valueOf(which));
 			
 			PreferenceManager.getDefaultSharedPreferences(getActivity())
-			.edit()
-			.putString("user", "{\"user\":null}")
-			.commit();
+			.edit().remove("user").commit();
 			
 			this.user = null;
 			

@@ -26,11 +26,12 @@ public class NavigationFragment extends Fragment implements OnItemClickListener 
 	
 	public NavigationFragment(){
 		this.menus = new ArrayList<NavMenu>();
-		
+		this.menuAdapter = new NavigationMenuAdapter(getActivity(), menus);
 	}
 	
 	public void setMenu(ArrayList<NavMenu> menus) {
 		this.menus = menus;
+		this.menuAdapter.notifyDataSetChanged();
 	}
 	
 	public ArrayList<NavMenu> getMenu() {
@@ -41,10 +42,12 @@ public class NavigationFragment extends Fragment implements OnItemClickListener 
 		return this.menuAdapter;
 	}
 	
-	public void activateMenu(int position) {
-		for(int i=0; i<this.menus.size(); i++)
-			this.menus.get(i).deactivate();
-		this.menus.get(position).activate();
+	public void activateMenu(NavMenu menu) {
+		for(int i=0; i<this.menus.size(); i++) {
+			NavMenu tMenu = this.menus.get(i);
+			if(tMenu.tag == menu.tag) tMenu.activate();
+			else tMenu.deactivate();
+		}
 		this.menuAdapter.notifyDataSetChanged();
 	}
 	
@@ -62,12 +65,7 @@ public class NavigationFragment extends Fragment implements OnItemClickListener 
 
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		for(int i=0; i<this.menus.size(); i++)
-			this.menus.get(i).deactivate();
-		this.menus.get(position).activate();
-		this.menuAdapter.notifyDataSetChanged();
-		this.listMenu.invalidate();
-		this.navInterface.OnNavigationMenuSelected(position);
+		this.navInterface.OnNavigationMenuSelected(this.menus.get(position));
 	}
 	
 	@Override

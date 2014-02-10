@@ -11,8 +11,10 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
@@ -22,7 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class NewsFragment extends Fragment 
-	implements NewsIndexInterface, OnScrollListener, OnClickListener {
+	implements NewsIndexInterface, OnScrollListener {
 
 	private View v;
 	private View footerView;
@@ -53,10 +55,14 @@ public class NewsFragment extends Fragment
 		this.newsRefreshProgress = (ProgressBar) v.findViewById(R.id.newsRefreshProgress);
 		this.newsRefrestText = (TextView) v.findViewById(R.id.newsRefreshText);
 		this.refreshContainer = v.findViewById(R.id.newsRefreshContainer);
-		v.findViewById(R.id.newsButtonRefresh).setOnClickListener(this);
-		//this.refreshContainer.setOnTouchListener(this);
 		
 		return v;
+	}
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		this.setHasOptionsMenu(true);
+		super.onCreate(savedInstanceState);
 	}
 	
 	@Override
@@ -94,12 +100,14 @@ public class NewsFragment extends Fragment
 
 	@Override
 	public void onRetrieveComplete(ArrayList<News> newsList) {
+		if(page == 1) this.newsList.clear();
 		this.newsList.addAll(newsList);
 		this.adapter.notifyDataSetChanged();
 		if(this.newsRefreshProgress.getAlpha() > 0)
 			this.newsRefreshProgress.animate().alpha(0).setDuration(100).start();
-		if(page == 1)
+		if(page == 1) {
 			this.newsListView.smoothScrollToPosition(0);
+		}
 	}
 
 	@Override
@@ -138,33 +146,25 @@ public class NewsFragment extends Fragment
 	public void onScrollStateChanged(AbsListView view, int scrollState) {}
 
 	@Override
-	public void onClick(View v) {
-		switch(v.getId()) {
-		case R.id.newsButtonRefresh:
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		inflater.inflate(R.menu.menu_news, menu);
+		//super.onCreateOptionsMenu(menu, inflater);
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.action_news_refresh:
 			if(this.newsIndexTask != null && this.newsIndexTask.getStatus() != Status.RUNNING) {
-				this.newsList.clear();
 				this.page = 1;
 				this.newsIndexTask = new NewsIndexTask(getActivity(), this, page, perpage);
 				this.newsIndexTask.execute();
 			}
-			break;
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
 		}
-		
 	}
 	
-	/*
-	@Override
-	public boolean onTouch(View v, MotionEvent event) {
-		switch(event.getAction()) {
-		case MotionEvent.ACTION_DOWN :
-			this.newsRefreshProgress.animate()
-			.alpha(1)
-			.setDuration(300)
-			.start();
-		}
-		return true;
-	}
-	*/
 	
-
 }

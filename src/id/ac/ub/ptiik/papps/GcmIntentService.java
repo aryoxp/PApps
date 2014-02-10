@@ -1,12 +1,16 @@
 package id.ac.ub.ptiik.papps;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
+
 import org.json.JSONObject;
 
+import id.ac.ub.ptiik.papps.base.AppFragment;
 import id.ac.ub.ptiik.papps.base.NotificationMessage;
 import id.ac.ub.ptiik.papps.helpers.NotificationMessageHandler;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
-
 import android.app.IntentService;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -20,7 +24,7 @@ import android.util.Log;
 public class GcmIntentService extends IntentService {
 
 	private static final String TAG = "GcmIntentService";
-	private static final int NOTIFICATION_ID = 1;
+	private int NOTIFICATION_ID = 1;
 	private NotificationManager mNotificationManager;
 	private NotificationMessageHandler dbHandler;
 	
@@ -61,10 +65,14 @@ public class GcmIntentService extends IntentService {
             	try {
             		JSONObject messageJSONObject = new JSONObject(messageJSONString);
             		int type = messageJSONObject.getInt("type");
+            		
             		String message = messageJSONObject.getString("message");
-            		String dateTime = messageJSONObject.getString("datetime");
+            		String sent = messageJSONObject.getString("datetime");
             		String from = messageJSONObject.getString("from");
-            		NotificationMessage notificationMessage = new NotificationMessage(type, message, dateTime, from);
+            		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
+            		String received = sdf.format(Calendar.getInstance(Locale.US).getTime());
+            		NotificationMessage notificationMessage = new NotificationMessage(type, message, sent, received, from);
+            		
             		this.dbHandler.add(notificationMessage);
             	} catch(Exception e) {
             		Log.e("MessageJSON Error", e.getMessage());
@@ -87,16 +95,19 @@ public class GcmIntentService extends IntentService {
         
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("type", NotificationMessage.MESSAGE);
+        intent.putExtra("fragment", AppFragment.FRAGMENT_MESSAGES);
         
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0, intent, 0);
-
+        
+        
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
         .setSmallIcon(R.drawable.ic_papps_taskbar)
         .setContentTitle("PTIIK Apps Server")
         .setStyle(new NotificationCompat.BigTextStyle().bigText(msg))
         .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
+        .setAutoCancel(true)
         .setContentText(msg);
-
+        
         mBuilder.setContentIntent(contentIntent);
         mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
     }

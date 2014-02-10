@@ -46,7 +46,7 @@ public class GCMHelper {
 		this.context = context;
 		
 		// Check device for Play Services APK. If check succeeds, proceed with
-        //  GCM registration.
+        // GCM registration.
         if (checkPlayServices()) {
         	
     		this.gcm = GoogleCloudMessaging.getInstance(context);

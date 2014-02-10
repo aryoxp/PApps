@@ -15,11 +15,13 @@ public class NotificationMessageHandler extends SQLiteOpenHelper {
 	private String KEY_ID = "id";
 	private String FIELD_TYPE = "type";
 	private String FIELD_MESSAGE = "message";
-	private String FIELD_DATETIME = "datetime";
+	private String FIELD_SENT = "sent";
+	private String FIELD_RECEIVED = "received";
 	private String FIELD_FROM = "sender";
+	private String FIELD_STATUS = "status";
 
 	private static String databaseName = "MessageDB";
-	private static int version = 1;
+	private static int version = 3;
 	
 	public NotificationMessageHandler(Context context) {
 		super(context, databaseName, null, version);
@@ -29,8 +31,9 @@ public class NotificationMessageHandler extends SQLiteOpenHelper {
 	public void onCreate(SQLiteDatabase db) {
 		String CREATE_MESSAGES_TABLE = "CREATE TABLE " + MESSAGES_TABLE + "("
                 + KEY_ID + " INTEGER PRIMARY KEY," + FIELD_TYPE + " INTEGER,"
-                + FIELD_MESSAGE + " TEXT," + FIELD_DATETIME + " TEXT," 
-                + FIELD_FROM + " TEXT)";
+                + FIELD_MESSAGE + " TEXT," + FIELD_SENT + " TEXT," 
+                + FIELD_RECEIVED + " TEXT," + FIELD_FROM + " TEXT,"
+                + FIELD_STATUS + " INTEGER)";
                 db.execSQL(CREATE_MESSAGES_TABLE);
 	}
 
@@ -45,9 +48,10 @@ public class NotificationMessageHandler extends SQLiteOpenHelper {
 		ContentValues values = new ContentValues();
 		values.put(FIELD_TYPE, notificationMessage.type);
 		values.put(FIELD_MESSAGE, notificationMessage.message);
-		values.put(FIELD_DATETIME, notificationMessage.dateTime);
+		values.put(FIELD_SENT, notificationMessage.sent);
+		values.put(FIELD_RECEIVED, notificationMessage.received);
 		values.put(FIELD_FROM, notificationMessage.from);
-		
+		values.put(FIELD_STATUS, notificationMessage.status);
 		// Inserting Row
 		db.insert(MESSAGES_TABLE, null, values);
 		db.close(); // Closing database connection
@@ -56,7 +60,7 @@ public class NotificationMessageHandler extends SQLiteOpenHelper {
 	public NotificationMessage get(int id){
 		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor cursor = db.query(MESSAGES_TABLE, new String[] { KEY_ID,
-	            FIELD_TYPE, FIELD_MESSAGE, FIELD_DATETIME, FIELD_FROM }, 
+	            FIELD_TYPE, FIELD_MESSAGE, FIELD_SENT, FIELD_RECEIVED, FIELD_FROM, FIELD_STATUS }, 
 	            KEY_ID + "=?", // where column
 	            new String[] { String.valueOf(id) }, // where value
 	            null, // group by 
@@ -69,8 +73,11 @@ public class NotificationMessageHandler extends SQLiteOpenHelper {
 		    	Integer.parseInt(cursor.getString(0)), // id
 		    	Integer.parseInt(cursor.getString(1)), // type
 		    	cursor.getString(2), // message
-		    	cursor.getString(3), // datetime
-		    	cursor.getString(4)); // from
+		    	cursor.getString(3), // date sent
+		    	cursor.getString(4), // date received
+		    	cursor.getString(5), // from
+		    	Integer.parseInt(cursor.getString(6)) //status 
+		    	);
 	    cursor.close();
 	    db.close();
 	    return notificationMessage;
@@ -83,9 +90,11 @@ public class NotificationMessageHandler extends SQLiteOpenHelper {
 	    ContentValues values = new ContentValues();
 	    values.put(FIELD_TYPE, notificationMessage.type);
 	    values.put(FIELD_MESSAGE, notificationMessage.message);
-	    values.put(FIELD_DATETIME, notificationMessage.dateTime);
+	    values.put(FIELD_SENT, notificationMessage.sent);
+		values.put(FIELD_RECEIVED, notificationMessage.received);
 		values.put(FIELD_FROM, notificationMessage.from);
-
+		values.put(FIELD_STATUS, notificationMessage.status);
+		
 	    // updating row
 	    return db.update(MESSAGES_TABLE, values, KEY_ID + " = ?",
 	            new String[] { String.valueOf(notificationMessage.id) });
@@ -113,8 +122,11 @@ public class NotificationMessageHandler extends SQLiteOpenHelper {
 		    		    	Integer.parseInt(cursor.getString(0)), // id
 		    		    	Integer.parseInt(cursor.getString(1)), // type
 		    		    	cursor.getString(2), // message
-		    		    	cursor.getString(3), // datetime
-		    		    	cursor.getString(4)); // from
+		    		    	cursor.getString(3), // date sent
+		    		    	cursor.getString(4), // date received
+		    		    	cursor.getString(5), // from
+		    		    	Integer.parseInt(cursor.getString(6)) //status 
+		    		    	);
 		        	listMessages.add(notificationMessage);
 		        } while(cursor.moveToNext());
 		      }

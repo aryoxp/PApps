@@ -6,4 +6,5 @@ public interface LoginInterface {
 	public void onLoginStarted();
 	public void onLoginSuccess(User user);
 	public void onLoginFail(String error);
+	public void onLoginProgress(int progress, String message);
 }

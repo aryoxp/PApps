@@ -21,11 +21,13 @@ public class LoginFragment extends DialogFragment
 	implements View.OnClickListener, LoginInterface {
 	
 	private View v;
-
+	private TextView loginProgressText;
 	private String usernameKeySharedPreferences = "appUsername";
 	private String karyawanIdKeySharedPreferences = "appKaryawanId";
 	
 	private LoginDialogFinishInterface mCallback;
+	
+	
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -36,6 +38,7 @@ public class LoginFragment extends DialogFragment
 		
 		TextView buttonOK = (TextView) v.findViewById(R.id.buttonLoginOK);
 		TextView buttonCancel = (TextView) v.findViewById(R.id.buttonLoginCancel);
+		this.loginProgressText = (TextView) v.findViewById(R.id.textLoginProgress);
 		
 		buttonOK.setOnClickListener(this);
 		buttonCancel.setOnClickListener(this);
@@ -90,6 +93,7 @@ public class LoginFragment extends DialogFragment
 		.start();
 		this.v.findViewById(R.id.buttonLoginOK).setClickable(false);
 		this.v.findViewById(R.id.buttonLoginCancel).setClickable(false);
+		this.loginProgressText.setText("Please wait, logging you in...");
 	}
 
 	@Override
@@ -136,6 +140,12 @@ public class LoginFragment extends DialogFragment
 	
 	public void setOnFinishCallback(LoginDialogFinishInterface mCallback) {
 		this.mCallback = mCallback;
+	}
+
+	@Override
+	public void onLoginProgress(int progress, String message) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

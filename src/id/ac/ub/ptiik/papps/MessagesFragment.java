@@ -3,32 +3,33 @@ package id.ac.ub.ptiik.papps;
 import id.ac.ub.ptiik.papps.adapters.NotificationMessageAdapter;
 import id.ac.ub.ptiik.papps.base.NotificationMessage;
 import id.ac.ub.ptiik.papps.helpers.NotificationMessageHandler;
+import id.ac.ub.ptiik.papps.interfaces.ContentFragmentInterface;
 
 import java.util.ArrayList;
 
 import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ContextMenu.ContextMenuInfo;
-import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class MessagesFragment extends Fragment 
-	implements OnClickListener, OnItemClickListener, android.content.DialogInterface.OnClickListener {
+	implements OnItemClickListener, android.content.DialogInterface.OnClickListener, OnItemLongClickListener {
 
 	View v;
 	ProgressBar refreshProgressBar;
@@ -41,6 +42,8 @@ public class MessagesFragment extends Fragment
 	
 	private NotificationMessage selectedMessage;
 	
+	private ContentFragmentInterface mCallback;
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -50,11 +53,18 @@ public class MessagesFragment extends Fragment
 		this.messagesListView = (ListView) this.v.findViewById(R.id.messagesList);
 		this.messagesListView.setAlpha(0);
 		this.messagesListView.setOnItemClickListener(this);
+		
+		this.messagesListView.setOnItemLongClickListener(this);
 		this.refreshText = (TextView) this.v.findViewById(R.id.messagesRefreshText);
 		this.refreshText.setAlpha(0);
 		this.registerForContextMenu(this.messagesListView);
-		this.v.findViewById(R.id.messagesButtonRefresh).setOnClickListener(this);
 		return v;
+	}
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		this.setHasOptionsMenu(true);
 	}
 	
 	@Override
@@ -73,16 +83,10 @@ public class MessagesFragment extends Fragment
 		super.onResume();
 		this.messagesListView.animate().alpha(1).setDuration(200).start();
 	}
-	
+
 	@Override
-	public void onClick(View v) {
-		switch(v.getId())
-		{
-		case R.id.messagesButtonRefresh:
-			this.messageList.clear();
-			this.messageList.addAll(this.handler.getAll());
-			this.adapter.updateMessages(this.messageList).notifyDataSetChanged();
-		}
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		inflater.inflate(R.menu.menu_messages, menu);
 	}
 
 	@Override
@@ -112,8 +116,8 @@ public class MessagesFragment extends Fragment
 			break;
 		case R.id.message_context_detail:
 			String detailText = "from: " + this.selectedMessage.from + "\n"
-					+ "sent: " + this.selectedMessage.dateTime + "\n"
-					+ "received: " + this.selectedMessage.dateTime;
+					+ "sent: " + this.selectedMessage.sent + "\n"
+					+ "received: " + this.selectedMessage.received;
 			new AlertDialog.Builder(getActivity())
 			.setMessage(detailText)
 			.setTitle("Message Detail")
@@ -139,5 +143,38 @@ public class MessagesFragment extends Fragment
 			dialog.dismiss();
 			break;
 		}
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch(item.getItemId()) {
+		case R.id.action_messages_refresh:
+			this.messageList.clear();
+			this.messageList.addAll(this.handler.getAll());
+			this.adapter = new NotificationMessageAdapter(getActivity(), this.messageList);
+			this.messagesListView.setAdapter(this.adapter);
+			return true;
+		case R.id.action_messages_new:
+			if(this.mCallback != null) {
+				MessagesNewFragment fragment = new MessagesNewFragment();
+				fragment.setOnNavigationCallback(this.mCallback);
+				this.mCallback.setContentFragment(fragment, "newMessages");
+			}
+			return true;
+			default:
+				return super.onOptionsItemSelected(item);
+		}
+	}
+
+	@Override
+	public boolean onItemLongClick(AdapterView<?> container, View view, int position,
+			long id) {
+		this.getActivity().openContextMenu(container);
+		this.selectedMessage = this.messageList.get(position);
+		return true;
+	}
+	
+	public void setOnNavigationCallback(ContentFragmentInterface mCallback) {
+		this.mCallback = mCallback;
 	}
 }

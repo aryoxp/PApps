@@ -6,11 +6,13 @@ import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
 import id.ac.ub.ptiik.papps.base.User;
+import id.ac.ub.ptiik.papps.helpers.GCMHelper;
 import id.ac.ub.ptiik.papps.interfaces.LoginInterface;
 import id.ac.ub.ptiik.papps.parsers.UserParser;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
@@ -50,6 +52,21 @@ public class LoginTask extends AsyncTask<Void, Void, User> {
 			String result = Rest.getInstance().post(url, data).getResponseText();
 			Log.d("Login", result);
 			User u = UserParser.Parse(result);
+			
+			GCMHelper gcmHelper = new GCMHelper(this.context);
+			String registrationId = gcmHelper.getRegistrationId();
+			if(registrationId != null && !registrationId.trim().equals(""))
+			{
+				url = "http://" + host + "/service/index.php/gcm/checkin";
+				data = new ArrayList<NameValuePair>();
+				data.add(new BasicNameValuePair("username", this.username));
+				data.add(new BasicNameValuePair("regid", registrationId));
+				data.add(new BasicNameValuePair("api", String.valueOf(Build.VERSION.SDK_INT)));
+				data.add(new BasicNameValuePair("status", "1"));
+				result = Rest.getInstance().post(url, data).getResponseText();
+				Log.d("Check-In", result);
+			}
+			
 			return u;
 		} catch(Exception e) {
 			e.printStackTrace();
