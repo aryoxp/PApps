@@ -1,9 +1,9 @@
 package id.ac.ub.ptiik.papps;
 
-import id.ac.ub.ptiik.papps.adapters.NotificationMessageAdapter;
+import id.ac.ub.ptiik.papps.adapters.MessageIndexAdapter;
 import id.ac.ub.ptiik.papps.base.NotificationMessage;
 import id.ac.ub.ptiik.papps.helpers.NotificationMessageHandler;
-import id.ac.ub.ptiik.papps.interfaces.ContentFragmentInterface;
+import id.ac.ub.ptiik.papps.interfaces.AppInterface;
 
 import java.util.ArrayList;
 
@@ -29,7 +29,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class MessagesFragment extends Fragment 
-	implements OnItemClickListener, android.content.DialogInterface.OnClickListener, OnItemLongClickListener {
+	implements OnItemClickListener, android.content.DialogInterface.OnClickListener, 
+	OnItemLongClickListener {
 
 	View v;
 	ProgressBar refreshProgressBar;
@@ -38,11 +39,11 @@ public class MessagesFragment extends Fragment
 	
 	private ArrayList<NotificationMessage> messageList;
 	private NotificationMessageHandler handler;
-	private NotificationMessageAdapter adapter;
+	private MessageIndexAdapter adapter;
 	
 	private NotificationMessage selectedMessage;
 	
-	private ContentFragmentInterface mCallback;
+	private AppInterface mCallback;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -73,7 +74,7 @@ public class MessagesFragment extends Fragment
 		this.handler = new NotificationMessageHandler(getActivity());
 		this.messageList.clear();
 		this.messageList.addAll(this.handler.getAll());
-		this.adapter = new NotificationMessageAdapter(getActivity(), this.messageList);
+		this.adapter = new MessageIndexAdapter(getActivity(), this.messageList);
 		this.messagesListView.setAdapter(this.adapter);
 		super.onStart();
 	}
@@ -151,7 +152,7 @@ public class MessagesFragment extends Fragment
 		case R.id.action_messages_refresh:
 			this.messageList.clear();
 			this.messageList.addAll(this.handler.getAll());
-			this.adapter = new NotificationMessageAdapter(getActivity(), this.messageList);
+			this.adapter = new MessageIndexAdapter(getActivity(), this.messageList);
 			this.messagesListView.setAdapter(this.adapter);
 			return true;
 		case R.id.action_messages_new:
@@ -174,7 +175,7 @@ public class MessagesFragment extends Fragment
 		return true;
 	}
 	
-	public void setOnNavigationCallback(ContentFragmentInterface mCallback) {
+	public void setOnNavigationCallback(AppInterface mCallback) {
 		this.mCallback = mCallback;
 	}
 }

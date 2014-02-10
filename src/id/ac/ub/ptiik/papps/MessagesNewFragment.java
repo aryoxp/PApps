@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import id.ac.ub.ptiik.papps.adapters.ComposeToAdapter;
 import id.ac.ub.ptiik.papps.base.UserOnline;
-import id.ac.ub.ptiik.papps.interfaces.ContentFragmentInterface;
+import id.ac.ub.ptiik.papps.interfaces.AppInterface;
 import id.ac.ub.ptiik.papps.interfaces.UserOnlineCheckInterface;
 import id.ac.ub.ptiik.papps.tasks.UserOnlineTask;
 import android.os.Bundle;
@@ -18,7 +18,7 @@ public class MessagesNewFragment extends Fragment implements UserOnlineCheckInte
 	View v;
 	View progressContainerView;
 	Spinner usersSpinner;
-	ContentFragmentInterface mCallback;
+	AppInterface mCallback;
 	ComposeToAdapter composeToAdapter;
 	ArrayList<UserOnline> onlineUsers;
 	
@@ -43,7 +43,7 @@ public class MessagesNewFragment extends Fragment implements UserOnlineCheckInte
 		userOnlineTask.execute();
 	}
 	
-	public void setOnNavigationCallback(ContentFragmentInterface mCallback) {
+	public void setOnNavigationCallback(AppInterface mCallback) {
 		this.mCallback = mCallback;
 	}
 

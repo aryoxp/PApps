@@ -7,7 +7,7 @@ import id.ac.ub.ptiik.papps.base.User;
 import id.ac.ub.ptiik.papps.helpers.GCMHelper;
 import id.ac.ub.ptiik.papps.helpers.SystemHelper;
 import id.ac.ub.ptiik.papps.interfaces.CheckinInterface;
-import id.ac.ub.ptiik.papps.interfaces.ContentFragmentInterface;
+import id.ac.ub.ptiik.papps.interfaces.AppInterface;
 import id.ac.ub.ptiik.papps.interfaces.NavigationInterface;
 import id.ac.ub.ptiik.papps.tasks.CheckinTask;
 
@@ -25,7 +25,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 public class MainActivity extends SlidingFragmentActivity 
-	implements NavigationInterface, CheckinInterface, ContentFragmentInterface {
+	implements NavigationInterface, CheckinInterface, AppInterface {
 
 	private ArrayList<NavMenu> menus;
 	private NavigationFragment navFragment;
@@ -105,7 +105,7 @@ public class MainActivity extends SlidingFragmentActivity
 		this.menuNews = new NavMenu(NavMenu.MENU_NEWS, "News", "News and Information", R.drawable.ic_communication_99, "news");
 		this.menuSchedule = new NavMenu(NavMenu.MENU_SCHEDULE, "Schedule", "Lecturing Schedules", R.drawable.ic_time_4, "schedule");
 		this.menuAgenda = new NavMenu(NavMenu.MENU_AGENDA, "Agenda", "My Agenda", R.drawable.ic_time_3, "agenda");
-		this.menuMessages = new NavMenu(NavMenu.MENU_MESSAGES, "Messages", "Incoming messages", R.drawable.ic_communication_63, "messages");
+		this.menuMessages = new NavMenu(NavMenu.MENU_MESSAGES, "Messages", "Incoming messages", R.drawable.ic_communication_61, "messages");
 		this.menus.add(menuHome);
 		this.menus.add(menuNews);
 		this.menus.add(menuSchedule);
@@ -119,8 +119,9 @@ public class MainActivity extends SlidingFragmentActivity
 	    
 	    this.registrationId = this.gcmHelper.getRegistrationId();
 		Log.d("c2dm ID", "Device is registered with ID: " + this.registrationId);
-		String username = SystemHelper.getSystemUser(getApplicationContext()).username;
-		if(username != null) {
+		User user = SystemHelper.getSystemUser(getApplicationContext());
+		if(user != null) {
+			String username = user.username;
 			CheckinTask checkinTask = new CheckinTask(getApplicationContext(), 
 					this, username, GCM.USER_ONLINE);
 			checkinTask.execute();
@@ -235,6 +236,11 @@ public class MainActivity extends SlidingFragmentActivity
 		.setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
 		.replace(R.id.contentContainer, fragment, tag)
 		.commit();
+	}
+
+	@Override
+	public void setActionBarTitle(String title) {
+		this.getActionBar().setTitle(title);
 	}
 	
 	

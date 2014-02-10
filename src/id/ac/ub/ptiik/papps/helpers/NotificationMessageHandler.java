@@ -113,11 +113,36 @@ public class NotificationMessageHandler extends SQLiteOpenHelper {
 		  ArrayList<NotificationMessage> listMessages = new ArrayList<NotificationMessage>();
 
 		  SQLiteDatabase db = this.getReadableDatabase();
-		  Cursor cursor = db.rawQuery("SELECT * FROM " + MESSAGES_TABLE, null);   
+		  Cursor cursor = db.rawQuery("SELECT DISTINCT " + FIELD_FROM + ", "
+				  + "(SELECT " + FIELD_MESSAGE 
+				  	+ " FROM " + MESSAGES_TABLE + " m " 
+				  	+ " WHERE m." + FIELD_FROM + "=f." + FIELD_FROM
+				  	+ " ORDER BY " + KEY_ID + " DESC LIMIT 1) AS message, "
+				  + "(SELECT " + FIELD_SENT
+				  	+ " FROM " + MESSAGES_TABLE + " s " 
+				  	+ " WHERE s." + FIELD_FROM + "=f." + FIELD_FROM
+				  	+ " ORDER BY " + KEY_ID + " DESC LIMIT 1) AS sent, "
+				  + "(SELECT " + FIELD_RECEIVED
+				  	+ " FROM " + MESSAGES_TABLE + " r " 
+					+ " WHERE r." + FIELD_FROM + "=f." + FIELD_FROM
+				  	+ " ORDER BY " + KEY_ID + " DESC LIMIT 1) AS received, "
+				  + "(SELECT " + FIELD_STATUS
+				  	+ " FROM " + MESSAGES_TABLE + " t " 
+					+ " WHERE t." + FIELD_FROM + "=f." + FIELD_FROM
+				  	+ " ORDER BY " + KEY_ID + " DESC LIMIT 1) AS status "
+				  + " FROM " + MESSAGES_TABLE + " f ", null);   
 		  try{
 		    if (cursor != null){
 		      if(cursor.moveToFirst()){
 		        do {
+		        	NotificationMessage notificationMessage = new NotificationMessage(
+		        			cursor.getString(0), // from
+		    		    	cursor.getString(1), // message
+		    		    	cursor.getString(2), // date sent
+		    		    	cursor.getString(3), // date sent
+		    		    	Integer.parseInt(cursor.getString(4)) // status
+		    		    	);
+		        	/*
 		        	NotificationMessage notificationMessage = new NotificationMessage(
 		    		    	Integer.parseInt(cursor.getString(0)), // id
 		    		    	Integer.parseInt(cursor.getString(1)), // type
@@ -127,6 +152,7 @@ public class NotificationMessageHandler extends SQLiteOpenHelper {
 		    		    	cursor.getString(5), // from
 		    		    	Integer.parseInt(cursor.getString(6)) //status 
 		    		    	);
+		        	*/
 		        	listMessages.add(notificationMessage);
 		        } while(cursor.moveToNext());
 		      }

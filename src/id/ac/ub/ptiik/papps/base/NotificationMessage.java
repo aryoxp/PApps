@@ -11,7 +11,7 @@ public class NotificationMessage {
 	public static final int MESSAGE = 1;
 	
 	public static final int STATUS_NEW = 2;
-	public static final int STATUS_OLD = 3;
+	public static final int STATUS_READ = 3;
 	
 	public static final int SENT = 100;
 	public static final int RECEIVED = 101;
@@ -44,6 +44,14 @@ public class NotificationMessage {
 		this.status = NotificationMessage.STATUS_NEW;
 	}
 	
+	public NotificationMessage(String from, String message, String sent, String received, int status) {
+		this.from = from;
+		this.sent = sent;
+		this.message = message;
+		this.received = received;
+		this.status = status;
+	}
+	
 	public String getDateTimeString(String format, int kind) {
 		SimpleDateFormat sdfParser = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
 		try {
@@ -60,5 +68,7 @@ public class NotificationMessage {
 			return sdf.format(this.sentDate);
 		}
 	}
+	
+	
 	
 }
