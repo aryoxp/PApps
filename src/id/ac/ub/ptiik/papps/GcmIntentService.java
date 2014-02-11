@@ -94,10 +94,11 @@ public class GcmIntentService extends IntentService {
                 this.getSystemService(Context.NOTIFICATION_SERVICE);
         
         Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra("type", NotificationMessage.MESSAGE);
-        intent.putExtra("fragment", AppFragment.FRAGMENT_MESSAGES);
+        String fragmentToLaunch = AppFragment.FRAGMENT_TAG_MESSAGES.toString();
+        intent.putExtra("fragment", fragmentToLaunch);
+        int flags = PendingIntent.FLAG_UPDATE_CURRENT;
         
-        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, intent, 0);
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, intent, flags);
         
         
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)

@@ -1,63 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="fill_parent"
+	xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/clouds"
-    android:orientation="horizontal" >
+    android:orientation="vertical"
+    tools:ignore="UselessParent" >
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:orientation="vertical"
-        android:paddingBottom="20dp"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:paddingTop="20dp"
-        android:background="@color/white"
-        tools:ignore="UselessParent" >
+     <RelativeLayout
+		 android:layout_marginTop="8dp"
+		 android:layout_marginLeft="16dp"
+		 android:layout_marginRight="16dp"
+		 android:paddingLeft="16dp"
+		 android:paddingTop="16dp"
+		 
+         android:background="@color/white"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content" >
 
-        <RelativeLayout
-            android:id="@+id/messageContainer"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+         <TextView
+             android:id="@+id/messageTanggal"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:gravity="center_vertical"
+             android:text="Medium Text"
+             android:textColor="@color/sunflower"
+             android:textSize="14sp"
+             android:fontFamily="sans-serif-condensed"
+             tools:ignore="HardcodedText" />
 
-            <TextView
-                android:id="@+id/messageTanggal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:text="Medium Text"
-                android:textColor="@color/sunflower"
-                android:textSize="14sp"
-                android:fontFamily="sans-serif-condensed"
-                tools:ignore="HardcodedText" />
-            
-            <View
-                android:id="@+id/messageStatus"
-                android:layout_width="8dp"
-                android:layout_height="8dp"
-                android:layout_alignParentRight="true"
-                android:background="@color/alizarin" />
+         <TextView
+             android:id="@+id/messageMessage"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:layout_below="@+id/messageTanggal"
+             android:layout_marginRight="56dp"
+             android:paddingBottom="16dp"
+             android:fontFamily="sans-serif"
+             android:gravity="center_vertical"
+             android:text="Medium Text"
+             android:textColor="@color/asbestos"
+             android:textSize="16sp"
+             tools:ignore="HardcodedText" />
 
-        </RelativeLayout>
+         <ImageView
+             android:contentDescription="@string/empty_space"
+             android:id="@+id/messageButtonDelete"
+             android:layout_width="32dp"
+             android:layout_height="32dp"
+             android:layout_alignParentRight="true"
+             android:layout_alignParentTop="true"
+             android:clickable="true"
+             android:layout_marginRight="12dp"
+             android:background="@drawable/button_white"
+             android:src="@drawable/ic_interface_74_gray" />
+		<View
+		    android:id="@+id/messageStatus"
+		    android:layout_width="16dp"
+		    android:layout_height="16dp"
+		    android:background="@color/alizarin"
+		    android:layout_alignParentRight="true"
+		    android:layout_alignParentBottom="true"
+	    	/>
+     </RelativeLayout>
 
-        <TextView
-            android:id="@+id/messageMessage"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:fontFamily="sans-serif"
-            android:gravity="center_vertical"
-            android:text="Medium Text"
-            android:textColor="@color/asbestos"
-            android:textSize="16sp"
-            tools:ignore="HardcodedText" />
-
-    </LinearLayout>
-
-</LinearLayout>
+ </LinearLayout>

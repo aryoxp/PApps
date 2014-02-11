@@ -2,19 +2,25 @@ package id.ac.ub.ptiik.papps.adapters;
 
 import id.ac.ub.ptiik.papps.R;
 import id.ac.ub.ptiik.papps.base.NotificationMessage;
+import id.ac.ub.ptiik.papps.helpers.NotificationMessageHandler;
 
 import java.util.ArrayList;
 //import java.util.Locale;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
-public class MessageThreadAdapter extends BaseAdapter {
+public class MessageThreadAdapter extends BaseAdapter 
+	implements OnClickListener {
 
 	private ArrayList<NotificationMessage> notificationMessageList;
 	private Context context;
@@ -59,6 +65,7 @@ public class MessageThreadAdapter extends BaseAdapter {
 		public TextView messageDateTime;
 		public TextView messageMessage;
 		public View messageStatus;
+		public View messageDeleteButton;
 	}
 
 	@Override
@@ -72,6 +79,7 @@ public class MessageThreadAdapter extends BaseAdapter {
 			vh.messageDateTime = (TextView) rowView.findViewById(R.id.messageTanggal);
 			vh.messageMessage = (TextView) rowView.findViewById(R.id.messageMessage);
 			vh.messageStatus = rowView.findViewById(R.id.messageStatus);
+			vh.messageDeleteButton = rowView.findViewById(R.id.messageButtonDelete);
 			rowView.setTag(vh);
 		}
 		ViewHolder vh = (ViewHolder) rowView.getTag();
@@ -79,9 +87,36 @@ public class MessageThreadAdapter extends BaseAdapter {
 		if(message.status == NotificationMessage.STATUS_NEW)
 			vh.messageStatus.setAlpha(1);
 		else vh.messageStatus.setAlpha(0);
+		//message.setRead();
 		vh.messageDateTime.setText(message.getDateTimeString("dd MMM yyy HH:mm", NotificationMessage.SENT));
 		vh.messageMessage.setText(message.message);
+		vh.messageDeleteButton.setTag(position);
+		vh.messageDeleteButton.setOnClickListener(this);
 		return rowView;
 	}
+
+	@Override
+	public void onClick(View v) {
+		final int position = (Integer) v.getTag();
+		
+		new AlertDialog.Builder(this.context)
+			.setMessage("Delete this message?")
+			.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					NotificationMessage message = notificationMessageList.get(position);
+					NotificationMessageHandler handler = new NotificationMessageHandler(context);
+					handler.delete(message);
+					notificationMessageList.remove(message);
+					notifyDataSetChanged();
+					Toast.makeText(context, "Message deleted", Toast.LENGTH_SHORT).show();
+				}
+			})
+			.setNegativeButton("No", null)
+			.show();
+
+	}
+	
 
 }

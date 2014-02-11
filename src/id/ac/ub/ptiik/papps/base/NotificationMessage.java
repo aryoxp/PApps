@@ -69,6 +69,10 @@ public class NotificationMessage {
 		}
 	}
 	
+	public void setRead() {
+		this.status = STATUS_READ;
+	}
+	
 	
 	
 }

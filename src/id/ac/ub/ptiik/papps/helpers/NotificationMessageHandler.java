@@ -142,17 +142,6 @@ public class NotificationMessageHandler extends SQLiteOpenHelper {
 		    		    	cursor.getString(3), // date sent
 		    		    	Integer.parseInt(cursor.getString(4)) // status
 		    		    	);
-		        	/*
-		        	NotificationMessage notificationMessage = new NotificationMessage(
-		    		    	Integer.parseInt(cursor.getString(0)), // id
-		    		    	Integer.parseInt(cursor.getString(1)), // type
-		    		    	cursor.getString(2), // message
-		    		    	cursor.getString(3), // date sent
-		    		    	cursor.getString(4), // date received
-		    		    	cursor.getString(5), // from
-		    		    	Integer.parseInt(cursor.getString(6)) //status 
-		    		    	);
-		        	*/
 		        	listMessages.add(notificationMessage);
 		        } while(cursor.moveToNext());
 		      }

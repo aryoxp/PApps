@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import id.ac.ub.ptiik.papps.adapters.MessageThreadAdapter;
 import id.ac.ub.ptiik.papps.base.NotificationMessage;
+import id.ac.ub.ptiik.papps.helpers.NotificationMessageHandler;
 import id.ac.ub.ptiik.papps.interfaces.AppInterface;
 import id.ac.ub.ptiik.papps.interfaces.MessageThreadInterface;
 import id.ac.ub.ptiik.papps.tasks.MessageThreadTask;
@@ -12,10 +13,13 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class MessagesThreadFragment extends Fragment implements MessageThreadInterface {
+public class MessagesThreadFragment extends Fragment 
+implements MessageThreadInterface, OnScrollListener {
 
 	private View progressContainerView;
 	private ListView messageThreadListView;
@@ -36,6 +40,7 @@ public class MessagesThreadFragment extends Fragment implements MessageThreadInt
 		this.messageThreadListView = (ListView) v.findViewById(R.id.messagesThreadList);
 		this.messageThreadListView.setAdapter(messageThreadAdapter);
 		this.messageThreadListView.setDivider(null);
+		this.messageThreadListView.setOnScrollListener(this);
 		this.messageThreadFrom = (TextView) v.findViewById(R.id.messagesThreadFrom);
 		//this.v = v;
 		return v;
@@ -76,6 +81,33 @@ public class MessagesThreadFragment extends Fragment implements MessageThreadInt
 		this.messages.clear();
 		this.messageThreadAdapter.notifyDataSetChanged();
 		this.progressContainerView.animate().alpha(0).setDuration(200).start();
+	}
+
+	private int firstVisibleIndex;
+	private int lastVisibleIndex;
+	
+	@Override
+	public void onScroll(AbsListView view, int firstVisibleItem,
+			int visibleItemCount, int totalItemCount) {
+		this.firstVisibleIndex = firstVisibleItem;
+		
+	}
+
+	@Override
+	public void onScrollStateChanged(AbsListView view, int scrollState) {
+		if(scrollState == SCROLL_STATE_IDLE)
+		{
+			this.lastVisibleIndex = this.messageThreadListView.getLastVisiblePosition();
+			NotificationMessageHandler handler = new NotificationMessageHandler(getActivity());
+			for(int i = this.firstVisibleIndex; i <= this.lastVisibleIndex; i++)
+			{
+				NotificationMessage notificationMessage = this.messages.get(i);
+				if(notificationMessage.status == NotificationMessage.STATUS_NEW) {
+					notificationMessage.setRead();
+					handler.update(notificationMessage);
+				}
+			}
+		}
 	}
 	
 }

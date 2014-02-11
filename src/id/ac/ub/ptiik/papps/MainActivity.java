@@ -19,6 +19,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -52,19 +53,13 @@ public class MainActivity extends SlidingFragmentActivity
 		
 		initiateNavigationMenu();		
 		configureNavigationMenu();
-		Bundle bundle = this.getIntent().getExtras();
-		if(bundle != null)
-		{
-			switch (bundle.getInt("fragment")) {
-			case AppFragment.FRAGMENT_MESSAGES:
-					this.OnNavigationMenuSelected(menuMessages);
-				break;
-			default:
-				this.OnNavigationMenuSelected(menuHome);
-				break;
-			}
+		Intent intent = this.getIntent();
+		String fragment = intent.getStringExtra("fragment");
+		if ( fragment!=null && fragment.equals(AppFragment.FRAGMENT_TAG_MESSAGES) ) {
+				this.OnNavigationMenuSelected(menuMessages);
 		} else
 			this.OnNavigationMenuSelected(menuHome);
+			
 		this.gcmHelper = new GCMHelper(this);
 	}
 		
@@ -101,11 +96,11 @@ public class MainActivity extends SlidingFragmentActivity
 
 	private void initiateNavigationMenu() {
 		this.menus = new ArrayList<NavMenu>();
-		this.menuHome = new NavMenu(NavMenu.MENU_HOME, "Home", "Apps home screen", R.drawable.ic_places_1, "home");
-		this.menuNews = new NavMenu(NavMenu.MENU_NEWS, "News", "News and Information", R.drawable.ic_communication_99, "news");
-		this.menuSchedule = new NavMenu(NavMenu.MENU_SCHEDULE, "Schedule", "Lecturing Schedules", R.drawable.ic_time_4, "schedule");
-		this.menuAgenda = new NavMenu(NavMenu.MENU_AGENDA, "Agenda", "My Agenda", R.drawable.ic_time_3, "agenda");
-		this.menuMessages = new NavMenu(NavMenu.MENU_MESSAGES, "Messages", "Incoming messages", R.drawable.ic_communication_61, "messages");
+		this.menuHome = new NavMenu(NavMenu.MENU_HOME, "Home", "Apps home screen", R.drawable.ic_places_1, AppFragment.FRAGMENT_TAG_HOME);
+		this.menuNews = new NavMenu(NavMenu.MENU_NEWS, "News", "News and Information", R.drawable.ic_communication_99, AppFragment.FRAGMENT_TAG_NEWS);
+		this.menuSchedule = new NavMenu(NavMenu.MENU_SCHEDULE, "Schedule", "Lecturing Schedules", R.drawable.ic_time_4, AppFragment.FRAGMENT_TAG_SCHEDULE);
+		this.menuAgenda = new NavMenu(NavMenu.MENU_AGENDA, "Agenda", "My Agenda", R.drawable.ic_time_3, AppFragment.FRAGMENT_TAG_AGENDA);
+		this.menuMessages = new NavMenu(NavMenu.MENU_MESSAGES, "Messages", "Incoming messages", R.drawable.ic_communication_61, AppFragment.FRAGMENT_TAG_MESSAGES);
 		this.menus.add(menuHome);
 		this.menus.add(menuNews);
 		this.menus.add(menuSchedule);
@@ -204,6 +199,15 @@ public class MainActivity extends SlidingFragmentActivity
 
 	@Override
 	public void onBackPressed() {
+		
+		FragmentManager manager = getSupportFragmentManager();
+		
+		if(manager.findFragmentByTag(AppFragment.FRAGMENT_TAG_MESSAGE_THREAD) != null)
+		{
+			this.OnNavigationMenuSelected(this.menuMessages);
+			return;
+		}
+		
 		Fragment fragment = getSupportFragmentManager()
 				.findFragmentByTag(this.menuHome.tag);
 		if(fragment == null) {

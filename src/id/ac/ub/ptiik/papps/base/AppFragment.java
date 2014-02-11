@@ -1,7 +1,10 @@
 package id.ac.ub.ptiik.papps.base;
 
 public class AppFragment {
-	public static final int FRAGMENT_HOME = 0;
-	public static final int FRAGMENT_MESSAGES = 1;
 	public static final String FRAGMENT_TAG_MESSAGE_THREAD = "messageThread";
+	public static final String FRAGMENT_TAG_HOME = "home";
+	public static final String FRAGMENT_TAG_MESSAGES = "messages";
+	public static final String FRAGMENT_TAG_NEWS = "news";
+	public static final String FRAGMENT_TAG_SCHEDULE = "schedule";
+	public static final String FRAGMENT_TAG_AGENDA = "agenda";
 }
