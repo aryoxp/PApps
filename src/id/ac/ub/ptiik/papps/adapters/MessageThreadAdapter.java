@@ -13,19 +13,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-//import ap.mobile.utils.TypefaceUtils;
 
-public class NotificationMessageAdapter extends BaseAdapter {
+public class MessageThreadAdapter extends BaseAdapter {
 
 	private ArrayList<NotificationMessage> notificationMessageList;
 	private Context context;
 	
-	public NotificationMessageAdapter(Context context, ArrayList<NotificationMessage> notificationMessageList) {
+	public MessageThreadAdapter(Context context, ArrayList<NotificationMessage> notificationMessageList) {
 		this.context = context;
 		this.notificationMessageList = notificationMessageList;
 	}
 	
-	public NotificationMessageAdapter updateMessages(ArrayList<NotificationMessage> messages) {
+	public MessageThreadAdapter updateMessages(ArrayList<NotificationMessage> messages) {
 		this.notificationMessageList = messages;
 		return this;
 	}
@@ -58,10 +57,8 @@ public class NotificationMessageAdapter extends BaseAdapter {
 
 	private class ViewHolder {
 		public TextView messageDateTime;
-		public TextView messageFrom;
-		public TextView messageType;
 		public TextView messageMessage;
-		//public View row;
+		public View messageStatus;
 	}
 
 	@Override
@@ -72,20 +69,17 @@ public class NotificationMessageAdapter extends BaseAdapter {
 			LayoutInflater inflater = ((Activity)context).getLayoutInflater();
 			rowView = inflater.inflate(R.layout.item_message, null);
 			ViewHolder vh = new ViewHolder();
-			vh.messageFrom = (TextView) rowView.findViewById(R.id.messageFrom);
 			vh.messageDateTime = (TextView) rowView.findViewById(R.id.messageTanggal);
 			vh.messageMessage = (TextView) rowView.findViewById(R.id.messageMessage);
-			vh.messageType = (TextView) rowView.findViewById(R.id.messageType);
-			//vh.row = rowView;
+			vh.messageStatus = rowView.findViewById(R.id.messageStatus);
 			rowView.setTag(vh);
 		}
 		ViewHolder vh = (ViewHolder) rowView.getTag();
 		NotificationMessage message = this.notificationMessageList.get(position);
-		vh.messageFrom.setText(message.from);
 		if(message.status == NotificationMessage.STATUS_NEW)
-			vh.messageFrom.setText(vh.messageFrom.getText() + " (NEW)");
+			vh.messageStatus.setAlpha(1);
+		else vh.messageStatus.setAlpha(0);
 		vh.messageDateTime.setText(message.getDateTimeString("dd MMM yyy HH:mm", NotificationMessage.SENT));
-		vh.messageType.setText(String.valueOf(message.type));
 		vh.messageMessage.setText(message.message);
 		return rowView;
 	}

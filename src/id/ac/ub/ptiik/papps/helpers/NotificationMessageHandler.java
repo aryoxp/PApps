@@ -162,6 +162,38 @@ public class NotificationMessageHandler extends SQLiteOpenHelper {
 		    db.close();
 		  }
 		  return listMessages;
-		}
+	}
+	
+	public ArrayList<NotificationMessage> getAll(String from){
+
+		  ArrayList<NotificationMessage> listMessages = new ArrayList<NotificationMessage>();
+
+		  SQLiteDatabase db = this.getReadableDatabase();
+		  Cursor cursor = db.rawQuery("SELECT * "
+				  + " FROM " + MESSAGES_TABLE + " f "
+				  + " WHERE " + FIELD_FROM + " LIKE ? ", new String[] { from });   
+		  try{
+		    if (cursor != null){
+		      if(cursor.moveToFirst()){
+		        do {
+		        	NotificationMessage notificationMessage = new NotificationMessage(
+		    		    	Integer.parseInt(cursor.getString(0)), // id
+		    		    	Integer.parseInt(cursor.getString(1)), // type
+		    		    	cursor.getString(2), // message
+		    		    	cursor.getString(3), // date sent
+		    		    	cursor.getString(4), // date received
+		    		    	cursor.getString(5), // from
+		    		    	Integer.parseInt(cursor.getString(6)) //status 
+		    		    	);
+		        	listMessages.add(notificationMessage);
+		        } while(cursor.moveToNext());
+		      }
+		    }
+		  } finally {
+		    cursor.close();
+		    db.close();
+		  }
+		  return listMessages;
+	}
 
 }

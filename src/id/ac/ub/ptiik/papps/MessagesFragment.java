@@ -1,6 +1,7 @@
 package id.ac.ub.ptiik.papps;
 
 import id.ac.ub.ptiik.papps.adapters.MessageIndexAdapter;
+import id.ac.ub.ptiik.papps.base.AppFragment;
 import id.ac.ub.ptiik.papps.base.NotificationMessage;
 import id.ac.ub.ptiik.papps.helpers.NotificationMessageHandler;
 import id.ac.ub.ptiik.papps.interfaces.AppInterface;
@@ -92,8 +93,14 @@ public class MessagesFragment extends Fragment
 
 	@Override
 	public void onItemClick(AdapterView<?> container, View view, int position, long id) {
-		this.getActivity().openContextMenu(container);
+		//this.getActivity().openContextMenu(container);
 		this.selectedMessage = this.messageList.get(position);
+		MessagesThreadFragment fragment = new MessagesThreadFragment();
+		Bundle args = new Bundle();
+		args.putString(MessagesThreadFragment.MESSAGE_FROM, this.selectedMessage.from);
+		fragment.setArguments(args);
+		fragment.setOnNavigationCallback(this.mCallback);
+		this.mCallback.setContentFragment(fragment, AppFragment.FRAGMENT_TAG_MESSAGE_THREAD);
 	}
 
 	@Override
