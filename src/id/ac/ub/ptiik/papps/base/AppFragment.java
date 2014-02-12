@@ -7,4 +7,5 @@ public class AppFragment {
 	public static final String FRAGMENT_TAG_NEWS = "news";
 	public static final String FRAGMENT_TAG_SCHEDULE = "schedule";
 	public static final String FRAGMENT_TAG_AGENDA = "agenda";
+	public static final String FRAGMENT_TAG_SENDTO = "sendto";
 }

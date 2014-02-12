@@ -37,5 +37,28 @@ public class UserParser {
 		
 		return null;
 	}
+	
+	public static User Parse(JSONObject user){
+		
+		try {
+			
+			User u = new User();
+			u.nama = user.getString("nama");
+			u.gelar_awal = user.getString("gelar_awal");
+			u.gelar_akhir = user.getString("gelar_akhir");
+			u.karyawan_id = user.getString("karyawan_id");
+			u.level = user.getInt("level");
+			u.status = user.getInt("status");
+			u.role = user.getString("role");
+			u.username = user.getString("username");
+			
+			return u;
+			
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
 
 }

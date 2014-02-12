@@ -4,30 +4,42 @@ import java.util.ArrayList;
 
 import id.ac.ub.ptiik.papps.adapters.MessageThreadAdapter;
 import id.ac.ub.ptiik.papps.base.NotificationMessage;
+import id.ac.ub.ptiik.papps.base.User;
 import id.ac.ub.ptiik.papps.helpers.NotificationMessageHandler;
+import id.ac.ub.ptiik.papps.helpers.SystemHelper;
 import id.ac.ub.ptiik.papps.interfaces.AppInterface;
+import id.ac.ub.ptiik.papps.interfaces.MessageSendInterface;
 import id.ac.ub.ptiik.papps.interfaces.MessageThreadInterface;
+import id.ac.ub.ptiik.papps.tasks.MessageSendTask;
 import id.ac.ub.ptiik.papps.tasks.MessageThreadTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MessagesThreadFragment extends Fragment 
-implements MessageThreadInterface, OnScrollListener {
+implements MessageThreadInterface, OnScrollListener, OnClickListener, MessageSendInterface {
 
-	private View progressContainerView;
+	private View progressContainerView, messageThreadSendButton;
 	private ListView messageThreadListView;
 	private TextView messageThreadFrom;
+	private EditText messageThreadMessageText;
 	private ArrayList<NotificationMessage> messages;
 	private MessageThreadAdapter messageThreadAdapter;
 	
+	private String usernameToSend;
+	private User user;
+	
 	public static final String MESSAGE_FROM = "messageFrom";
+	public static final String MESSAGE_FROM_NAME = "messageFromName";
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -42,6 +54,9 @@ implements MessageThreadInterface, OnScrollListener {
 		this.messageThreadListView.setDivider(null);
 		this.messageThreadListView.setOnScrollListener(this);
 		this.messageThreadFrom = (TextView) v.findViewById(R.id.messagesThreadFrom);
+		this.messageThreadMessageText = (EditText) v.findViewById(R.id.messagesThreadMessageText);
+		this.messageThreadSendButton = v.findViewById(R.id.messagesThreadSendButton);
+		this.messageThreadSendButton.setOnClickListener(this);
 		//this.v = v;
 		return v;
 	}
@@ -50,8 +65,18 @@ implements MessageThreadInterface, OnScrollListener {
 	public void onStart() {
 		super.onStart();
 		try {
+			this.user = SystemHelper.getSystemUser(getActivity());
+			
 			String from = this.getArguments().getString(MESSAGE_FROM, "");
-			this.messageThreadFrom.setText(from);
+			String fromName = this.getArguments().getString(MESSAGE_FROM_NAME, "");
+			
+			String nameToDisplay = fromName;
+			if(fromName.equals(""))
+				nameToDisplay = from;
+			else nameToDisplay = fromName + " (" + from + ")";
+			
+			this.usernameToSend = from;
+			this.messageThreadFrom.setText(nameToDisplay);
 			MessageThreadTask task = new MessageThreadTask(getActivity(), this);
 			task.execute(from);
 		} catch (Exception e) {
@@ -108,6 +133,39 @@ implements MessageThreadInterface, OnScrollListener {
 				}
 			}
 		}
+	}
+
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.messagesThreadSendButton:
+			
+			String message = this.messageThreadMessageText.getText().toString();
+			if(this.user != null) {
+				MessageSendTask sendTask = new MessageSendTask(getActivity(), this, this.user.username);
+				sendTask.execute(this.usernameToSend, message);
+			} else
+				Toast.makeText(getActivity(), "You have to login to send messages", Toast.LENGTH_SHORT).show();
+			break;
+
+		default:
+			break;
+		}
+	}
+
+	@Override
+	public void onMessageSendStart() {
+		
+	}
+
+	@Override
+	public void onMessageSendComplete(Boolean status) {
+		Toast.makeText(getActivity(), "complete", Toast.LENGTH_SHORT).show();
+	}
+
+	@Override
+	public void onMessageSendFail(String error) {
+		
 	}
 	
 }

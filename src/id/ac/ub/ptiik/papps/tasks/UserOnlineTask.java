@@ -28,7 +28,7 @@ public class UserOnlineTask extends AsyncTask<Void, Void, ArrayList<UserOnline>>
 		new Handler(Looper.getMainLooper()).post(new Runnable() {
 			@Override
 			public void run() {
-				mCallback.onUserOnlinceCheckStarted();
+				mCallback.onUserOnlineCheckStarted();
 			}
 		});
 		try {
@@ -50,9 +50,9 @@ public class UserOnlineTask extends AsyncTask<Void, Void, ArrayList<UserOnline>>
 	@Override
 	protected void onPostExecute(ArrayList<UserOnline> users) {
 		if(users != null && users.size() > 0) {
-			this.mCallback.onUserOnlinceCheckSuccess(users);
+			this.mCallback.onUserOnlineCheckSuccess(users);
 		} else {
-			this.mCallback.onUserOnlinceCheckFail(this.error);
+			this.mCallback.onUserOnlineCheckFail(this.error);
 		}
 	}
 }

@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 public class ComposeToAdapter extends BaseAdapter {
@@ -49,51 +48,31 @@ public class ComposeToAdapter extends BaseAdapter {
 	public long getItemId(int position) {
 		return position;
 	}
-
-	private class SelectedViewHolder {
-		public TextView userSelectedText;
-	}
 	
 	private class OptionsViewHolder {
 		public TextView userOptionsText;
-		public ImageView userOptionsImageView;
-	}
-
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		
-		View rowView = convertView;
-		if(rowView == null) {
-			LayoutInflater inflater = ((Activity)context).getLayoutInflater();
-			rowView = inflater.inflate(R.layout.item_user_selected, null);
-			SelectedViewHolder vh = new SelectedViewHolder();
-			vh.userSelectedText = (TextView) rowView.findViewById(R.id.userSelectedText);
-			//vh.row = rowView;
-			rowView.setTag(vh);
-		}
-		SelectedViewHolder vh = (SelectedViewHolder) rowView.getTag();
-		vh.userSelectedText.setText(this.userList.get(position).getNamaGelar());
-		return rowView;
+		public TextView userOptionsStatusText;
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public View getDropDownView(int position, View convertView, ViewGroup parent) {
+	public View getView(int position, View convertView, ViewGroup parent) {
 		View rowView = convertView;
 		if(rowView == null) {
 			LayoutInflater inflater = ((Activity)context).getLayoutInflater();
 			rowView = inflater.inflate(R.layout.item_user_options, null);
 			OptionsViewHolder vh = new OptionsViewHolder();
 			vh.userOptionsText = (TextView) rowView.findViewById(R.id.userOptionsText);
-			vh.userOptionsImageView = (ImageView) rowView.findViewById(R.id.userOptionsStatusIcon);
+			vh.userOptionsStatusText = (TextView) rowView.findViewById(R.id.userOptionsStatusText);
 			//vh.row = rowView;
 			rowView.setTag(vh);
 		}
 		OptionsViewHolder vh = (OptionsViewHolder) rowView.getTag();
 		vh.userOptionsText.setText(this.userList.get(position).getNamaGelar());
-		if(this.userList.get(position).status == 0)
-			vh.userOptionsImageView.setBackgroundDrawable(
-					this.context.getResources().getDrawable(R.color.pomegranate));
+		if(this.userList.get(position).status == 0) {
+			vh.userOptionsStatusText.setTextColor(
+					this.context.getResources().getColor(R.color.pomegranate));
+			vh.userOptionsStatusText.setText("OFFLINE");
+		}
 		return rowView;
 	}
 

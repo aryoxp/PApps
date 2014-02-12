@@ -3,8 +3,10 @@ package id.ac.ub.ptiik.papps;
 import id.ac.ub.ptiik.papps.adapters.MessageIndexAdapter;
 import id.ac.ub.ptiik.papps.base.AppFragment;
 import id.ac.ub.ptiik.papps.base.NotificationMessage;
+import id.ac.ub.ptiik.papps.base.UserOnline;
 import id.ac.ub.ptiik.papps.helpers.NotificationMessageHandler;
 import id.ac.ub.ptiik.papps.interfaces.AppInterface;
+import id.ac.ub.ptiik.papps.interfaces.SendtoInterface;
 
 import java.util.ArrayList;
 
@@ -31,7 +33,7 @@ import android.widget.Toast;
 
 public class MessagesFragment extends Fragment 
 	implements OnItemClickListener, android.content.DialogInterface.OnClickListener, 
-	OnItemLongClickListener {
+	OnItemLongClickListener, SendtoInterface {
 
 	View v;
 	ProgressBar refreshProgressBar;
@@ -163,11 +165,11 @@ public class MessagesFragment extends Fragment
 			this.messagesListView.setAdapter(this.adapter);
 			return true;
 		case R.id.action_messages_new:
-			if(this.mCallback != null) {
-				MessagesNewFragment fragment = new MessagesNewFragment();
-				fragment.setOnNavigationCallback(this.mCallback);
-				this.mCallback.setContentFragment(fragment, "newMessages");
-			}
+			
+			SendtoFragment sendtoFragment = new SendtoFragment();
+			sendtoFragment.setOnUserSelectedCallback(this);
+			sendtoFragment.show(getFragmentManager(), AppFragment.FRAGMENT_TAG_SENDTO);
+			
 			return true;
 			default:
 				return super.onOptionsItemSelected(item);
@@ -184,5 +186,18 @@ public class MessagesFragment extends Fragment
 	
 	public void setOnNavigationCallback(AppInterface mCallback) {
 		this.mCallback = mCallback;
+	}
+
+	@Override
+	public void onUserSelected(UserOnline user) {
+		if(this.mCallback != null) {
+			MessagesThreadFragment fragment = new MessagesThreadFragment();
+			Bundle args = new Bundle();
+			args.putString(MessagesThreadFragment.MESSAGE_FROM, user.username);
+			args.putString(MessagesThreadFragment.MESSAGE_FROM_NAME, user.nama);
+			fragment.setArguments(args);
+			fragment.setOnNavigationCallback(this.mCallback);
+			this.mCallback.setContentFragment(fragment, AppFragment.FRAGMENT_TAG_MESSAGE_THREAD);
+		}
 	}
 }

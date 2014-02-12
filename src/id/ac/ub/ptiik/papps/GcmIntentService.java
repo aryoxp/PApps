@@ -8,7 +8,9 @@ import org.json.JSONObject;
 
 import id.ac.ub.ptiik.papps.base.AppFragment;
 import id.ac.ub.ptiik.papps.base.NotificationMessage;
+import id.ac.ub.ptiik.papps.base.User;
 import id.ac.ub.ptiik.papps.helpers.NotificationMessageHandler;
+import id.ac.ub.ptiik.papps.parsers.UserParser;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import android.app.IntentService;
@@ -27,6 +29,8 @@ public class GcmIntentService extends IntentService {
 	private int NOTIFICATION_ID = 1;
 	private NotificationManager mNotificationManager;
 	private NotificationMessageHandler dbHandler;
+	
+	private NotificationMessage message;
 	
 	public GcmIntentService(String name) {
 		super(name);
@@ -68,11 +72,15 @@ public class GcmIntentService extends IntentService {
             		
             		String message = messageJSONObject.getString("message");
             		String sent = messageJSONObject.getString("datetime");
-            		String from = messageJSONObject.getString("from");
+            		
+            		JSONObject from = messageJSONObject.getJSONObject("from");
+            		
+            		User user = UserParser.Parse(from);
+            		
             		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
             		String received = sdf.format(Calendar.getInstance(Locale.US).getTime());
-            		NotificationMessage notificationMessage = new NotificationMessage(type, message, sent, received, from);
-            		
+            		NotificationMessage notificationMessage = new NotificationMessage(type, message, sent, received, user.username);
+            		this.message = notificationMessage;
             		this.dbHandler.add(notificationMessage);
             	} catch(Exception e) {
             		Log.e("MessageJSON Error", e.getMessage());
@@ -104,10 +112,10 @@ public class GcmIntentService extends IntentService {
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
         .setSmallIcon(R.drawable.ic_papps_taskbar)
         .setContentTitle("PTIIK Apps Server")
-        .setStyle(new NotificationCompat.BigTextStyle().bigText(msg))
+        .setStyle(new NotificationCompat.BigTextStyle().bigText(this.message.message))
         .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
         .setAutoCancel(true)
-        .setContentText(msg);
+        .setContentText(this.message.message);
         
         mBuilder.setContentIntent(contentIntent);
         mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());

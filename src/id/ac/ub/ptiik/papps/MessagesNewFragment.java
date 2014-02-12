@@ -48,12 +48,12 @@ public class MessagesNewFragment extends Fragment implements UserOnlineCheckInte
 	}
 
 	@Override
-	public void onUserOnlinceCheckStarted() {
+	public void onUserOnlineCheckStarted() {
 		this.progressContainerView.animate().alpha(1).setDuration(200).start();
 	}
 
 	@Override
-	public void onUserOnlinceCheckSuccess(ArrayList<UserOnline> users) {
+	public void onUserOnlineCheckSuccess(ArrayList<UserOnline> users) {
 		this.progressContainerView.animate().alpha(0).setDuration(200).start();
 		this.onlineUsers.clear();
 		this.onlineUsers.addAll(users);
@@ -61,7 +61,7 @@ public class MessagesNewFragment extends Fragment implements UserOnlineCheckInte
 	}
 
 	@Override
-	public void onUserOnlinceCheckFail(String error) {
+	public void onUserOnlineCheckFail(String error) {
 		this.onlineUsers.clear();
 		this.progressContainerView.animate().alpha(0).setDuration(200).start();
 	}

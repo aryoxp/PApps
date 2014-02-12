@@ -9,19 +9,24 @@
     <TextView
         android:id="@+id/userOptionsText"
         android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
         android:padding="12dp"
         android:textColor="@color/asbestos"
         android:textSize="13sp" >
     </TextView>
 
-    <ImageView
-        android:id="@+id/userOptionsStatusIcon"
+    <TextView
+        android:id="@+id/userOptionsStatusText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/emerald"
-        android:contentDescription="@string/empty_space"
-        android:src="@drawable/ic_status_9" />
+        android:layout_margin="8dp"
+        android:fontFamily="sans-serif-condensed"
+        android:text="ONLINE"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@color/emerald"
+        android:textSize="12sp"
+        android:layout_gravity="center_vertical"
+        tools:ignore="HardcodedText" />
 
 </LinearLayout>
