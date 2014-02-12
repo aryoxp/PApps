@@ -10,9 +10,10 @@ import id.ac.ub.ptiik.papps.base.NavMenu;
 import id.ac.ub.ptiik.papps.base.PreferenceKey;
 import id.ac.ub.ptiik.papps.base.User;
 import id.ac.ub.ptiik.papps.helpers.SystemHelper;
+import id.ac.ub.ptiik.papps.interfaces.DashboardInfoInterface;
 import id.ac.ub.ptiik.papps.interfaces.LoginDialogFinishInterface;
 import id.ac.ub.ptiik.papps.interfaces.NavigationInterface;
-import id.ac.ub.ptiik.papps.tasks.WeatherTask;
+import id.ac.ub.ptiik.papps.tasks.DashboardInfoTask;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -28,10 +29,9 @@ import android.view.ViewManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import ap.mobile.base.Weather;
-import ap.mobile.interfaces.WeatherInterface;
 
 public class DashboardFragment extends Fragment 
-	implements WeatherInterface, View.OnClickListener, LoginDialogFinishInterface,
+	implements DashboardInfoInterface, View.OnClickListener, LoginDialogFinishInterface,
 	DialogInterface.OnClickListener {
 	
 	private ImageView iconView;
@@ -95,7 +95,7 @@ public class DashboardFragment extends Fragment
 			this.weatherTimestamp = SystemHelper.getPreferenceInteger(getActivity(), PreferenceKey.WEATHER_TIMESTAMP);
 			int selisih = (int) ((System.currentTimeMillis()/1000)-this.weatherTimestamp);
 			if(this.weatherTimestamp == 0 || selisih > 3600) {
-				WeatherTask weatherTask = new WeatherTask(getActivity(), this);
+				DashboardInfoTask weatherTask = new DashboardInfoTask(getActivity(), this);
 				weatherTask.execute("Malang");
 			} else {
 				String jsonWeather = SystemHelper.getPreferenceString(getActivity(), PreferenceKey.WEATHER_JSON);
@@ -328,5 +328,10 @@ public class DashboardFragment extends Fragment
 		.translationX(this.getResources().getDisplayMetrics().widthPixels)
 		.setDuration(300)
 		.start();
+	}
+
+	@Override
+	public void eventSummaryLoaded() {
+		
 	}
 }

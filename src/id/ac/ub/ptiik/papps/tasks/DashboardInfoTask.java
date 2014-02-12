@@ -3,23 +3,23 @@ package id.ac.ub.ptiik.papps.tasks;
 import com.google.gson.Gson;
 
 import id.ac.ub.ptiik.papps.base.PreferenceKey;
+import id.ac.ub.ptiik.papps.interfaces.DashboardInfoInterface;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
 import ap.mobile.base.Weather;
-import ap.mobile.interfaces.WeatherInterface;
 import ap.mobile.jsonparser.WeatherParser;
 import ap.mobile.utils.Rest;
 
-public class WeatherTask extends AsyncTask<String, Void, Weather> {
+public class DashboardInfoTask extends AsyncTask<String, Void, Weather> {
 	
-	private WeatherInterface mCallback;
+	private DashboardInfoInterface mCallback;
 	private String error;
 	private Context context;
 		
-	public WeatherTask(Context context, WeatherInterface mCallback) {
+	public DashboardInfoTask(Context context, DashboardInfoInterface mCallback) {
 		this.mCallback = mCallback;
 		this.context = context;
 	}
