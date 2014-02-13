@@ -2,6 +2,8 @@ package id.ac.ub.ptiik.papps;
 
 import id.ac.ub.ptiik.papps.base.AppFragment;
 import id.ac.ub.ptiik.papps.base.GCM;
+import id.ac.ub.ptiik.papps.base.Message;
+import id.ac.ub.ptiik.papps.base.MessageReceived;
 import id.ac.ub.ptiik.papps.base.NavMenu;
 import id.ac.ub.ptiik.papps.base.User;
 import id.ac.ub.ptiik.papps.helpers.GCMHelper;
@@ -15,11 +17,15 @@ import java.util.ArrayList;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingFragmentActivity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -40,6 +46,8 @@ public class MainActivity extends SlidingFragmentActivity
 	
 	private GCMHelper gcmHelper;
 	private String registrationId;
+	
+	
 		
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -59,10 +67,43 @@ public class MainActivity extends SlidingFragmentActivity
 				this.OnNavigationMenuSelected(menuMessages);
 		} else
 			this.OnNavigationMenuSelected(menuHome);
-			
+		
 		this.gcmHelper = new GCMHelper(this);
+		LocalBroadcastManager
+			.getInstance(getApplicationContext())
+			.registerReceiver(this.mBroadcastReceiver, new IntentFilter("newNotification"));
 	}
 		
+	private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+
+			String receiver = intent.getStringExtra("receiver");
+			String sender = intent.getStringExtra("sender");
+			String sent = intent.getStringExtra("sent");
+			String received = intent.getStringExtra("received");
+			String message = intent.getStringExtra("message");
+			int type = intent.getIntExtra("type", Message.STATUS_NEW);
+			
+			MessageReceived newMessage = 
+    				new MessageReceived(type, message, sent, received, sender, receiver);
+
+			MessagesThreadFragment messagesThreadFragment = 
+					(MessagesThreadFragment) getSupportFragmentManager()
+					.findFragmentByTag(AppFragment.FRAGMENT_TAG_MESSAGE_THREAD);
+			if(messagesThreadFragment != null)
+				messagesThreadFragment.addMessage(newMessage);
+			
+			MessagesFragment messagesFragment = (MessagesFragment) getSupportFragmentManager()
+					.findFragmentByTag(AppFragment.FRAGMENT_TAG_MESSAGES);
+			if(messagesFragment != null)
+				messagesFragment.reloadMessageIndex();
+			
+		}
+		
+	};
+	
 	private void configureNavigationMenu() {
 		
 		// configuring Action Bar
@@ -121,6 +162,18 @@ public class MainActivity extends SlidingFragmentActivity
 					this, username, GCM.USER_ONLINE);
 			checkinTask.execute();
 		}
+		
+		LocalBroadcastManager
+		.getInstance(getApplicationContext())
+		.registerReceiver(this.mBroadcastReceiver, new IntentFilter("newNotification"));
+				
+	}
+	
+	@Override
+	protected void onPause() {
+		super.onPause();
+		LocalBroadcastManager.getInstance(getApplicationContext())
+		.unregisterReceiver(this.mBroadcastReceiver);
 	}
 	
 	@Override

@@ -3,9 +3,9 @@ package id.ac.ub.ptiik.papps;
 import java.util.ArrayList;
 
 import id.ac.ub.ptiik.papps.adapters.MessageThreadAdapter;
-import id.ac.ub.ptiik.papps.base.NotificationMessage;
+import id.ac.ub.ptiik.papps.base.MessageReceived;
 import id.ac.ub.ptiik.papps.base.User;
-import id.ac.ub.ptiik.papps.helpers.NotificationMessageHandler;
+import id.ac.ub.ptiik.papps.helpers.MessageDBHelper;
 import id.ac.ub.ptiik.papps.helpers.SystemHelper;
 import id.ac.ub.ptiik.papps.interfaces.AppInterface;
 import id.ac.ub.ptiik.papps.interfaces.MessageSendInterface;
@@ -32,10 +32,11 @@ implements MessageThreadInterface, OnScrollListener, OnClickListener, MessageSen
 	private ListView messageThreadListView;
 	private TextView messageThreadFrom;
 	private EditText messageThreadMessageText;
-	private ArrayList<NotificationMessage> messages;
+	private ArrayList<MessageReceived> messages;
 	private MessageThreadAdapter messageThreadAdapter;
 	
-	private String usernameToSend;
+	private String sender;
+	private String receiver;
 	private User user;
 	
 	public static final String MESSAGE_FROM = "messageFrom";
@@ -47,7 +48,7 @@ implements MessageThreadInterface, OnScrollListener, OnClickListener, MessageSen
 		View v = inflater.inflate(R.layout.fragment_messages_thread, container, false);
 		this.progressContainerView = v.findViewById(R.id.messagesThreadProgressContainer);
 		this.progressContainerView.setAlpha(0);
-		this.messages = new ArrayList<NotificationMessage>();
+		this.messages = new ArrayList<MessageReceived>();
 		this.messageThreadAdapter = new MessageThreadAdapter(getActivity(), this.messages);
 		this.messageThreadListView = (ListView) v.findViewById(R.id.messagesThreadList);
 		this.messageThreadListView.setAdapter(messageThreadAdapter);
@@ -67,21 +68,31 @@ implements MessageThreadInterface, OnScrollListener, OnClickListener, MessageSen
 		try {
 			this.user = SystemHelper.getSystemUser(getActivity());
 			
-			String from = this.getArguments().getString(MESSAGE_FROM, "");
-			String fromName = this.getArguments().getString(MESSAGE_FROM_NAME, "");
+			this.sender = this.getArguments().getString(MESSAGE_FROM, "");
+			String senderName = this.getArguments().getString(MESSAGE_FROM_NAME, "");
 			
-			String nameToDisplay = fromName;
-			if(fromName.equals(""))
-				nameToDisplay = from;
-			else nameToDisplay = fromName + " (" + from + ")";
+			String nameToDisplay = senderName;
+			if(senderName.equals(""))
+				nameToDisplay = sender;
+			else nameToDisplay = senderName + " (" + sender + ")";
 			
-			this.usernameToSend = from;
+			this.receiver = sender;
 			this.messageThreadFrom.setText(nameToDisplay);
-			MessageThreadTask task = new MessageThreadTask(getActivity(), this);
-			task.execute(from);
+			this.readMessages();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	private void readMessages() {
+		MessageThreadTask task = new MessageThreadTask(getActivity(), this);
+		task.execute(this.sender, this.user.username);
+	}
+	
+	public void addMessage(MessageReceived message) {
+		this.messages.add(message);
+		this.messageThreadAdapter.notifyDataSetChanged();
+		this.messageThreadListView.smoothScrollToPosition(this.messageThreadAdapter.getCount());
 	}
 	
 	public void setOnNavigationCallback(AppInterface mCallback) {}
@@ -93,7 +104,7 @@ implements MessageThreadInterface, OnScrollListener, OnClickListener, MessageSen
 
 	@Override
 	public void onMessageThreadRetrieveComplete(
-			ArrayList<NotificationMessage> messages) {
+			ArrayList<MessageReceived> messages) {
 		this.progressContainerView.animate().alpha(0).setDuration(200).start();
 		this.messages.clear();
 		this.messages.addAll(messages);
@@ -123,11 +134,11 @@ implements MessageThreadInterface, OnScrollListener, OnClickListener, MessageSen
 		if(scrollState == SCROLL_STATE_IDLE)
 		{
 			this.lastVisibleIndex = this.messageThreadListView.getLastVisiblePosition();
-			NotificationMessageHandler handler = new NotificationMessageHandler(getActivity());
+			MessageDBHelper handler = new MessageDBHelper(getActivity());
 			for(int i = this.firstVisibleIndex; i <= this.lastVisibleIndex; i++)
 			{
-				NotificationMessage notificationMessage = this.messages.get(i);
-				if(notificationMessage.status == NotificationMessage.STATUS_NEW) {
+				MessageReceived notificationMessage = this.messages.get(i);
+				if(notificationMessage.status == MessageReceived.STATUS_NEW) {
 					notificationMessage.setRead();
 					handler.update(notificationMessage);
 				}
@@ -141,9 +152,12 @@ implements MessageThreadInterface, OnScrollListener, OnClickListener, MessageSen
 		case R.id.messagesThreadSendButton:
 			
 			String message = this.messageThreadMessageText.getText().toString();
+			if(message.trim().equals(""))
+				return;
 			if(this.user != null) {
 				MessageSendTask sendTask = new MessageSendTask(getActivity(), this, this.user.username);
-				sendTask.execute(this.usernameToSend, message);
+				sendTask.execute(this.receiver, message);
+				this.messageThreadMessageText.setText("");
 			} else
 				Toast.makeText(getActivity(), "You have to login to send messages", Toast.LENGTH_SHORT).show();
 			break;

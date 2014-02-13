@@ -1,8 +1,9 @@
 package id.ac.ub.ptiik.papps.adapters;
 
 import id.ac.ub.ptiik.papps.R;
-import id.ac.ub.ptiik.papps.base.NotificationMessage;
-import id.ac.ub.ptiik.papps.helpers.NotificationMessageHandler;
+import id.ac.ub.ptiik.papps.base.Message;
+import id.ac.ub.ptiik.papps.base.MessageReceived;
+import id.ac.ub.ptiik.papps.helpers.MessageDBHelper;
 
 import java.util.ArrayList;
 //import java.util.Locale;
@@ -22,20 +23,20 @@ import android.widget.Toast;
 public class MessageThreadAdapter extends BaseAdapter 
 	implements OnClickListener {
 
-	private ArrayList<NotificationMessage> notificationMessageList;
+	private ArrayList<MessageReceived> notificationMessageList;
 	private Context context;
 	
-	public MessageThreadAdapter(Context context, ArrayList<NotificationMessage> notificationMessageList) {
+	public MessageThreadAdapter(Context context, ArrayList<MessageReceived> notificationMessageList) {
 		this.context = context;
 		this.notificationMessageList = notificationMessageList;
 	}
 	
-	public MessageThreadAdapter updateMessages(ArrayList<NotificationMessage> messages) {
+	public MessageThreadAdapter updateMessages(ArrayList<MessageReceived> messages) {
 		this.notificationMessageList = messages;
 		return this;
 	}
 	
-	public int findItem(NotificationMessage u) {
+	public int findItem(MessageReceived u) {
 		if(u != null) {
 			for (int i = 0; i<this.notificationMessageList.size(); i++) {
 				if(u.id != 0 && u.id == this.notificationMessageList.get(i).id) {
@@ -83,12 +84,12 @@ public class MessageThreadAdapter extends BaseAdapter
 			rowView.setTag(vh);
 		}
 		ViewHolder vh = (ViewHolder) rowView.getTag();
-		NotificationMessage message = this.notificationMessageList.get(position);
-		if(message.status == NotificationMessage.STATUS_NEW)
+		MessageReceived message = this.notificationMessageList.get(position);
+		if(message.status == MessageReceived.STATUS_NEW)
 			vh.messageStatus.setAlpha(1);
 		else vh.messageStatus.setAlpha(0);
 		//message.setRead();
-		vh.messageDateTime.setText(message.getDateTimeString("dd MMM yyy HH:mm", NotificationMessage.SENT));
+		vh.messageDateTime.setText(message.getDateTimeString("dd MMM yyy HH:mm", Message.DATE_SENT));
 		vh.messageMessage.setText(message.message);
 		vh.messageDeleteButton.setTag(position);
 		vh.messageDeleteButton.setOnClickListener(this);
@@ -105,8 +106,8 @@ public class MessageThreadAdapter extends BaseAdapter
 				
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					NotificationMessage message = notificationMessageList.get(position);
-					NotificationMessageHandler handler = new NotificationMessageHandler(context);
+					MessageReceived message = notificationMessageList.get(position);
+					MessageDBHelper handler = new MessageDBHelper(context);
 					handler.delete(message);
 					notificationMessageList.remove(message);
 					notifyDataSetChanged();

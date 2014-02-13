@@ -4,14 +4,10 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
-import org.json.JSONObject;
-
 import id.ac.ub.ptiik.papps.base.AppFragment;
-import id.ac.ub.ptiik.papps.base.NotificationMessage;
-import id.ac.ub.ptiik.papps.base.User;
-import id.ac.ub.ptiik.papps.helpers.NotificationMessageHandler;
-import id.ac.ub.ptiik.papps.parsers.UserParser;
-
+import id.ac.ub.ptiik.papps.base.Message;
+import id.ac.ub.ptiik.papps.base.MessageReceived;
+import id.ac.ub.ptiik.papps.helpers.MessageDBHelper;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import android.app.IntentService;
 import android.app.NotificationManager;
@@ -21,6 +17,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 public class GcmIntentService extends IntentService {
@@ -28,9 +25,9 @@ public class GcmIntentService extends IntentService {
 	private static final String TAG = "GcmIntentService";
 	private int NOTIFICATION_ID = 1;
 	private NotificationManager mNotificationManager;
-	private NotificationMessageHandler dbHandler;
+	private MessageDBHelper dbHandler;
 	
-	private NotificationMessage message;
+	private MessageReceived message;
 	
 	public GcmIntentService(String name) {
 		super(name);
@@ -49,6 +46,7 @@ public class GcmIntentService extends IntentService {
         // The getMessageType() intent parameter must be the intent you received
         // in your BroadcastReceiver.
         String messageType = gcm.getMessageType(intent);
+        
         //Log.d("GcmIntentService", messageType);
 
         if (!extras.isEmpty()) {  // has effect of unparcelling Bundle
@@ -64,27 +62,32 @@ public class GcmIntentService extends IntentService {
                 sendNotification("Deleted messages on server: " + extras.toString());
             } else if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE.equals(messageType)) {
             	
-            	this.dbHandler = new NotificationMessageHandler(this.getApplicationContext());
-            	String messageJSONString = extras.getString("message");
-            	try {
-            		JSONObject messageJSONObject = new JSONObject(messageJSONString);
-            		int type = messageJSONObject.getInt("type");
-            		
-            		String message = messageJSONObject.getString("message");
-            		String sent = messageJSONObject.getString("datetime");
-            		
-            		JSONObject from = messageJSONObject.getJSONObject("from");
-            		
-            		User user = UserParser.Parse(from);
-            		
-            		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
-            		String received = sdf.format(Calendar.getInstance(Locale.US).getTime());
-            		NotificationMessage notificationMessage = new NotificationMessage(type, message, sent, received, user.username);
-            		this.message = notificationMessage;
-            		this.dbHandler.add(notificationMessage);
-            	} catch(Exception e) {
-            		Log.e("MessageJSON Error", e.getMessage());
-            	}
+            	this.dbHandler = new MessageDBHelper(this.getApplicationContext());
+            	
+            	String receiver = extras.getString("receiver");
+            	String sender = extras.getString("sender");
+            	String sent = extras.getString("datetime");
+            	String message = extras.getString("message");
+            	int type = Message.TYPE_RECEIVED;
+            	
+            	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
+        		String received = sdf.format(Calendar.getInstance(Locale.US).getTime());
+        		MessageReceived notificationMessage = 
+        				new MessageReceived(type, message, sent, received, sender, receiver);
+        		
+        		Intent localIntent = new Intent("newNotification");
+        		localIntent.putExtra("receiver", receiver);
+        		localIntent.putExtra("sender", sender);
+        		localIntent.putExtra("sent", sent);
+        		localIntent.putExtra("received", received);
+        		localIntent.putExtra("message", message);
+        		localIntent.putExtra("type", type);
+        		
+        		LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(localIntent);
+        		
+        		this.message = notificationMessage;
+        		this.dbHandler.add(notificationMessage);
+        		
                 // Post notification of received message.
                 sendNotification("Received: " + extras.getString("message"));
                 Log.i(TAG, "Received: " + extras.toString());
@@ -113,12 +116,21 @@ public class GcmIntentService extends IntentService {
         .setSmallIcon(R.drawable.ic_papps_taskbar)
         .setContentTitle("PTIIK Apps Server")
         .setStyle(new NotificationCompat.BigTextStyle().bigText(this.message.message))
-        .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
         .setAutoCancel(true)
         .setContentText(this.message.message);
+        
+        if(this.notificationStatus)
+        	mBuilder.setSound(Settings.System.DEFAULT_NOTIFICATION_URI);
         
         mBuilder.setContentIntent(contentIntent);
         mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
     }
+       
+    private Boolean notificationStatus = true;
+    
+    public void turnNotificationOn(Boolean status) {
+    	this.notificationStatus = status;
+    }
+    
 
 }

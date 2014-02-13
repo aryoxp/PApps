@@ -1,7 +1,9 @@
 package id.ac.ub.ptiik.papps.adapters;
 
 import id.ac.ub.ptiik.papps.R;
-import id.ac.ub.ptiik.papps.base.NotificationMessage;
+import id.ac.ub.ptiik.papps.base.Message;
+import id.ac.ub.ptiik.papps.base.MessageIndex;
+import id.ac.ub.ptiik.papps.base.MessageReceived;
 
 import java.util.ArrayList;
 //import java.util.Locale;
@@ -17,23 +19,23 @@ import android.widget.TextView;
 
 public class MessageIndexAdapter extends BaseAdapter {
 
-	private ArrayList<NotificationMessage> notificationMessageList;
+	private ArrayList<MessageIndex> messageList;
 	private Context context;
 	
-	public MessageIndexAdapter(Context context, ArrayList<NotificationMessage> notificationMessageList) {
+	public MessageIndexAdapter(Context context, ArrayList<MessageIndex> messageList) {
 		this.context = context;
-		this.notificationMessageList = notificationMessageList;
+		this.messageList = messageList;
 	}
 	
-	public MessageIndexAdapter updateMessages(ArrayList<NotificationMessage> messages) {
-		this.notificationMessageList = messages;
+	public MessageIndexAdapter updateMessages(ArrayList<MessageIndex> messages) {
+		this.messageList = messages;
 		return this;
 	}
 	
-	public int findItem(NotificationMessage u) {
+	public int findItem(MessageReceived u) {
 		if(u != null) {
-			for (int i = 0; i<this.notificationMessageList.size(); i++) {
-				if(u.id != 0 && u.id == this.notificationMessageList.get(i).id) {
+			for (int i = 0; i<this.messageList.size(); i++) {
+				if(u.id != 0 && u.id == this.messageList.get(i).id) {
 					return i;
 				}
 			}
@@ -43,12 +45,12 @@ public class MessageIndexAdapter extends BaseAdapter {
 	
 	@Override
 	public int getCount() {
-		return notificationMessageList.size();
+		return messageList.size();
 	}
 
 	@Override
 	public Object getItem(int position) {
-		return notificationMessageList.get(position);
+		return messageList.get(position);
 	}
 
 	@Override
@@ -80,12 +82,12 @@ public class MessageIndexAdapter extends BaseAdapter {
 			rowView.setTag(vh);
 		}
 		ViewHolder vh = (ViewHolder) rowView.getTag();
-		NotificationMessage message = this.notificationMessageList.get(position);
-		vh.messageFrom.setText(message.from);
-		if(message.status == NotificationMessage.STATUS_NEW)
+		MessageIndex message = this.messageList.get(position);
+		vh.messageFrom.setText(message.sender);
+		if(message.status == MessageReceived.STATUS_NEW)
 			vh.messageType.setAlpha(1);
 		else vh.messageType.setAlpha(0);
-		vh.messageDateTime.setText(message.getDateTimeString("dd MMM yyy HH:mm", NotificationMessage.SENT));
+		vh.messageDateTime.setText(message.getDateTimeString("dd MMM yyy HH:mm", Message.DATE_SENT));
 		vh.messageMessage.setText(message.message);
 		return rowView;
 	}

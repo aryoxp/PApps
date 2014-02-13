@@ -2,9 +2,9 @@ package id.ac.ub.ptiik.papps;
 
 import id.ac.ub.ptiik.papps.adapters.MessageIndexAdapter;
 import id.ac.ub.ptiik.papps.base.AppFragment;
-import id.ac.ub.ptiik.papps.base.NotificationMessage;
+import id.ac.ub.ptiik.papps.base.MessageIndex;
 import id.ac.ub.ptiik.papps.base.UserOnline;
-import id.ac.ub.ptiik.papps.helpers.NotificationMessageHandler;
+import id.ac.ub.ptiik.papps.helpers.MessageDBHelper;
 import id.ac.ub.ptiik.papps.interfaces.AppInterface;
 import id.ac.ub.ptiik.papps.interfaces.SendtoInterface;
 
@@ -40,11 +40,11 @@ public class MessagesFragment extends Fragment
 	ListView messagesListView;
 	TextView refreshText;
 	
-	private ArrayList<NotificationMessage> messageList;
-	private NotificationMessageHandler handler;
+	private ArrayList<MessageIndex> messageList;
+	private MessageDBHelper handler;
 	private MessageIndexAdapter adapter;
 	
-	private NotificationMessage selectedMessage;
+	private MessageIndex selectedMessage;
 	
 	private AppInterface mCallback;
 	
@@ -73,8 +73,8 @@ public class MessagesFragment extends Fragment
 	
 	@Override
 	public void onStart() {
-		this.messageList = new ArrayList<NotificationMessage>();
-		this.handler = new NotificationMessageHandler(getActivity());
+		this.messageList = new ArrayList<MessageIndex>();
+		this.handler = new MessageDBHelper(getActivity());
 		this.messageList.clear();
 		this.messageList.addAll(this.handler.getAll());
 		this.adapter = new MessageIndexAdapter(getActivity(), this.messageList);
@@ -92,6 +92,12 @@ public class MessagesFragment extends Fragment
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		inflater.inflate(R.menu.menu_messages, menu);
 	}
+	
+	public void reloadMessageIndex() {
+		this.messageList.clear();
+		this.messageList.addAll(this.handler.getAll());
+		this.adapter.notifyDataSetChanged();
+	}
 
 	@Override
 	public void onItemClick(AdapterView<?> container, View view, int position, long id) {
@@ -99,7 +105,7 @@ public class MessagesFragment extends Fragment
 		this.selectedMessage = this.messageList.get(position);
 		MessagesThreadFragment fragment = new MessagesThreadFragment();
 		Bundle args = new Bundle();
-		args.putString(MessagesThreadFragment.MESSAGE_FROM, this.selectedMessage.from);
+		args.putString(MessagesThreadFragment.MESSAGE_FROM, this.selectedMessage.sender);
 		fragment.setArguments(args);
 		fragment.setOnNavigationCallback(this.mCallback);
 		this.mCallback.setContentFragment(fragment, AppFragment.FRAGMENT_TAG_MESSAGE_THREAD);
@@ -125,7 +131,7 @@ public class MessagesFragment extends Fragment
 			.show();	
 			break;
 		case R.id.message_context_detail:
-			String detailText = "from: " + this.selectedMessage.from + "\n"
+			String detailText = "sender: " + this.selectedMessage.sender + "\n"
 					+ "sent: " + this.selectedMessage.sent + "\n"
 					+ "received: " + this.selectedMessage.received;
 			new AlertDialog.Builder(getActivity())
@@ -141,7 +147,7 @@ public class MessagesFragment extends Fragment
 	public void onClick(DialogInterface dialog, int which) {
 		switch(which){
 		case Dialog.BUTTON_POSITIVE:
-			NotificationMessageHandler handler = new NotificationMessageHandler(getActivity());
+			MessageDBHelper handler = new MessageDBHelper(getActivity());
 			if(handler.delete(this.selectedMessage) > 0)
 			{
 				Toast.makeText(getActivity(), "Message deleted", Toast.LENGTH_SHORT).show();
@@ -159,10 +165,7 @@ public class MessagesFragment extends Fragment
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch(item.getItemId()) {
 		case R.id.action_messages_refresh:
-			this.messageList.clear();
-			this.messageList.addAll(this.handler.getAll());
-			this.adapter = new MessageIndexAdapter(getActivity(), this.messageList);
-			this.messagesListView.setAdapter(this.adapter);
+			this.reloadMessageIndex();
 			return true;
 		case R.id.action_messages_new:
 			

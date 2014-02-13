@@ -2,15 +2,15 @@ package id.ac.ub.ptiik.papps.tasks;
 
 import java.util.ArrayList;
 
-import id.ac.ub.ptiik.papps.base.NotificationMessage;
-import id.ac.ub.ptiik.papps.helpers.NotificationMessageHandler;
+import id.ac.ub.ptiik.papps.base.MessageReceived;
+import id.ac.ub.ptiik.papps.helpers.MessageDBHelper;
 import id.ac.ub.ptiik.papps.interfaces.MessageThreadInterface;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
 
-public class MessageThreadTask extends AsyncTask<String, Void, ArrayList<NotificationMessage>> {
+public class MessageThreadTask extends AsyncTask<String, Void, ArrayList<MessageReceived>> {
 	
 	private Context context;
 	private MessageThreadInterface mCallback;
@@ -22,7 +22,7 @@ public class MessageThreadTask extends AsyncTask<String, Void, ArrayList<Notific
 	}
 	
 	@Override
-	protected ArrayList<NotificationMessage> doInBackground(String... params) {
+	protected ArrayList<MessageReceived> doInBackground(String... params) {
 		new Handler(Looper.getMainLooper()).post(new Runnable() {
 			@Override
 			public void run() {
@@ -30,9 +30,9 @@ public class MessageThreadTask extends AsyncTask<String, Void, ArrayList<Notific
 			}
 		});
 		try {
-			ArrayList<NotificationMessage> messages = new ArrayList<NotificationMessage>();
-			NotificationMessageHandler handler = new NotificationMessageHandler(this.context);
-			messages = handler.getAll(params[0]);
+			ArrayList<MessageReceived> messages = new ArrayList<MessageReceived>();
+			MessageDBHelper handler = new MessageDBHelper(this.context);
+			messages = handler.getAll(params[0], params[1]);
 			return messages;
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -42,7 +42,7 @@ public class MessageThreadTask extends AsyncTask<String, Void, ArrayList<Notific
 	}
 	
 	@Override
-	protected void onPostExecute(ArrayList<NotificationMessage> messages) {
+	protected void onPostExecute(ArrayList<MessageReceived> messages) {
 		if(messages != null && messages.size() > 0) {
 			this.mCallback.onMessageThreadRetrieveComplete(messages);
 		} else {

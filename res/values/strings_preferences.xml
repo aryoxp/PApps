@@ -2,6 +2,9 @@
 <resources>
    	<string name="pref_settings_title">Settings</string>
 	<string name="pref_server_configuration">Network Configuration</string>
+	<string name="pref_messaging">Messaging</string>
 	<string name="pref_ip_address">Server IP Address</string>
 	<string name="pref_ip_address_description">Server IP address used as application web services.</string>
+	<string name="pref_sound">Enable Message Alert Sound</string>
+	<string name="pref_sound_description">Alert when a message or notification arrives.</string>
 </resources>
