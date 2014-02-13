@@ -56,7 +56,7 @@ implements MessageThreadInterface, OnScrollListener, OnClickListener, MessageSen
 		this.messages = new ArrayList<Message>();
 		this.messageThreadAdapter = new MessageThreadAdapter(getActivity(), this.messages);
 		this.messageThreadListView = (ListView) v.findViewById(R.id.messagesThreadList);
-		this.messageThreadListView.setAdapter(messageThreadAdapter);
+		this.messageThreadListView.setAdapter(this.messageThreadAdapter);
 		this.messageThreadListView.setDivider(null);
 		this.messageThreadListView.setOnScrollListener(this);
 		this.messageThreadFrom = (TextView) v.findViewById(R.id.messagesThreadFrom);
@@ -95,7 +95,7 @@ implements MessageThreadInterface, OnScrollListener, OnClickListener, MessageSen
 	}
 	
 	public void addMessage(MessageReceived message) {
-		this.messages.add(message);
+		this.messageThreadAdapter.add(message);
 		this.messageThreadAdapter.notifyDataSetChanged();
 		this.messageThreadListView.smoothScrollToPosition(this.messageThreadAdapter.getCount());
 	}
@@ -111,16 +111,13 @@ implements MessageThreadInterface, OnScrollListener, OnClickListener, MessageSen
 	public void onMessageThreadRetrieveComplete(
 			ArrayList<Message> messages) {
 		this.progressContainerView.animate().alpha(0).setDuration(200).start();
-		this.messages.clear();
-		this.messages.addAll(messages);
+		this.messageThreadAdapter.setItems(messages);
 		this.messageThreadAdapter.notifyDataSetChanged();
 		this.messageThreadListView.smoothScrollToPosition(this.messageThreadAdapter.getCount());
 	}
 
 	@Override
 	public void onMessageThreadRetrieveFail(String error) {
-		this.messages.clear();
-		this.messageThreadAdapter.notifyDataSetChanged();
 		this.progressContainerView.animate().alpha(0).setDuration(200).start();
 	}
 
@@ -131,7 +128,6 @@ implements MessageThreadInterface, OnScrollListener, OnClickListener, MessageSen
 	public void onScroll(AbsListView view, int firstVisibleItem,
 			int visibleItemCount, int totalItemCount) {
 		this.firstVisibleIndex = firstVisibleItem;
-		
 	}
 
 	@Override
@@ -142,7 +138,7 @@ implements MessageThreadInterface, OnScrollListener, OnClickListener, MessageSen
 			MessageDBHelper handler = new MessageDBHelper(getActivity());
 			for(int i = this.firstVisibleIndex; i <= this.lastVisibleIndex; i++)
 			{
-				Message message = this.messages.get(i);
+				Message message = (Message) this.messageThreadAdapter.getItem(i);
 				if(message.readStatus == MessageReceived.STATUS_NEW) {
 					message.setRead();
 					handler.update(message);
@@ -166,9 +162,9 @@ implements MessageThreadInterface, OnScrollListener, OnClickListener, MessageSen
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
 				String sent = sdf.format(Calendar.getInstance(Locale.US).getTime());
 				MessageSent messageSent = new MessageSent(message, sent, this.sender, this.receiver);
-				this.messages.add(messageSent);
+				this.messageThreadAdapter.add(messageSent);
 				this.messageThreadAdapter.notifyDataSetChanged();
-				
+				this.messageThreadListView.smoothScrollToPosition(this.messageThreadAdapter.getCount());
 				// save to db
 				MessageDBHelper handler = new MessageDBHelper(getActivity());
 				handler.add(messageSent);

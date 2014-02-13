@@ -45,7 +45,7 @@
                 android:layout_weight="1"
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp"
-                android:background="@color/silver" >
+                android:background="@color/clouds" >
             </ListView>
 
             <View

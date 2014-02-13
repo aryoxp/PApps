@@ -47,6 +47,14 @@ public class MessageThreadAdapter extends BaseAdapter
 		return -1;
 	}
 	
+	public void add(Message message) {
+		this.messageList.add(message);
+	}
+	
+	public void setItems(ArrayList<Message> messages) {
+		this.messageList = messages;
+	}
+	
 	@Override
 	public int getCount() {
 		return messageList.size();
@@ -61,49 +69,91 @@ public class MessageThreadAdapter extends BaseAdapter
 	public long getItemId(int position) {
 		return position;
 	}
-
+	/*
 	private class ViewHolder {
 		public TextView messageDateTime;
 		public TextView messageMessage;
 		public View messageStatus;
-		public View messageDeleteButton;
-		public View messageContainer;
+		//public View messageDeleteButton;
+		//public View messageContainer;
 	}
-
-	@SuppressWarnings("deprecation")
+	*/
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		
-		View rowView = convertView;
-		if(rowView == null) {
-			LayoutInflater inflater = ((Activity)context).getLayoutInflater();
-			rowView = inflater.inflate(R.layout.item_message, null);
-			ViewHolder vh = new ViewHolder();
-			vh.messageDateTime = (TextView) rowView.findViewById(R.id.messageTanggal);
-			vh.messageMessage = (TextView) rowView.findViewById(R.id.messageMessage);
-			vh.messageStatus = rowView.findViewById(R.id.messageStatus);
-			vh.messageDeleteButton = rowView.findViewById(R.id.messageButtonDelete);
-			vh.messageContainer = rowView.findViewById(R.id.messageContainer);
-			rowView.setTag(vh);
-		}
-		ViewHolder vh = (ViewHolder) rowView.getTag();
 		Message message = this.messageList.get(position);
+		LayoutInflater inflater = ((Activity)context).getLayoutInflater();
+		
+		TextView messageDateTime;
+		TextView messageMessage;
+		View messageStatus;
+		View rowView;
+		if(message.type == Message.TYPE_RECEIVED)
+		{
+			rowView = inflater.inflate(R.layout.item_message_alt, null, false);
+			messageDateTime = (TextView) rowView.findViewById(R.id.messageAltTanggal);
+			messageMessage = (TextView) rowView.findViewById(R.id.messageAltMessage);
+			messageStatus = rowView.findViewById(R.id.messageAltStatus);
+		} else {
+			rowView = inflater.inflate(R.layout.item_message, null);
+			messageDateTime = (TextView) rowView.findViewById(R.id.messageTanggal);
+			messageMessage = (TextView) rowView.findViewById(R.id.messageMessage);
+			messageStatus = rowView.findViewById(R.id.messageStatus);
+		}
+		
+		if(message.readStatus == MessageReceived.STATUS_NEW)
+			messageStatus.setAlpha(1);
+		else messageStatus.setAlpha(0);
+		messageDateTime.setText(message.getDateTimeString("dd MMM yyy HH:mm", Message.DATE_SENT));
+		messageMessage.setText(message.message);
+		return rowView;
+		/*
+		View rowView = convertView;
+		
+		if(message.type == Message.TYPE_RECEIVED) {
+			if(rowView == null) {
+				LayoutInflater inflater = ((Activity)context).getLayoutInflater();
+				rowView = inflater.inflate(R.layout.item_message_alt, null);
+				ViewHolder vh = new ViewHolder();
+				vh.messageDateTime = (TextView) rowView.findViewById(R.id.messageAltTanggal);
+				vh.messageMessage = (TextView) rowView.findViewById(R.id.messageAltMessage);
+				vh.messageStatus = rowView.findViewById(R.id.messageAltStatus);
+				//vh.messageDeleteButton = rowView.findViewById(R.id.messageButtonDelete);
+				//vh.messageContainer = rowView.findViewById(R.id.messageAltContainer);
+				rowView.setTag(vh);
+			}
+		} else {
+			if(rowView == null) {
+				LayoutInflater inflater = ((Activity)context).getLayoutInflater();
+				rowView = inflater.inflate(R.layout.item_message, null);
+				ViewHolder vh = new ViewHolder();
+				vh.messageDateTime = (TextView) rowView.findViewById(R.id.messageTanggal);
+				vh.messageMessage = (TextView) rowView.findViewById(R.id.messageMessage);
+				vh.messageStatus = rowView.findViewById(R.id.messageStatus);
+				//vh.messageDeleteButton = rowView.findViewById(R.id.messageButtonDelete);
+				//vh.messageContainer = rowView.findViewById(R.id.messageContainer);
+				rowView.setTag(vh);
+			}
+		}
+		
+		
+		ViewHolder vh = (ViewHolder) rowView.getTag();
 		if(message.readStatus == MessageReceived.STATUS_NEW)
 			vh.messageStatus.setAlpha(1);
 		else vh.messageStatus.setAlpha(0);
 		//message.setRead();
 		vh.messageDateTime.setText(message.getDateTimeString("dd MMM yyy HH:mm", Message.DATE_SENT));
 		vh.messageMessage.setText(message.message);
-		vh.messageDeleteButton.setTag(position);
-		vh.messageDeleteButton.setOnClickListener(this);
+		//vh.messageDeleteButton.setTag(position);
+		//vh.messageDeleteButton.setOnClickListener(this);
 		if(message.type == Message.TYPE_SENT) {
-			vh.messageDeleteButton.setBackgroundDrawable(this.context.getResources().getDrawable(R.drawable.button_clouds));
-			vh.messageContainer.setBackgroundColor(this.context.getResources().getColor(R.color.clouds));
+			//vh.messageDeleteButton.setBackgroundDrawable(this.context.getResources().getDrawable(R.drawable.button_clouds));
+			//vh.messageContainer.setBackgroundColor(this.context.getResources().getColor(R.color.clouds));
 		} else {
-			vh.messageDeleteButton.setBackgroundDrawable(this.context.getResources().getDrawable(R.drawable.button_white));
-			vh.messageContainer.setBackgroundColor(this.context.getResources().getColor(R.color.white));
+			//vh.messageDeleteButton.setBackgroundDrawable(this.context.getResources().getDrawable(R.drawable.button_white));
+			//vh.messageContainer.setBackgroundColor(this.context.getResources().getColor(R.color.white));
 		}
 		return rowView;
+		*/
 	}
 
 	@Override

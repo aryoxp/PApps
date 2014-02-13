@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     tools:ignore="UselessParent" >
@@ -12,11 +12,9 @@
 		 android:layout_marginBottom="8dp"
 		 android:layout_marginLeft="16dp"
 		 android:layout_marginRight="16dp"
-		 android:paddingLeft="16dp"
-		 android:paddingTop="16dp"
-		 
-         android:background="@color/white"
-         android:layout_width="match_parent"
+		 android:padding="16dp"
+         android:background="@drawable/bg_item_chat_a"
+         android:layout_width="wrap_content"
          android:layout_height="wrap_content" >
 
          <TextView
@@ -25,7 +23,7 @@
              android:layout_height="wrap_content"
              android:gravity="center_vertical"
              android:text="Medium Text"
-             android:textColor="@color/sunflower"
+             android:textColor="@color/white"
              android:textSize="14sp"
              android:fontFamily="sans-serif-condensed"
              tools:ignore="HardcodedText" />
@@ -36,32 +34,19 @@
              android:layout_height="wrap_content"
              android:layout_below="@+id/messageTanggal"
              android:layout_marginRight="56dp"
-             android:paddingBottom="16dp"
              android:fontFamily="sans-serif"
              android:gravity="center_vertical"
              android:text="Medium Text"
-             android:textColor="@color/asbestos"
+             android:textColor="@color/white"
              android:textSize="16sp"
              tools:ignore="HardcodedText" />
-
-         <ImageView
-             android:contentDescription="@string/empty_space"
-             android:id="@+id/messageButtonDelete"
-             android:layout_width="32dp"
-             android:layout_height="32dp"
-             android:layout_alignParentRight="true"
-             android:layout_alignParentTop="true"
-             android:clickable="true"
-             android:layout_marginRight="12dp"
-             android:background="@drawable/button_white"
-             android:src="@drawable/ic_interface_74_gray" />
 		<View
 		    android:id="@+id/messageStatus"
 		    android:layout_width="16dp"
 		    android:layout_height="16dp"
-		    android:background="@color/alizarin"
+		    android:background="@color/white"
 		    android:layout_alignParentRight="true"
-		    android:layout_alignParentBottom="true"
+		    android:layout_centerVertical="true"
 	    	/>
      </RelativeLayout>
 
