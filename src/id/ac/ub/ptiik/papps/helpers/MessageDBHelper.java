@@ -4,8 +4,6 @@ import java.util.ArrayList;
 
 import id.ac.ub.ptiik.papps.base.Message;
 import id.ac.ub.ptiik.papps.base.MessageIndex;
-import id.ac.ub.ptiik.papps.base.MessageReceived;
-import id.ac.ub.ptiik.papps.base.MessageSent;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -47,7 +45,7 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 		this.onCreate(db);
 	}
 	
-	public void add(MessageReceived message){
+	public void add(Message message){
 		SQLiteDatabase db = this.getWritableDatabase();
 		ContentValues values = new ContentValues();
 		values.put(FIELD_TYPE, message.type);
@@ -56,28 +54,13 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 		values.put(FIELD_RECEIVED, message.received);
 		values.put(FIELD_SENDER, message.sender);
 		values.put(FIELD_RECEIVER, message.receiver);
-		values.put(FIELD_STATUS, message.status);
-		// Inserting Row
-		db.insert(MESSAGES_TABLE, null, values);
-		db.close(); // Closing database connection
-	}
-	
-	public void add(MessageSent message){
-		SQLiteDatabase db = this.getWritableDatabase();
-		ContentValues values = new ContentValues();
-		values.put(FIELD_TYPE, message.type);
-		values.put(FIELD_MESSAGE, message.message);
-		values.put(FIELD_SENT, message.sent);
-		values.put(FIELD_RECEIVED, message.received);
-		values.put(FIELD_SENDER, message.sender);
-		values.put(FIELD_RECEIVER, message.receiver);
-		values.put(FIELD_STATUS, message.status);
+		values.put(FIELD_STATUS, message.readStatus);
 		// Inserting Row
 		db.insert(MESSAGES_TABLE, null, values);
 		db.close(); // Closing database connection
 	}
 
-	public MessageReceived get(int id){
+	public Message get(int id){
 		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor cursor = db.query(MESSAGES_TABLE, new String[] { KEY_ID,
 	            FIELD_TYPE, FIELD_MESSAGE, FIELD_SENT, FIELD_RECEIVED, FIELD_SENDER, 
@@ -90,7 +73,7 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 	            null); // limit
 
 		if (cursor != null) cursor.moveToFirst();
-		    MessageReceived message = new MessageReceived(
+		Message message = new Message(
 		    	Integer.parseInt(cursor.getString(0)), // id
 		    	Integer.parseInt(cursor.getString(1)), // type
 		    	cursor.getString(2), // message
@@ -105,7 +88,7 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 	    return message;
 	}
 
-	public int update(MessageReceived message) {
+	public int update(Message message) {
 
 	    SQLiteDatabase db = this.getWritableDatabase();
 
@@ -116,7 +99,7 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 		values.put(FIELD_RECEIVED, message.received);
 		values.put(FIELD_SENDER, message.sender);
 		values.put(FIELD_RECEIVER, message.receiver);
-		values.put(FIELD_STATUS, message.status);
+		values.put(FIELD_STATUS, message.readStatus);
 		
 	    // updating row
 	    return db.update(MESSAGES_TABLE, values, KEY_ID + " = ?",
@@ -156,6 +139,7 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 				  + " FROM " + MESSAGES_TABLE + " f ", null);   
 		  try{
 		    if (cursor != null){
+		    	
 		      if(cursor.moveToFirst()){
 		        do {
 		        	MessageIndex message = new MessageIndex(
@@ -167,6 +151,7 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 		    		    	Integer.parseInt(cursor.getString(5)) // status
 		    		    	);
 		        	messagesList.add(message);
+		        	
 		        } while(cursor.moveToNext());
 		      }
 		    }
@@ -177,9 +162,9 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 		  return messagesList;
 	}
 	
-	public ArrayList<MessageReceived> getAll(String sender, String receiver){
+	public ArrayList<Message> getAll(String sender, String receiver){
 
-		  ArrayList<MessageReceived> messagesList = new ArrayList<MessageReceived>();
+		  ArrayList<Message> messagesList = new ArrayList<Message>();
 
 		  SQLiteDatabase db = this.getReadableDatabase();
 		  Cursor cursor = db.rawQuery("SELECT * "
@@ -189,8 +174,14 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 		  try{
 		    if (cursor != null){
 		      if(cursor.moveToFirst()){
+		    	  int count = cursor.getCount();
+		    	  int i = 0;
 		        do {
-		        	MessageReceived message = new MessageReceived(
+		        	if(count-i > 10 && Integer.parseInt(cursor.getString(7)) == Message.STATUS_READ) {
+		        		i++;
+		        		continue;
+		        	}
+		        	Message message = new Message(
 		    		    	Integer.parseInt(cursor.getString(0)), // id
 		    		    	Integer.parseInt(cursor.getString(1)), // type
 		    		    	cursor.getString(2), // message
@@ -201,6 +192,7 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 		    		    	Integer.parseInt(cursor.getString(7)) //status 
 		    		    	);
 		        	messagesList.add(message);
+		        	i++;
 		        } while(cursor.moveToNext());
 		      }
 		    }

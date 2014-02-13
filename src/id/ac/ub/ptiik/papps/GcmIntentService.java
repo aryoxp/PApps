@@ -72,7 +72,7 @@ public class GcmIntentService extends IntentService {
             	
             	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
         		String received = sdf.format(Calendar.getInstance(Locale.US).getTime());
-        		MessageReceived notificationMessage = 
+        		MessageReceived newMessage = 
         				new MessageReceived(type, message, sent, received, sender, receiver);
         		
         		Intent localIntent = new Intent("newNotification");
@@ -85,8 +85,8 @@ public class GcmIntentService extends IntentService {
         		
         		LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(localIntent);
         		
-        		this.message = notificationMessage;
-        		this.dbHandler.add(notificationMessage);
+        		this.message = newMessage;
+        		this.dbHandler.add(newMessage);
         		
                 // Post notification of received message.
                 sendNotification("Received: " + extras.getString("message"));

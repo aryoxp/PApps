@@ -1,9 +1,14 @@
 package id.ac.ub.ptiik.papps;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Locale;
 
 import id.ac.ub.ptiik.papps.adapters.MessageThreadAdapter;
+import id.ac.ub.ptiik.papps.base.Message;
 import id.ac.ub.ptiik.papps.base.MessageReceived;
+import id.ac.ub.ptiik.papps.base.MessageSent;
 import id.ac.ub.ptiik.papps.base.User;
 import id.ac.ub.ptiik.papps.helpers.MessageDBHelper;
 import id.ac.ub.ptiik.papps.helpers.SystemHelper;
@@ -32,7 +37,7 @@ implements MessageThreadInterface, OnScrollListener, OnClickListener, MessageSen
 	private ListView messageThreadListView;
 	private TextView messageThreadFrom;
 	private EditText messageThreadMessageText;
-	private ArrayList<MessageReceived> messages;
+	private ArrayList<Message> messages;
 	private MessageThreadAdapter messageThreadAdapter;
 	
 	private String sender;
@@ -48,7 +53,7 @@ implements MessageThreadInterface, OnScrollListener, OnClickListener, MessageSen
 		View v = inflater.inflate(R.layout.fragment_messages_thread, container, false);
 		this.progressContainerView = v.findViewById(R.id.messagesThreadProgressContainer);
 		this.progressContainerView.setAlpha(0);
-		this.messages = new ArrayList<MessageReceived>();
+		this.messages = new ArrayList<Message>();
 		this.messageThreadAdapter = new MessageThreadAdapter(getActivity(), this.messages);
 		this.messageThreadListView = (ListView) v.findViewById(R.id.messagesThreadList);
 		this.messageThreadListView.setAdapter(messageThreadAdapter);
@@ -104,7 +109,7 @@ implements MessageThreadInterface, OnScrollListener, OnClickListener, MessageSen
 
 	@Override
 	public void onMessageThreadRetrieveComplete(
-			ArrayList<MessageReceived> messages) {
+			ArrayList<Message> messages) {
 		this.progressContainerView.animate().alpha(0).setDuration(200).start();
 		this.messages.clear();
 		this.messages.addAll(messages);
@@ -137,10 +142,10 @@ implements MessageThreadInterface, OnScrollListener, OnClickListener, MessageSen
 			MessageDBHelper handler = new MessageDBHelper(getActivity());
 			for(int i = this.firstVisibleIndex; i <= this.lastVisibleIndex; i++)
 			{
-				MessageReceived notificationMessage = this.messages.get(i);
-				if(notificationMessage.status == MessageReceived.STATUS_NEW) {
-					notificationMessage.setRead();
-					handler.update(notificationMessage);
+				Message message = this.messages.get(i);
+				if(message.readStatus == MessageReceived.STATUS_NEW) {
+					message.setRead();
+					handler.update(message);
 				}
 			}
 		}
@@ -155,9 +160,24 @@ implements MessageThreadInterface, OnScrollListener, OnClickListener, MessageSen
 			if(message.trim().equals(""))
 				return;
 			if(this.user != null) {
+				this.messageThreadMessageText.setText("");
+				
+				// instantiating sent message to save
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
+				String sent = sdf.format(Calendar.getInstance(Locale.US).getTime());
+				MessageSent messageSent = new MessageSent(message, sent, this.sender, this.receiver);
+				this.messages.add(messageSent);
+				this.messageThreadAdapter.notifyDataSetChanged();
+				
+				// save to db
+				MessageDBHelper handler = new MessageDBHelper(getActivity());
+				handler.add(messageSent);
+				
+				// send to receiver via GCM
 				MessageSendTask sendTask = new MessageSendTask(getActivity(), this, this.user.username);
 				sendTask.execute(this.receiver, message);
-				this.messageThreadMessageText.setText("");
+				
+				
 			} else
 				Toast.makeText(getActivity(), "You have to login to send messages", Toast.LENGTH_SHORT).show();
 			break;

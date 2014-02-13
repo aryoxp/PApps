@@ -8,7 +8,7 @@ public class MessageIndex extends Message {
 		this.sent = sent;
 		this.message = message;
 		this.received = received;
-		this.status = status;
+		this.readStatus = status;
 	}
 	
 }

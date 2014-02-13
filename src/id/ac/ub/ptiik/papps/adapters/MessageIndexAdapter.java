@@ -84,7 +84,7 @@ public class MessageIndexAdapter extends BaseAdapter {
 		ViewHolder vh = (ViewHolder) rowView.getTag();
 		MessageIndex message = this.messageList.get(position);
 		vh.messageFrom.setText(message.sender);
-		if(message.status == MessageReceived.STATUS_NEW)
+		if(message.readStatus == MessageReceived.STATUS_NEW)
 			vh.messageType.setAlpha(1);
 		else vh.messageType.setAlpha(0);
 		vh.messageDateTime.setText(message.getDateTimeString("dd MMM yyy HH:mm", Message.DATE_SENT));

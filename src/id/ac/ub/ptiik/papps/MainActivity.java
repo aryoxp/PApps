@@ -84,7 +84,7 @@ public class MainActivity extends SlidingFragmentActivity
 			String sent = intent.getStringExtra("sent");
 			String received = intent.getStringExtra("received");
 			String message = intent.getStringExtra("message");
-			int type = intent.getIntExtra("type", Message.STATUS_NEW);
+			int type = intent.getIntExtra("type", Message.TYPE_RECEIVED);
 			
 			MessageReceived newMessage = 
     				new MessageReceived(type, message, sent, received, sender, receiver);
@@ -93,7 +93,7 @@ public class MainActivity extends SlidingFragmentActivity
 					(MessagesThreadFragment) getSupportFragmentManager()
 					.findFragmentByTag(AppFragment.FRAGMENT_TAG_MESSAGE_THREAD);
 			if(messagesThreadFragment != null)
-				messagesThreadFragment.addMessage(newMessage);
+ 				messagesThreadFragment.addMessage(newMessage);
 			
 			MessagesFragment messagesFragment = (MessagesFragment) getSupportFragmentManager()
 					.findFragmentByTag(AppFragment.FRAGMENT_TAG_MESSAGES);

@@ -23,23 +23,23 @@ import android.widget.Toast;
 public class MessageThreadAdapter extends BaseAdapter 
 	implements OnClickListener {
 
-	private ArrayList<MessageReceived> notificationMessageList;
+	private ArrayList<Message> messageList;
 	private Context context;
 	
-	public MessageThreadAdapter(Context context, ArrayList<MessageReceived> notificationMessageList) {
+	public MessageThreadAdapter(Context context, ArrayList<Message> messageList) {
 		this.context = context;
-		this.notificationMessageList = notificationMessageList;
+		this.messageList = messageList;
 	}
 	
-	public MessageThreadAdapter updateMessages(ArrayList<MessageReceived> messages) {
-		this.notificationMessageList = messages;
+	public MessageThreadAdapter updateMessages(ArrayList<Message> messages) {
+		this.messageList = messages;
 		return this;
 	}
 	
 	public int findItem(MessageReceived u) {
 		if(u != null) {
-			for (int i = 0; i<this.notificationMessageList.size(); i++) {
-				if(u.id != 0 && u.id == this.notificationMessageList.get(i).id) {
+			for (int i = 0; i<this.messageList.size(); i++) {
+				if(u.id != 0 && u.id == this.messageList.get(i).id) {
 					return i;
 				}
 			}
@@ -49,12 +49,12 @@ public class MessageThreadAdapter extends BaseAdapter
 	
 	@Override
 	public int getCount() {
-		return notificationMessageList.size();
+		return messageList.size();
 	}
 
 	@Override
 	public Object getItem(int position) {
-		return notificationMessageList.get(position);
+		return messageList.get(position);
 	}
 
 	@Override
@@ -67,8 +67,10 @@ public class MessageThreadAdapter extends BaseAdapter
 		public TextView messageMessage;
 		public View messageStatus;
 		public View messageDeleteButton;
+		public View messageContainer;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		
@@ -81,11 +83,12 @@ public class MessageThreadAdapter extends BaseAdapter
 			vh.messageMessage = (TextView) rowView.findViewById(R.id.messageMessage);
 			vh.messageStatus = rowView.findViewById(R.id.messageStatus);
 			vh.messageDeleteButton = rowView.findViewById(R.id.messageButtonDelete);
+			vh.messageContainer = rowView.findViewById(R.id.messageContainer);
 			rowView.setTag(vh);
 		}
 		ViewHolder vh = (ViewHolder) rowView.getTag();
-		MessageReceived message = this.notificationMessageList.get(position);
-		if(message.status == MessageReceived.STATUS_NEW)
+		Message message = this.messageList.get(position);
+		if(message.readStatus == MessageReceived.STATUS_NEW)
 			vh.messageStatus.setAlpha(1);
 		else vh.messageStatus.setAlpha(0);
 		//message.setRead();
@@ -93,6 +96,13 @@ public class MessageThreadAdapter extends BaseAdapter
 		vh.messageMessage.setText(message.message);
 		vh.messageDeleteButton.setTag(position);
 		vh.messageDeleteButton.setOnClickListener(this);
+		if(message.type == Message.TYPE_SENT) {
+			vh.messageDeleteButton.setBackgroundDrawable(this.context.getResources().getDrawable(R.drawable.button_clouds));
+			vh.messageContainer.setBackgroundColor(this.context.getResources().getColor(R.color.clouds));
+		} else {
+			vh.messageDeleteButton.setBackgroundDrawable(this.context.getResources().getDrawable(R.drawable.button_white));
+			vh.messageContainer.setBackgroundColor(this.context.getResources().getColor(R.color.white));
+		}
 		return rowView;
 	}
 
@@ -106,10 +116,10 @@ public class MessageThreadAdapter extends BaseAdapter
 				
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					MessageReceived message = notificationMessageList.get(position);
+					Message message = messageList.get(position);
 					MessageDBHelper handler = new MessageDBHelper(context);
 					handler.delete(message);
-					notificationMessageList.remove(message);
+					messageList.remove(message);
 					notifyDataSetChanged();
 					Toast.makeText(context, "Message deleted", Toast.LENGTH_SHORT).show();
 				}

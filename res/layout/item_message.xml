@@ -7,6 +7,7 @@
     tools:ignore="UselessParent" >
 
      <RelativeLayout
+         android:id="@+id/messageContainer"
 		 android:layout_marginTop="8dp"
 		 android:layout_marginBottom="8dp"
 		 android:layout_marginLeft="16dp"

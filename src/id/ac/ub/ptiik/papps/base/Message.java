@@ -18,13 +18,28 @@ public class Message {
 	public static final int TYPE_SENT = 90;
 	public static final int TYPE_RECEIVED = 91;
 	
-	public int id, type, status;
+	public int id, type, readStatus;
 	public String message;
 	public String sent;
 	public String received;
 	public String sender;
 	public String receiver;
-		
+	
+	public Message(){}
+	
+	public Message(
+			int id, int type, String message, String sent, 
+			String received, String sender, String receiver, int status) {
+		this.id = id;
+		this.message = message;
+		this.type = type;
+		this.sent = sent;
+		this.received = received;
+		this.sender = sender;
+		this.receiver = receiver;
+		this.readStatus = status;
+	}
+	
 	public String getDateTimeString(String format, int dateKind) {
 		
 		SimpleDateFormat sdfParser = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
@@ -44,5 +59,9 @@ public class Message {
 			return "";
 		}
 		
+	}
+	
+	public void setRead() {
+		this.readStatus = STATUS_READ;
 	}
 }
