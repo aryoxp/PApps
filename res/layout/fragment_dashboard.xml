@@ -38,12 +38,12 @@
                 android:textColor="@color/asbestos" />
 
             <ImageView
-                android:contentDescription="@string/empty_space"
                 android:id="@+id/dashboardButtonSignOut"
                 android:layout_width="58dp"
                 android:layout_height="42dp"
                 android:background="@drawable/button_gray"
                 android:clickable="true"
+                android:contentDescription="@string/empty_space"
                 android:paddingBottom="8dp"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
@@ -109,16 +109,16 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="right"
+                        android:maxLines="1"
                         android:text="26°C"
                         android:textColor="@color/white"
-                        android:maxLines="1"
                         android:textSize="52sp" />
                 </LinearLayout>
 
                 <LinearLayout
-                    android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" >
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" >
 
                     <TextView
                         android:id="@+id/dashboardTemperatureDescriptionText"
@@ -136,9 +136,9 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-condensed"
                         android:gravity="right"
+                        android:maxLines="1"
                         android:paddingLeft="5dp"
                         android:text="Sat, 19 Jun 20:04"
-                        android:maxLines="1"
                         android:textColor="#CCffffff"
                         android:textSize="12sp" />
                 </LinearLayout>
@@ -156,11 +156,11 @@
             android:id="@+id/newsSummaryContainer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingBottom="16dp"
-            android:paddingTop="16dp"
-            android:clickable="true"
+            android:layout_weight="1"
             android:background="@drawable/button_white"
-            android:layout_weight="1" >
+            android:clickable="true"
+            android:paddingBottom="16dp"
+            android:paddingTop="16dp" >
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -199,11 +199,11 @@
             android:id="@+id/agendaSummaryContainer"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:paddingBottom="16dp"
-            android:paddingTop="16dp"
-            android:clickable="true"
+            android:layout_weight="1"
             android:background="@drawable/button_white"
-            android:layout_weight="1" >
+            android:clickable="true"
+            android:paddingBottom="16dp"
+            android:paddingTop="16dp" >
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -242,11 +242,11 @@
             android:id="@+id/notificationSummaryContainer"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:paddingBottom="16dp"
-            android:paddingTop="16dp"
-            android:clickable="true"
+            android:layout_weight="1"
             android:background="@drawable/button_white"
-            android:layout_weight="1" >
+            android:clickable="true"
+            android:paddingBottom="16dp"
+            android:paddingTop="16dp" >
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -281,10 +281,21 @@
         android:layout_height="1px"
         android:background="@color/silver" />
 
-    <FrameLayout
-        android:id="@+id/dashboardContentContainer"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
-    </FrameLayout>
+
+        <LinearLayout
+            android:id="@+id/dashboardContentContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+            
+            <include layout="@layout/view_dashboard_today_news"/>
+            <include layout="@layout/view_dashboard_today_agenda"/>
+            
+        </LinearLayout>
+
+    </ScrollView>
 
 </LinearLayout>

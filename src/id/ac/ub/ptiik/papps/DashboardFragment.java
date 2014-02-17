@@ -1,13 +1,12 @@
 package id.ac.ub.ptiik.papps;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-import com.google.gson.Gson;
-
 import id.ac.ub.ptiik.papps.base.NavMenu;
-import id.ac.ub.ptiik.papps.base.PreferenceKey;
+import id.ac.ub.ptiik.papps.base.News;
 import id.ac.ub.ptiik.papps.base.User;
 import id.ac.ub.ptiik.papps.helpers.SystemHelper;
 import id.ac.ub.ptiik.papps.interfaces.DashboardInfoInterface;
@@ -39,7 +38,6 @@ public class DashboardFragment extends Fragment
 	private TextView humidityView;
 	private TextView descriptionView;
 	private TextView buttonSignIn;
-	private Weather weather;
 	private View v;
 	
 	private User user;
@@ -47,6 +45,7 @@ public class DashboardFragment extends Fragment
 	private int weatherTimestamp;
 	
 	private NavigationInterface navigationCallback;
+	private ViewGroup contentContainer;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -57,6 +56,7 @@ public class DashboardFragment extends Fragment
 		this.temperatureView = (TextView) v.findViewById(R.id.dashboardTemperatureText);
 		this.humidityView = (TextView) v.findViewById(R.id.dashboardHumidityText);
 		this.descriptionView = (TextView) v.findViewById(R.id.dashboardTemperatureDescriptionText);
+		this.contentContainer = (ViewGroup) v.findViewById(R.id.dashboardContentContainer);
 		
 		v.findViewById(R.id.newsSummaryContainer).setOnClickListener(this);
 		v.findViewById(R.id.agendaSummaryContainer).setOnClickListener(this);
@@ -90,20 +90,9 @@ public class DashboardFragment extends Fragment
 		}
 		
 		super.onStart();
+		DashboardInfoTask dashboardInfoTask = new DashboardInfoTask(getActivity(), this);
+		dashboardInfoTask.execute("Malang");
 		
-		if(this.weather == null) {
-			this.weatherTimestamp = SystemHelper.getPreferenceInteger(getActivity(), PreferenceKey.WEATHER_TIMESTAMP);
-			int selisih = (int) ((System.currentTimeMillis()/1000)-this.weatherTimestamp);
-			if(this.weatherTimestamp == 0 || selisih > 3600) {
-				DashboardInfoTask weatherTask = new DashboardInfoTask(getActivity(), this);
-				weatherTask.execute("Malang");
-			} else {
-				String jsonWeather = SystemHelper.getPreferenceString(getActivity(), PreferenceKey.WEATHER_JSON);
-				Gson gson = new Gson();
-				Weather w = gson.fromJson(jsonWeather, Weather.class);
-				this.setWeather(w);
-			}
-		}
 		try {
 			this.user = SystemHelper.getSystemUser(getActivity());
 		} catch (Exception e) {
@@ -122,7 +111,6 @@ public class DashboardFragment extends Fragment
 	public void setWeather(Weather weather) {
 		
 		
-		this.weather = weather;
 		switch(weather.id){
 			case 200:
 			case 210:
@@ -310,9 +298,10 @@ public class DashboardFragment extends Fragment
 	}	
 	
 	private void logoutView() {
-		View loginContainer  = this.v.findViewById(R.id.dashboardContentContainer);
-		View dashboardLogin = getActivity().getLayoutInflater().inflate(R.layout.view_dashboard_login, (ViewGroup) loginContainer, false);
-		((ViewGroup) loginContainer).addView(dashboardLogin);
+		View dashboardLogin = getActivity().getLayoutInflater().inflate(R.layout.view_dashboard_login, (ViewGroup) this.contentContainer, false);
+		dashboardLogin.setTag("loginView");
+		if(this.contentContainer.findViewWithTag("loginView") == null)
+			this.contentContainer.addView(dashboardLogin, 0);
 		
 		dashboardLogin.setAlpha(0);
 		dashboardLogin.animate()
@@ -334,5 +323,10 @@ public class DashboardFragment extends Fragment
 	public void setUnreadMessages(int count) {
 		TextView unreadMessagesText = (TextView) this.v.findViewById(R.id.dashboardNumNotificationText);
 		unreadMessagesText.setText(String.valueOf(count));
+	}
+
+	@Override
+	public void setTodayNews(ArrayList<News> newses) {
+		
 	}
 }
