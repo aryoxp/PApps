@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/white"
     android:orientation="vertical" >
 
     <LinearLayout
@@ -49,7 +50,7 @@
             android:text="Personal"
             android:textAllCaps="true"
             android:clickable="true"
-            android:background="@drawable/button_white"
+            android:background="@drawable/button_clouds"
             android:textColor="@color/asbestos"
             tools:ignore="HardcodedText" />
 
@@ -63,7 +64,7 @@
             android:text="All"
             android:textAllCaps="true"
             android:clickable="true"
-            android:background="@drawable/button_white"
+            android:background="@drawable/button_clouds"
             android:textColor="@color/asbestos"
             tools:ignore="HardcodedText" />
 
@@ -77,7 +78,8 @@
     <FrameLayout
         android:id="@+id/listagendaContainer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:background="@color/white" >
 
         <TextView 
             android:id="@+id/agendaNoEventsText"

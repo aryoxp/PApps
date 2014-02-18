@@ -42,10 +42,12 @@ public class AgendaFragment extends DialogFragment implements OnClickListener {
 		
 		if(this.cell.getListAgendaKaryawan().size() == 0) {
 			this.agendaKaryawanList.setAlpha(0);
-			this.v.findViewById(R.id.agendaTabAll).setBackgroundDrawable(this.getActivity().getResources().getDrawable(R.drawable.button_clouds));
+			this.v.findViewById(R.id.agendaTabAll).setBackgroundDrawable(this.getActivity().getResources().getDrawable(R.drawable.button_white));
+			this.v.findViewById(R.id.agendaNoEventsText).setAlpha(0);
 		} else {
 			this.agendaList.setAlpha(0);
-			this.v.findViewById(R.id.agendaTabPersonal).setBackgroundDrawable(this.getActivity().getResources().getDrawable(R.drawable.button_clouds));
+			this.v.findViewById(R.id.agendaTabPersonal).setBackgroundDrawable(this.getActivity().getResources().getDrawable(R.drawable.button_white));
+			this.v.findViewById(R.id.agendaNoEventsText).setAlpha(0);
 		}
 		
 		this.agendaList.setAdapter(this.agendaAdapter);
@@ -72,8 +74,8 @@ public class AgendaFragment extends DialogFragment implements OnClickListener {
 			if(this.agendaKaryawanList.getAlpha()>0)
 				this.agendaKaryawanList.animate().alpha(0).setDuration(200).start();
 			this.agendaList.animate().alpha(1).setDuration(200).start();
-			this.v.findViewById(R.id.agendaTabAll).setBackgroundDrawable(this.getActivity().getResources().getDrawable(R.drawable.button_clouds));
-			this.v.findViewById(R.id.agendaTabPersonal).setBackgroundDrawable(this.getActivity().getResources().getDrawable(R.drawable.button_white));
+			this.v.findViewById(R.id.agendaTabAll).setBackgroundDrawable(this.getActivity().getResources().getDrawable(R.drawable.button_white));
+			this.v.findViewById(R.id.agendaTabPersonal).setBackgroundDrawable(this.getActivity().getResources().getDrawable(R.drawable.button_clouds));
 			if(this.cell.getAgendaCount() == 0)
 				this.v.findViewById(R.id.agendaNoEventsText).setAlpha(1);
 			else this.v.findViewById(R.id.agendaNoEventsText).setAlpha(0);
@@ -82,8 +84,8 @@ public class AgendaFragment extends DialogFragment implements OnClickListener {
 			if(this.agendaList.getAlpha()>0)
 				this.agendaList.animate().alpha(0).setDuration(200).start();
 			this.agendaKaryawanList.animate().alpha(1).setDuration(200).start();
-			this.v.findViewById(R.id.agendaTabPersonal).setBackgroundDrawable(this.getActivity().getResources().getDrawable(R.drawable.button_clouds));
-			this.v.findViewById(R.id.agendaTabAll).setBackgroundDrawable(this.getActivity().getResources().getDrawable(R.drawable.button_white));
+			this.v.findViewById(R.id.agendaTabPersonal).setBackgroundDrawable(this.getActivity().getResources().getDrawable(R.drawable.button_white));
+			this.v.findViewById(R.id.agendaTabAll).setBackgroundDrawable(this.getActivity().getResources().getDrawable(R.drawable.button_clouds));
 			if(this.cell.getAgendaKaryawanCount() == 0)
 				this.v.findViewById(R.id.agendaNoEventsText).setAlpha(1);
 			else this.v.findViewById(R.id.agendaNoEventsText).setAlpha(0);
