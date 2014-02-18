@@ -43,10 +43,18 @@ public class AgendaFragment extends DialogFragment implements OnClickListener {
 		if(this.cell.getListAgendaKaryawan().size() == 0) {
 			this.agendaKaryawanList.setAlpha(0);
 			this.v.findViewById(R.id.agendaTabAll).setBackgroundDrawable(this.getActivity().getResources().getDrawable(R.drawable.button_white));
+<<<<<<< HEAD
 			
 		} else {
 			this.agendaList.setAlpha(0);
 			this.v.findViewById(R.id.agendaTabPersonal).setBackgroundDrawable(this.getActivity().getResources().getDrawable(R.drawable.button_white));
+=======
+			this.v.findViewById(R.id.agendaNoEventsText).setAlpha(0);
+		} else {
+			this.agendaList.setAlpha(0);
+			this.v.findViewById(R.id.agendaTabPersonal).setBackgroundDrawable(this.getActivity().getResources().getDrawable(R.drawable.button_white));
+			this.v.findViewById(R.id.agendaNoEventsText).setAlpha(0);
+>>>>>>> 4ce0d3ca8d11515a567490d2071f972d4b62659b
 		}
 		
 		if(this.cell.getListAgendaKaryawan().size() > 0 || this.cell.getListAgenda().size() > 0)

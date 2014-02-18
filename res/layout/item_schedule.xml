@@ -24,11 +24,11 @@
                 android:id="@+id/scheduleDateTimeText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed"
                 android:gravity="center_vertical"
                 android:text="Medium Text"
                 android:textColor="@color/orange"
                 android:textSize="14sp"
-                android:fontFamily="sans-serif-condensed"
                 tools:ignore="HardcodedText" />
 
             <TextView
@@ -42,29 +42,56 @@
                 android:textColor="@color/silver"
                 android:textSize="16sp"
                 tools:ignore="HardcodedText" />
-
         </RelativeLayout>
 
-        <TextView
-            android:id="@+id/scheduleMatakuliahText"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:fontFamily="sans-serif-condensed"
-            android:gravity="center_vertical"
-            android:text="Medium Text"
-            android:textColor="@color/asbestos"
-            android:textSize="20sp"
-            tools:ignore="HardcodedText" />
-
-        <TextView
-            android:id="@+id/scheduleLecturerText"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/scheduleClassLectureNameContainer"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-condensed"
-            android:text="--"
-            android:textColor="@color/silver"
-            tools:ignore="HardcodedText" />
+            android:orientation="horizontal" 
+            >
 
+            <LinearLayout
+                android:id="@+id/scheduleNameLectureContainer"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/scheduleMatakuliahText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:fontFamily="sans-serif-condensed"
+                    android:gravity="center_vertical"
+                    android:text="Medium Text"
+                    android:textColor="@color/asbestos"
+                    android:textSize="20sp"
+                    tools:ignore="HardcodedText" />
+
+                <TextView
+                    android:id="@+id/scheduleLecturerText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-condensed"
+                    android:text="--"
+                    android:textColor="@color/silver"
+                    tools:ignore="HardcodedText" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/scheduleClassText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:background="@color/silver"
+                android:padding="4dp"
+                android:text="SI-C"
+                android:textColor="@color/white"
+                android:fontFamily="sans-serif-condensed"
+                tools:ignore="HardcodedText" />
+
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>

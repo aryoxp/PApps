@@ -45,6 +45,7 @@ public class ScheduleAdapter extends BaseAdapter {
 		public TextView scheduleLecturerText;
 		public TextView scheduleLocationText;
 		public TextView scheduleSubjectText;
+		public TextView scheduleClassText;
 	}
 
 	@Override
@@ -59,6 +60,7 @@ public class ScheduleAdapter extends BaseAdapter {
 			vh.scheduleLecturerText = (TextView) rowView.findViewById(R.id.scheduleLecturerText);
 			vh.scheduleLocationText = (TextView) rowView.findViewById(R.id.scheduleLocationText);
 			vh.scheduleSubjectText = (TextView) rowView.findViewById(R.id.scheduleMatakuliahText);
+			vh.scheduleClassText = (TextView) rowView.findViewById(R.id.scheduleClassText);
 			rowView.setTag(vh);
 		}
 		ViewHolder vh = (ViewHolder) rowView.getTag();
@@ -70,6 +72,13 @@ public class ScheduleAdapter extends BaseAdapter {
 		vh.scheduleDateTimeText.setText(dateTime);
 		vh.scheduleLocationText.setText(jadwal.ruang);
 		vh.scheduleLecturerText.setText(jadwal.dosen.getNamaGelar());
+		vh.scheduleClassText.setText(jadwal.prodi + "-" + jadwal.kelas);
+		if(jadwal.prodi.equals("TIF/ILKOM"))
+			vh.scheduleClassText.setBackgroundColor(this.context.getResources().getColor(R.color.petermann));
+		else if(jadwal.prodi.equals("SI"))
+			vh.scheduleClassText.setBackgroundColor(this.context.getResources().getColor(R.color.sunflower));
+		else if(jadwal.prodi.equals("SISKOM"))
+			vh.scheduleClassText.setBackgroundColor(this.context.getResources().getColor(R.color.emerald));
 		return rowView;
 	}
 
