@@ -13,6 +13,9 @@ import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -45,13 +48,11 @@ public class CalendarFragment extends Fragment
 		this.v.findViewById(R.id.calendarTableContainer).setAlpha(0);
 		View nextMonthButton = this.v.findViewById(R.id.calendarNextMonthButton);
 		View prevMonthButton = this.v.findViewById(R.id.calendarPrevMonthButton);
-		View refreshButton = this.v.findViewById(R.id.calendarButtonRefresh);
 		nextMonthButton.setOnClickListener(this);
 		prevMonthButton.setOnClickListener(this);
-		refreshButton.setOnClickListener(this);
 		this.userId = this.getArguments().getString("idKaryawan");
 		
-		
+		this.setHasOptionsMenu(true);
 		return v;
 	}
 	
@@ -79,8 +80,6 @@ public class CalendarFragment extends Fragment
 				int month = this.currentCalendar.get(Calendar.MONTH);
 				SimpleDateFormat sdf = new SimpleDateFormat("MMM yyyy", Locale.US);		
 				switch(v.getId()) {
-					case R.id.calendarButtonRefresh:
-						break;
 					case R.id.calendarNextMonthButton:
 						month++;
 						break;
@@ -88,18 +87,22 @@ public class CalendarFragment extends Fragment
 						month--;
 						break;
 				}
-				this.currentCalendar.set(Calendar.MONTH, month);
-				this.monthYearText = (TextView) this.v.findViewById(R.id.calendarMonthYearText);
-				this.monthYearText.setText(sdf.format(this.currentCalendar.getTime()));
-				this.agendaKaryawanTask = 
-						new AgendaKaryawanTask(getActivity(), 
-								(AgendaKaryawanIndexInterface) this, 
-								this.userId, this.currentCalendar.get(Calendar.MONTH), 
-								this.currentCalendar.get(Calendar.YEAR));
-				this.agendaKaryawanTask.execute();
+				reloadCalendar(month, sdf);
 			}
 			break;
 		}
+	}
+
+	private void reloadCalendar(int month, SimpleDateFormat sdf) {
+		this.currentCalendar.set(Calendar.MONTH, month);
+		this.monthYearText = (TextView) this.v.findViewById(R.id.calendarMonthYearText);
+		this.monthYearText.setText(sdf.format(this.currentCalendar.getTime()));
+		this.agendaKaryawanTask = 
+				new AgendaKaryawanTask(getActivity(), 
+						(AgendaKaryawanIndexInterface) this, 
+						this.userId, this.currentCalendar.get(Calendar.MONTH), 
+						this.currentCalendar.get(Calendar.YEAR));
+		this.agendaKaryawanTask.execute();
 	}
 
 	@Override
@@ -137,5 +140,24 @@ public class CalendarFragment extends Fragment
 		AgendaFragment fragment = new AgendaFragment();
 		fragment.putCalendarCell(cell);
 		fragment.show(this.getFragmentManager(), "dayCalendar");
+	}
+	
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		inflater.inflate(R.menu.menu_agenda, menu);
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch(item.getItemId()){
+		case R.id.action_agenda_refresh:
+			if(this.agendaKaryawanTask.getStatus() != Status.RUNNING) {
+				int month = this.currentCalendar.get(Calendar.MONTH);
+				SimpleDateFormat sdf = new SimpleDateFormat("MMM yyyy", Locale.US);		
+				reloadCalendar(month, sdf);
+			}
+			break;
+		}
+		return true;
 	}
 }

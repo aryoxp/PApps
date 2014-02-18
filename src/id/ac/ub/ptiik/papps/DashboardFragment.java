@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
+import id.ac.ub.ptiik.papps.adapters.NewsIndexAdapter;
+import id.ac.ub.ptiik.papps.adapters.NewsTodayAdapter;
 import id.ac.ub.ptiik.papps.base.NavMenu;
 import id.ac.ub.ptiik.papps.base.News;
 import id.ac.ub.ptiik.papps.base.User;
@@ -26,6 +28,7 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.ViewManager;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import ap.mobile.base.Weather;
 
@@ -46,6 +49,8 @@ public class DashboardFragment extends Fragment
 	
 	private NavigationInterface navigationCallback;
 	private ViewGroup contentContainer;
+	private ListView todayNewsListView;
+	private ListView todayAgendaListView;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -57,6 +62,8 @@ public class DashboardFragment extends Fragment
 		this.humidityView = (TextView) v.findViewById(R.id.dashboardHumidityText);
 		this.descriptionView = (TextView) v.findViewById(R.id.dashboardTemperatureDescriptionText);
 		this.contentContainer = (ViewGroup) v.findViewById(R.id.dashboardContentContainer);
+		this.todayNewsListView = (ListView) v.findViewById(R.id.dashboardTodayNewsListView);
+		this.todayAgendaListView = (ListView) v.findViewById(R.id.dashboardTodayAgendaListView);
 		
 		v.findViewById(R.id.newsSummaryContainer).setOnClickListener(this);
 		v.findViewById(R.id.agendaSummaryContainer).setOnClickListener(this);
@@ -327,6 +334,12 @@ public class DashboardFragment extends Fragment
 
 	@Override
 	public void setTodayNews(ArrayList<News> newses) {
-		
+		NewsTodayAdapter newsTodayAdapter = new NewsTodayAdapter(this.getActivity(), newses);
+		if(newses.size() > 0) {
+			this.v.findViewById(R.id.dashboardTodayNewsNoNewsText).setAlpha(0);
+			((TextView)this.v.findViewById(R.id.dashboardNumNews)).setText(String.valueOf(newses.size()));
+		}
+		if(this.todayNewsListView != null) 
+			this.todayNewsListView.setAdapter(newsTodayAdapter);
 	}
 }

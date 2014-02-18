@@ -1,11 +1,15 @@
 package id.ac.ub.ptiik.papps.tasks;
 
+import java.util.ArrayList;
+
 import com.google.gson.Gson;
 
+import id.ac.ub.ptiik.papps.base.News;
 import id.ac.ub.ptiik.papps.base.PreferenceKey;
 import id.ac.ub.ptiik.papps.helpers.MessageDBHelper;
 import id.ac.ub.ptiik.papps.helpers.SystemHelper;
 import id.ac.ub.ptiik.papps.interfaces.DashboardInfoInterface;
+import id.ac.ub.ptiik.papps.parsers.NewsListParser;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Handler;
@@ -77,6 +81,20 @@ public class DashboardInfoTask extends AsyncTask<String, Void, Void> {
 				}
 			});
 			
+			String host = PreferenceManager
+					.getDefaultSharedPreferences(this.context)
+					.getString("host", "175.45.187.246");
+			String url = "http://"+host+"/service/index.php/news/today";
+			String result = Rest.getInstance().get(url).getResponseText();
+			final ArrayList<News> newsList = NewsListParser.Parse(result);
+			
+			
+			new Handler(Looper.getMainLooper()).post(new Runnable() {
+				@Override
+				public void run() {
+					mCallback.setTodayNews(newsList);
+				}
+			});
 			
 		} catch(Exception e) {
 			e.printStackTrace();

@@ -40,16 +40,6 @@
                 android:textColor="#fff"
                 android:textSize="27sp"
                 tools:ignore="HardcodedText" />
-
-            <ImageView
-                android:id="@+id/scheduleButtonRefresh"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:background="@drawable/button_yellow"
-                android:clickable="true"
-                android:contentDescription="@string/empty_space"
-                android:padding="20dp"
-                android:src="@drawable/ic_transfers_66" />
         </LinearLayout>
     </LinearLayout>
 

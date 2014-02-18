@@ -21,8 +21,10 @@ import id.ac.ub.ptiik.papps.tasks.MatakuliahIndexTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -33,7 +35,7 @@ import android.widget.Spinner;
 
 public class ScheduleFragment extends Fragment 
 	implements OnItemSelectedListener, KaryawanIndexInterface, 
-	MatakuliahIndexInterface, JadwalMengajarIndexInterface, OnClickListener {
+	MatakuliahIndexInterface, JadwalMengajarIndexInterface {
 	
 	Spinner categoryList;
 	Spinner scheduleOptions;
@@ -70,8 +72,7 @@ public class ScheduleFragment extends Fragment
 		this.scheduleProgressBar.setAlpha(0);
 		this.v = v;
 		
-		this.v.findViewById(R.id.scheduleButtonRefresh).setOnClickListener(this);
-		
+		this.setHasOptionsMenu(true);
 		return v;
 	}
 
@@ -176,13 +177,18 @@ public class ScheduleFragment extends Fragment
 	public void onJadwalRetrieveFail(String error) {}
 
 	@Override
-	public void onClick(View v) {
-		switch(v.getId()) {
-		case R.id.scheduleButtonRefresh:
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		inflater.inflate(R.menu.menu_schedule, menu);
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch(item.getItemId()){
+		case R.id.action_schedule_refresh:
 			if(this.scheduleOptions.getAdapter() != null)
 				this.loadSchedule();
 			break;
 		}
+		return true;
 	}
-
 }
