@@ -4,11 +4,14 @@ import java.util.ArrayList;
 
 import com.google.gson.Gson;
 
+import id.ac.ub.ptiik.papps.base.AgendaKaryawan;
 import id.ac.ub.ptiik.papps.base.News;
 import id.ac.ub.ptiik.papps.base.PreferenceKey;
+import id.ac.ub.ptiik.papps.base.User;
 import id.ac.ub.ptiik.papps.helpers.MessageDBHelper;
 import id.ac.ub.ptiik.papps.helpers.SystemHelper;
 import id.ac.ub.ptiik.papps.interfaces.DashboardInfoInterface;
+import id.ac.ub.ptiik.papps.parsers.AgendaKaryawanParser;
 import id.ac.ub.ptiik.papps.parsers.NewsListParser;
 import android.content.Context;
 import android.os.AsyncTask;
@@ -95,6 +98,19 @@ public class DashboardInfoTask extends AsyncTask<String, Void, Void> {
 					mCallback.setTodayNews(newsList);
 				}
 			});
+			
+			User user = SystemHelper.getSystemUser(this.context);
+			if(user != null) {
+				url = "http://"+host+"/service/index.php/agenda/today/" + user.karyawan_id;
+				result = Rest.getInstance().get(url).getResponseText();
+				final ArrayList<AgendaKaryawan> agendaKaryawanList = AgendaKaryawanParser.Parse(result);
+				new Handler(Looper.getMainLooper()).post(new Runnable() {
+					@Override
+					public void run() {
+						mCallback.setTodayAgenda(agendaKaryawanList);
+					}
+				});
+			}
 			
 		} catch(Exception e) {
 			e.printStackTrace();

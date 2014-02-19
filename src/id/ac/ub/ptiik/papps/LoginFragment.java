@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager.LayoutParams;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class LoginFragment extends DialogFragment 
 	implements View.OnClickListener, LoginInterface {
@@ -58,8 +57,8 @@ public class LoginFragment extends DialogFragment
 		// Restore preferences
 		String username = 
 				PreferenceManager.getDefaultSharedPreferences(
-						getActivity()).getString(this.usernameKeySharedPreferences, "guest");
-		Toast.makeText(getActivity(), "Current user: " + username, Toast.LENGTH_SHORT).show();
+						getActivity()).getString(this.usernameKeySharedPreferences, "");
+		//Toast.makeText(getActivity(), "Current user: " + username, Toast.LENGTH_SHORT).show();
 		
 		EditText usernameEditText = (EditText)this.v.findViewById(R.id.textLoginUsername);
 		usernameEditText.setText(username);
@@ -144,7 +143,6 @@ public class LoginFragment extends DialogFragment
 
 	@Override
 	public void onLoginProgress(int progress, String message) {
-		// TODO Auto-generated method stub
 		
 	}
 

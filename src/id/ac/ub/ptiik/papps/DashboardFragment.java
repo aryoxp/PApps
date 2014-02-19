@@ -5,8 +5,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-import id.ac.ub.ptiik.papps.adapters.NewsIndexAdapter;
+import id.ac.ub.ptiik.papps.adapters.AgendaKaryawanAdapter;
 import id.ac.ub.ptiik.papps.adapters.NewsTodayAdapter;
+import id.ac.ub.ptiik.papps.base.AgendaKaryawan;
 import id.ac.ub.ptiik.papps.base.NavMenu;
 import id.ac.ub.ptiik.papps.base.News;
 import id.ac.ub.ptiik.papps.base.User;
@@ -333,13 +334,29 @@ public class DashboardFragment extends Fragment
 	}
 
 	@Override
-	public void setTodayNews(ArrayList<News> newses) {
-		NewsTodayAdapter newsTodayAdapter = new NewsTodayAdapter(this.getActivity(), newses);
-		if(newses.size() > 0) {
+	public void setTodayNews(ArrayList<News> newsList) {
+		if(newsList == null)
+			return;
+		NewsTodayAdapter newsTodayAdapter = new NewsTodayAdapter(this.getActivity(), newsList);
+		if(newsList.size() > 0) {
 			this.v.findViewById(R.id.dashboardTodayNewsNoNewsText).setAlpha(0);
-			((TextView)this.v.findViewById(R.id.dashboardNumNews)).setText(String.valueOf(newses.size()));
+			((TextView)this.v.findViewById(R.id.dashboardNumNews)).setText(String.valueOf(newsList.size()));
 		}
 		if(this.todayNewsListView != null) 
 			this.todayNewsListView.setAdapter(newsTodayAdapter);
+	}
+
+	@Override
+	public void setTodayAgenda(ArrayList<AgendaKaryawan> agendaKaryawanList) {
+		if(agendaKaryawanList == null)
+			return;
+		AgendaKaryawanAdapter agendaKaryawanAdapter = new AgendaKaryawanAdapter(this.getActivity(), agendaKaryawanList);
+		if(agendaKaryawanAdapter.getCount() > 0) {
+			this.v.findViewById(R.id.dashboardTodayAgendaNoAgendaText).setAlpha(0);
+			((TextView)this.v.findViewById(R.id.dashboardNumAgenda)).setText(String.valueOf(agendaKaryawanList.size()));
+		}
+		if(this.todayAgendaListView != null)
+			this.todayAgendaListView.setAdapter(agendaKaryawanAdapter);
+		
 	}
 }
