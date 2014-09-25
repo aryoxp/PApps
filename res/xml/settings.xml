@@ -5,8 +5,18 @@
         <EditTextPreference
                 android:title="@string/pref_ip_address"
                 android:summary="@string/pref_ip_address_description"
-                android:key="prefIPAddress"
+                android:key="host"
                 android:defaultValue="175.45.187.246"
+                />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/pref_messaging" >
+        <ListPreference
+                android:title="@string/pref_sound"
+                android:summary="@string/pref_sound_description"
+                android:key="sound"
+                android:entries="@array/pref_sound_entry"
+                android:entryValues="@array/pref_sound_entry_values"
+                android:defaultValue="1"
                 />
     </PreferenceCategory>
     

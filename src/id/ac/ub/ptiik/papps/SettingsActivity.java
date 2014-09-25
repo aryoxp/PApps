@@ -14,7 +14,7 @@ public class SettingsActivity extends PreferenceActivity {
 		View view = this.getWindow().getDecorView();
 	    view.setBackgroundColor(0xffffffff);
 		// Display the fragment as the main content.
-	    this.getActionBar().setLogo(R.drawable.app_icon);
+	    this.getActionBar().setLogo(R.drawable.ic_launcher);
 	    this.getActionBar().setDisplayHomeAsUpEnabled(true);
 	    this.getActionBar().setHomeButtonEnabled(true);
         getFragmentManager().beginTransaction()

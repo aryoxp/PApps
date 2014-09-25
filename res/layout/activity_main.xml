@@ -12,7 +12,7 @@
         android:layout_height="fill_parent"
         android:background="#fff" >
     </FrameLayout>
-
+	<!-- 
     <FrameLayout
         android:id="@+id/navigationContainer"
         android:layout_width="250dp"
@@ -20,5 +20,5 @@
         android:padding="10dp"
         android:background="#fff4f4f4" >
     </FrameLayout>
-
+	 -->
 </FrameLayout>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_gravity="right"
+    android:gravity="right"
+    tools:ignore="UselessParent" >
+
+    <LinearLayout
+        android:id="@+id/messageAltContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_gravity="right"
+        android:orientation="vertical"
+        android:background="@drawable/bg_item_chat_b"
+        android:padding="16dp" >
+
+        <TextView
+            android:id="@+id/messageAltTanggal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-condensed"
+            android:text="Medium Text"
+            android:textColor="@color/silver"
+            android:textSize="14sp"
+            android:layout_gravity="right"
+            tools:ignore="HardcodedText" />
+
+        <TextView
+            android:id="@+id/messageAltMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:gravity="center_vertical|right"
+            android:text="Medium Text"
+            android:textColor="@color/concrete"
+            android:textSize="16sp"
+            android:layout_gravity="right"
+            tools:ignore="HardcodedText" />
+
+        <View
+            android:id="@+id/messageAltStatus"
+            android:layout_width="8dp"
+            android:layout_height="8dp"
+            android:layout_marginTop="14dp"
+            android:layout_gravity="right"
+            android:background="@color/alizarin" />
+
+    </LinearLayout>
+
+ </LinearLayout>

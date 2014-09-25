@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/fragment_schedule"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/sunflower"
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:id="@+id/imageWeatherDashboard"
+            android:layout_width="76dp"
+            android:layout_height="76dp"
+            android:background="@color/orange"
+            android:contentDescription="@string/empty_space"
+            android:padding="20dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_communication_99" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/fragmentNewsTitle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:padding="22dp"
+                android:text="News"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="#fff"
+                android:textSize="27sp"
+                android:fontFamily="sans-serif-condensed"
+                tools:ignore="HardcodedText" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/listNewsContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <FrameLayout
+            android:id="@+id/newsRefreshContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <TextView
+                android:id="@+id/newsRefreshText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="20dp"
+                android:text="TextView"
+                android:textColor="@color/asbestos" />
+        </FrameLayout>
+
+        <ListView
+            android:id="@+id/newsList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white" >
+        </ListView>
+
+        <ProgressBar
+            android:id="@+id/newsRefreshProgress"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:indeterminate="true"
+            android:padding="10dp" />
+    </FrameLayout>
+
+</LinearLayout>
