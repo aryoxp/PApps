@@ -18,8 +18,13 @@ import id.ac.ub.ptiik.papps.interfaces.MatakuliahIndexInterface;
 import id.ac.ub.ptiik.papps.tasks.JadwalMengajarTask;
 import id.ac.ub.ptiik.papps.tasks.KaryawanIndexTask;
 import id.ac.ub.ptiik.papps.tasks.MatakuliahIndexTask;
+<<<<<<< HEAD
 import android.app.Fragment;
 import android.os.Bundle;
+=======
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+>>>>>>> masteronline
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;

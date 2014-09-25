@@ -6,9 +6,15 @@ import id.ac.ub.ptiik.papps.adapters.NewsIndexAdapter;
 import id.ac.ub.ptiik.papps.base.News;
 import id.ac.ub.ptiik.papps.interfaces.NewsIndexInterface;
 import id.ac.ub.ptiik.papps.tasks.NewsIndexTask;
+<<<<<<< HEAD
 import android.app.Fragment;
 import android.os.AsyncTask.Status;
 import android.os.Bundle;
+=======
+import android.os.AsyncTask.Status;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+>>>>>>> masteronline
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;

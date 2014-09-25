@@ -104,7 +104,11 @@ public class GcmIntentService extends IntentService {
         mNotificationManager = (NotificationManager)
                 this.getSystemService(Context.NOTIFICATION_SERVICE);
         
+<<<<<<< HEAD
         Intent intent = new Intent(this, HomeActivity.class);
+=======
+        Intent intent = new Intent(this, MainActivity.class);
+>>>>>>> masteronline
         String fragmentToLaunch = AppFragment.FRAGMENT_TAG_MESSAGES.toString();
         intent.putExtra("fragment", fragmentToLaunch);
         int flags = PendingIntent.FLAG_UPDATE_CURRENT;

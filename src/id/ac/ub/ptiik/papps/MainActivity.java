@@ -1,5 +1,9 @@
 package id.ac.ub.ptiik.papps;
+<<<<<<< HEAD
 /*
+=======
+
+>>>>>>> masteronline
 import id.ac.ub.ptiik.papps.base.AppFragment;
 import id.ac.ub.ptiik.papps.base.GCM;
 import id.ac.ub.ptiik.papps.base.Message;
@@ -14,8 +18,13 @@ import id.ac.ub.ptiik.papps.interfaces.NavigationInterface;
 import id.ac.ub.ptiik.papps.tasks.CheckinTask;
 
 import java.util.ArrayList;
+<<<<<<< HEAD
 //import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 //import com.jeremyfeinstein.slidingmenu.lib.app.SlidingFragmentActivity;
+=======
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
+import com.jeremyfeinstein.slidingmenu.lib.app.SlidingFragmentActivity;
+>>>>>>> masteronline
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -30,7 +39,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
+<<<<<<< HEAD
 /*
+=======
+
+>>>>>>> masteronline
 public class MainActivity extends SlidingFragmentActivity 
 	implements NavigationInterface, CheckinInterface, AppInterface {
 
@@ -302,5 +315,8 @@ public class MainActivity extends SlidingFragmentActivity
 	
 	
 }
+<<<<<<< HEAD
 
 */
+=======
+>>>>>>> masteronline

@@ -1,7 +1,10 @@
 package id.ac.ub.ptiik.papps.base;
 
+<<<<<<< HEAD
 import java.util.ArrayList;
 
+=======
+>>>>>>> masteronline
 public class NavMenu {
 	
 	public static final int MENU_HOME = 0;
@@ -16,7 +19,10 @@ public class NavMenu {
 	public boolean isActive = false;
 	public int id;
 	public String tag;
+<<<<<<< HEAD
 	public int notificationCount = 0;
+=======
+>>>>>>> masteronline
 	
 	public NavMenu(){}
 	public NavMenu(int id, String title, String description, int imageResourceId, String tag){
@@ -32,6 +38,7 @@ public class NavMenu {
 	public void deactivate() {
 		this.isActive = false;
 	}
+<<<<<<< HEAD
 	
 	public void addCount() {
 		this.notificationCount++;
@@ -53,4 +60,6 @@ public class NavMenu {
 				menus.get(i).deactivate();
 		}
 	}
+=======
+>>>>>>> masteronline
 }

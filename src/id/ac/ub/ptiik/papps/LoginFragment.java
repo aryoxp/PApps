@@ -5,9 +5,15 @@ import id.ac.ub.ptiik.papps.interfaces.LoginDialogFinishInterface;
 import id.ac.ub.ptiik.papps.interfaces.LoginInterface;
 import id.ac.ub.ptiik.papps.tasks.LoginTask;
 import android.app.AlertDialog;
+<<<<<<< HEAD
 import android.app.DialogFragment;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+=======
+import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.v4.app.DialogFragment;
+>>>>>>> masteronline
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;

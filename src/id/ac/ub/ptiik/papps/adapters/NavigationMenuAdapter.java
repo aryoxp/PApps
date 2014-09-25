@@ -45,8 +45,12 @@ public class NavigationMenuAdapter extends BaseAdapter {
 	private class ViewHolder {
 		public ImageView icon;
 		public TextView title;
+<<<<<<< HEAD
 		public TextView description;
 		public TextView count;
+=======
+		//public TextView description;
+>>>>>>> masteronline
 		public View row;
 	}
 	
@@ -59,6 +63,7 @@ public class NavigationMenuAdapter extends BaseAdapter {
 			rowView = inflater.inflate(R.layout.item_menu_navigation, null);
 			ViewHolder vh = new ViewHolder();
 			vh.title = (TextView) rowView.findViewById(R.id.menuTitle);
+<<<<<<< HEAD
 			vh.description = (TextView) rowView.findViewById(R.id.menuSubTitle);
 			vh.icon = (ImageView) rowView.findViewById(R.id.menuIcon);
 			vh.count = (TextView) rowView.findViewById(R.id.menuCount);
@@ -82,6 +87,22 @@ public class NavigationMenuAdapter extends BaseAdapter {
 		int isCountVisible = (menu.notificationCount == 0)?View.GONE:View.VISIBLE;
 		vh.count.setVisibility(isCountVisible);
 		
+=======
+			//vh.description = (TextView) rowView.findViewById(R.id.menuDescription);
+			vh.icon = (ImageView) rowView.findViewById(R.id.menuIcon);
+			vh.row = rowView;
+			rowView.setTag(vh);
+		}
+		ViewHolder vh = (ViewHolder) rowView.getTag();
+		vh.title.setText(this.listMenu.get(position).title);
+		//.title.toUpperCase(Locale.US));
+		//vh.title.setTypeface(TypefaceUtils.NewInstance(this.context).normalCondensed());		
+		//vh.description.setText(this.listMenu.get(position).description);
+		if(this.listMenu.get(position).imageResourceId != 0)
+			vh.icon.setImageResource(this.listMenu.get(position).imageResourceId);
+		if(this.listMenu.get(position).isActive) vh.row.setBackgroundColor(0xff2980b9);
+		else vh.row.setBackgroundColor(Color.TRANSPARENT);
+>>>>>>> masteronline
 		return rowView;
 	}
 

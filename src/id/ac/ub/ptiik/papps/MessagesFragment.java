@@ -12,9 +12,15 @@ import java.util.ArrayList;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+<<<<<<< HEAD
 import android.app.Fragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
+=======
+import android.content.DialogInterface;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+>>>>>>> masteronline
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;

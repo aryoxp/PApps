@@ -7,8 +7,13 @@ import id.ac.ub.ptiik.papps.base.UserOnline;
 import id.ac.ub.ptiik.papps.interfaces.SendtoInterface;
 import id.ac.ub.ptiik.papps.interfaces.UserOnlineCheckInterface;
 import id.ac.ub.ptiik.papps.tasks.UserOnlineTask;
+<<<<<<< HEAD
 import android.app.DialogFragment;
 import android.os.Bundle;
+=======
+import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+>>>>>>> masteronline
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;

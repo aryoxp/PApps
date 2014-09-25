@@ -17,10 +17,17 @@ import id.ac.ub.ptiik.papps.interfaces.LoginDialogFinishInterface;
 import id.ac.ub.ptiik.papps.interfaces.NavigationInterface;
 import id.ac.ub.ptiik.papps.tasks.DashboardInfoTask;
 import android.app.AlertDialog;
+<<<<<<< HEAD
 import android.app.Fragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+=======
+import android.content.DialogInterface;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.v4.app.Fragment;
+>>>>>>> masteronline
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;

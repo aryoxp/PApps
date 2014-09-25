@@ -3,8 +3,13 @@ package id.ac.ub.ptiik.papps;
 import id.ac.ub.ptiik.papps.adapters.AgendaAdapter;
 import id.ac.ub.ptiik.papps.adapters.AgendaKaryawanAdapter;
 import id.ac.ub.ptiik.papps.base.CalendarCell;
+<<<<<<< HEAD
 import android.app.DialogFragment;
 import android.os.Bundle;
+=======
+import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+>>>>>>> masteronline
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
